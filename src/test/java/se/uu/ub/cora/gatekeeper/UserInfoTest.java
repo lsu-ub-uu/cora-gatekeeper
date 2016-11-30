@@ -25,6 +25,14 @@ import org.testng.annotations.Test;
 
 public class UserInfoTest {
 	@Test
+	public void testUserInfoUserInStorage() {
+		String idInUserStorage = "someIdFromStorage";
+
+		UserInfo userInfo = UserInfo.withIdInUserStorage(idInUserStorage);
+		assertEquals(userInfo.idInUserStorage, "someIdFromStorage");
+	}
+
+	@Test
 	public void testUserInfo() {
 		String idFromLogin = "idFromLogin";
 		String domainFromLogin = "domainFromLogin";

@@ -30,21 +30,39 @@ import se.uu.ub.cora.spider.authentication.AuthenticationException;
 import se.uu.ub.cora.spider.authentication.Authenticator;
 
 public class AuthenticatorTest {
+	private static final int FIRST_NON_HARDCODED = 3;
 	private UserPickerSpy userPicker;
 	private Authenticator authenticator;
 	private User logedInUser;
+	private GatekeeperTokenProvider tokenProvider;
 
 	@BeforeMethod
 	public void setUp() {
 		userPicker = new UserPickerSpy();
 		authenticator = new AuthenticatorImp(userPicker);
+		tokenProvider = (GatekeeperTokenProvider) authenticator;
+	}
+
+	@Test
+	public void testHardCodedTokens() {
+		assertEquals(userPicker.usedUserInfos.get(0).idInUserStorage, "99999");
+		logedInUser = authenticator.getUserForToken("dummySystemAdminAuthenticatedToken");
+		assertEquals(logedInUser, userPicker.returnedUsers.get(0));
+
+		assertEquals(userPicker.usedUserInfos.get(1).idInUserStorage, "121212");
+		logedInUser = authenticator.getUserForToken("fitnesseUserToken");
+		assertEquals(logedInUser, userPicker.returnedUsers.get(1));
+
+		assertEquals(userPicker.usedUserInfos.get(2).idInUserStorage, "131313");
+		logedInUser = authenticator.getUserForToken("fitnesseAdminToken");
+		assertEquals(logedInUser, userPicker.returnedUsers.get(2));
 	}
 
 	@Test
 	public void testNoToken() {
-		logedInUser = authenticator.tryToGetActiveUser(null);
+		logedInUser = authenticator.getUserForToken(null);
 		assertPluggedInUserPickerWasUsed();
-		assertUsedUserInfoLoginAndDomain("12345", "system");
+		assertUsedUserInfoIdInUserStorage("12345");
 		assertReturnedUserIsFromUserPicker();
 	}
 
@@ -52,11 +70,9 @@ public class AuthenticatorTest {
 		assertTrue(userPicker.userPickerWasCalled);
 	}
 
-	private void assertUsedUserInfoLoginAndDomain(String expectedLoginId,
-			String expectedLoginDomain) {
+	private void assertUsedUserInfoIdInUserStorage(String expectedIdInUserStorage) {
 		UserInfo usedUserInfo = userPicker.usedUserInfo;
-		assertEquals(usedUserInfo.idFromLogin, expectedLoginId);
-		assertEquals(usedUserInfo.domainFromLogin, expectedLoginDomain);
+		assertEquals(usedUserInfo.idInUserStorage, expectedIdInUserStorage);
 	}
 
 	private void assertReturnedUserIsFromUserPicker() {
@@ -65,31 +81,30 @@ public class AuthenticatorTest {
 
 	@Test(expectedExceptions = AuthenticationException.class)
 	public void testNonAuthenticatedUser() {
-		authenticator.tryToGetActiveUser("dummyNonAuthenticatedToken");
+		authenticator.getUserForToken("dummyNonAuthenticatedToken");
 	}
 
 	@Test
-	public void testSystemAdmin() {
-		logedInUser = authenticator.tryToGetActiveUser("dummySystemAdminAuthenticatedToken");
-		assertPluggedInUserPickerWasUsed();
-		assertUsedUserInfoLoginAndDomain("99999", "system");
-		assertReturnedUserIsFromUserPicker();
+	public void testUserOnlyPickedOncePerAuthToken() {
+		logedInUser = authenticator.getUserForToken("fitnesseAdminToken");
+		assertPluggedInUserPickerWasUsedOnce();
+		logedInUser = authenticator.getUserForToken("fitnesseAdminToken");
+		assertPluggedInUserPickerWasUsedOnce();
+
+	}
+
+	private void assertPluggedInUserPickerWasUsedOnce() {
+		assertEquals(userPicker.returnedUsers.size(), 3);
 	}
 
 	@Test
-	public void testFitnesseUser() {
-		logedInUser = authenticator.tryToGetActiveUser("fitnesseUserToken");
-		assertPluggedInUserPickerWasUsed();
-		assertUsedUserInfoLoginAndDomain("121212", "system");
-		assertReturnedUserIsFromUserPicker();
-	}
+	public void testGetAuthTokenForUserInfo() {
+		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain("someLoginId", "someLoginDomain");
+		String authToken = tokenProvider.getAuthTokenForUserInfo(userInfo);
 
-	@Test
-	public void testFitnesseAdmin() {
-		logedInUser = authenticator.tryToGetActiveUser("fitnesseAdminToken");
-		assertPluggedInUserPickerWasUsed();
-		assertUsedUserInfoLoginAndDomain("131313", "system");
-		assertReturnedUserIsFromUserPicker();
+		assertEquals(userPicker.usedUserInfos.get(FIRST_NON_HARDCODED), userInfo);
+		logedInUser = authenticator.getUserForToken(authToken);
+		assertEquals(logedInUser.loginId, "someLoginId");
 	}
 
 }

@@ -19,26 +19,6 @@
 
 package se.uu.ub.cora.gatekeeper;
 
-public final class UserInfo {
-
-	public String idFromLogin;
-	public String domainFromLogin;
-	public String idInUserStorage;
-
-	private UserInfo(String idFromLogin, String domainFromLogin) {
-		this.idFromLogin = idFromLogin;
-		this.domainFromLogin = domainFromLogin;
-	}
-
-	private UserInfo(String idInUserStorage) {
-		this.idInUserStorage = idInUserStorage;
-	}
-
-	public static UserInfo withLoginIdAndLoginDomain(String idFromLogin, String domainFromLogin) {
-		return new UserInfo(idFromLogin, domainFromLogin);
-	}
-
-	public static UserInfo withIdInUserStorage(String idInUserStorage) {
-		return new UserInfo(idInUserStorage);
-	}
+public interface GatekeeperTokenProvider {
+	public String getAuthTokenForUserInfo(UserInfo userInfo);
 }

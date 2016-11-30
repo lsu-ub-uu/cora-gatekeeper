@@ -19,6 +19,9 @@
 
 package se.uu.ub.cora.gatekeeper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import se.uu.ub.cora.beefeater.authentication.User;
 
 public class UserPickerSpy implements UserPicker {
@@ -26,15 +29,19 @@ public class UserPickerSpy implements UserPicker {
 	public boolean userPickerWasCalled = false;
 	public UserInfo usedUserInfo = null;
 	public User returnedUser = null;
+	public List<UserInfo> usedUserInfos = new ArrayList<>();
+	public List<User> returnedUsers = new ArrayList<>();
 
 	@Override
 	public User pickUser(UserInfo userInfo) {
 		usedUserInfo = userInfo;
+		usedUserInfos.add(userInfo);
 		userPickerWasCalled = true;
 		User user = new User("12345");
 		user.loginId = userInfo.idFromLogin;
 		user.loginDomain = userInfo.domainFromLogin;
 		returnedUser = user;
+		returnedUsers.add(user);
 		return user;
 	}
 
