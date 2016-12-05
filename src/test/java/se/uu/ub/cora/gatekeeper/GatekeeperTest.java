@@ -27,38 +27,45 @@ import org.testng.annotations.Test;
 
 import se.uu.ub.cora.beefeater.authentication.User;
 import se.uu.ub.cora.spider.authentication.AuthenticationException;
-import se.uu.ub.cora.spider.authentication.Authenticator;
 
-public class AuthenticatorTest {
+public class GatekeeperTest {
+	private static final int FIRST_NON_HARDCODED = 3;
 	private UserPickerSpy userPicker;
-	private Authenticator authenticator;
+	private Gatekeeper gatekeeper;
 	private User logedInUser;
 
 	@BeforeMethod
 	public void setUp() {
 		userPicker = new UserPickerSpy();
-		authenticator = new AuthenticatorImp();
+		// gatekeeper = new AuthenticatorImp(userPicker);
 		Gatekeeper.INSTANCE.setUserPicker(userPicker);
+		gatekeeper = Gatekeeper.INSTANCE;
+	}
+
+	@Test
+	public void testEnum() {
+		// small hack to get 100% coverage on enum
+		Gatekeeper.valueOf(Gatekeeper.INSTANCE.toString());
 	}
 
 	@Test
 	public void testHardCodedTokens() {
 		assertEquals(userPicker.usedUserInfos.get(0).idInUserStorage, "99999");
-		logedInUser = authenticator.getUserForToken("dummySystemAdminAuthenticatedToken");
+		logedInUser = gatekeeper.getUserForToken("dummySystemAdminAuthenticatedToken");
 		assertEquals(logedInUser, userPicker.returnedUsers.get(0));
 
 		assertEquals(userPicker.usedUserInfos.get(1).idInUserStorage, "121212");
-		logedInUser = authenticator.getUserForToken("fitnesseUserToken");
+		logedInUser = gatekeeper.getUserForToken("fitnesseUserToken");
 		assertEquals(logedInUser, userPicker.returnedUsers.get(1));
 
 		assertEquals(userPicker.usedUserInfos.get(2).idInUserStorage, "131313");
-		logedInUser = authenticator.getUserForToken("fitnesseAdminToken");
+		logedInUser = gatekeeper.getUserForToken("fitnesseAdminToken");
 		assertEquals(logedInUser, userPicker.returnedUsers.get(2));
 	}
 
 	@Test
 	public void testNoToken() {
-		logedInUser = authenticator.getUserForToken(null);
+		logedInUser = gatekeeper.getUserForToken(null);
 		assertPluggedInUserPickerWasUsed();
 		assertUsedUserInfoIdInUserStorage("12345");
 		assertReturnedUserIsFromUserPicker();
@@ -79,14 +86,14 @@ public class AuthenticatorTest {
 
 	@Test(expectedExceptions = AuthenticationException.class)
 	public void testNonAuthenticatedUser() {
-		authenticator.getUserForToken("dummyNonAuthenticatedToken");
+		gatekeeper.getUserForToken("dummyNonAuthenticatedToken");
 	}
 
 	@Test
 	public void testUserOnlyPickedOncePerAuthToken() {
-		logedInUser = authenticator.getUserForToken("fitnesseAdminToken");
+		logedInUser = gatekeeper.getUserForToken("fitnesseAdminToken");
 		assertPluggedInUserPickerWasUsedOnce();
-		logedInUser = authenticator.getUserForToken("fitnesseAdminToken");
+		logedInUser = gatekeeper.getUserForToken("fitnesseAdminToken");
 		assertPluggedInUserPickerWasUsedOnce();
 
 	}
@@ -94,4 +101,15 @@ public class AuthenticatorTest {
 	private void assertPluggedInUserPickerWasUsedOnce() {
 		assertEquals(userPicker.returnedUsers.size(), 3);
 	}
+
+	@Test
+	public void testGetAuthTokenForUserInfo() {
+		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain("someLoginId", "someLoginDomain");
+		String authToken = gatekeeper.getAuthTokenForUserInfo(userInfo);
+
+		assertEquals(userPicker.usedUserInfos.get(FIRST_NON_HARDCODED), userInfo);
+		logedInUser = gatekeeper.getUserForToken(authToken);
+		assertEquals(logedInUser.loginId, "someLoginId");
+	}
+
 }

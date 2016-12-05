@@ -19,15 +19,13 @@
 
 package se.uu.ub.cora.gatekeeper;
 
-import se.uu.ub.cora.beefeater.authentication.User;
-import se.uu.ub.cora.spider.authentication.Authenticator;
+public class GatekeeperTokenProviderImp implements GatekeeperTokenProvider {
 
-public class AuthenticatorImp implements Authenticator {
 	@Override
-	public User getUserForToken(String authToken) {
+	public String getAuthTokenForUserInfo(UserInfo userInfo) {
 		// the idea is to in the future change this to an https call to a
-		// running
-		// gatekeeper server
-		return Gatekeeper.INSTANCE.getUserForToken(authToken);
+		// running gatekeeper server
+		return Gatekeeper.INSTANCE.getAuthTokenForUserInfo(userInfo);
 	}
+
 }
