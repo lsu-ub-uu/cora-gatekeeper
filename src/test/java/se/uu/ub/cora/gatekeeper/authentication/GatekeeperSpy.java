@@ -17,31 +17,36 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper;
+package se.uu.ub.cora.gatekeeper.authentication;
 
-import se.uu.ub.cora.beefeater.authentication.User;
+import se.uu.ub.cora.gatekeeper.UserInfo;
 import se.uu.ub.cora.spider.authentication.AuthenticationException;
-import se.uu.ub.cora.spider.authentication.Authenticator;
 
-public class AuthenticatorSpy implements Authenticator {
-
-	public boolean authenticationWasCalled = false;
-	public String authToken;
+public class GatekeeperSpy implements Gatekeeper {
 
 	@Override
 	public User getUserForToken(String authToken) {
-		authenticationWasCalled = true;
 
-		this.authToken = authToken;
-		if ("dummyNonAuthenticatedToken".equals(authToken)) {
+		if (authToken == null) {
+			User user = new User("12345");
+			user.roles.add("someRole112345");
+			user.roles.add("someRole212345");
+			return user;
+
+		}
+		if (authToken.equals("dummyNonAuthenticatedToken")) {
 			throw new AuthenticationException("token not valid");
 		}
-
-		User user = new User("12345");
-		user.loginId = "knownUser";
-		user.loginDomain = "system";
-		user.roles.add("guest");
+		User user = new User("someId");
+		user.roles.add("someRole1");
+		user.roles.add("someRole2");
 		return user;
+	}
+
+	@Override
+	public String getAuthTokenForUserInfo(UserInfo userInfo) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

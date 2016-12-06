@@ -17,7 +17,10 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper;
+package se.uu.ub.cora.gatekeeper.tokenprovider;
+
+import se.uu.ub.cora.gatekeeper.GatekeeperImp;
+import se.uu.ub.cora.gatekeeper.UserInfo;
 
 public class GatekeeperTokenProviderImp implements GatekeeperTokenProvider {
 
@@ -25,7 +28,7 @@ public class GatekeeperTokenProviderImp implements GatekeeperTokenProvider {
 	public String getAuthTokenForUserInfo(UserInfo userInfo) {
 		// the idea is to in the future change this to an https call to a
 		// running gatekeeper server
-		return Gatekeeper.INSTANCE.getAuthTokenForUserInfo(userInfo);
+		return GatekeeperImp.INSTANCE.getAuthTokenForUserInfo(userInfo);
 	}
 
 }

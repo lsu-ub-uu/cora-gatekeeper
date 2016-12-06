@@ -25,9 +25,12 @@
 	<name>gatekeeper</name>
 
 	<properties>
+		<json.version>0.3-SNAPSHOT</json.version>
 		<beefeater.version>0.5-SNAPSHOT</beefeater.version>
 		<spider.version>0.12-SNAPSHOT</spider.version>
 		<basicstorage.version>0.3-SNAPSHOT</basicstorage.version>
+		<javax.ws.rs.version>2.0.1</javax.ws.rs.version>
+		<jersey.version>2.23.2</jersey.version>
 	</properties>
 
 	<scm>
@@ -65,6 +68,12 @@
 	<dependencies>
 		<dependency>
 			<groupId>se.uu.ub.cora</groupId>
+			<artifactId>json</artifactId>
+			<version>${json.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>se.uu.ub.cora</groupId>
 			<artifactId>beefeater</artifactId>
 			<version>${beefeater.version}</version>
 		</dependency>
@@ -83,6 +92,29 @@
 			<artifactId>testng</artifactId>
 			<version>${testng.version}</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.ws.rs</groupId>
+			<artifactId>javax.ws.rs-api</artifactId>
+			<version>${javax.ws.rs.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jersey.containers</groupId>
+			<artifactId>jersey-container-servlet</artifactId>
+			<version>${jersey.version}</version>
+			<scope>compile</scope>
+		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.glassfish.jersey.media</groupId> -->
+<!-- 			<artifactId>jersey-media-multipart</artifactId> -->
+<!-- 			<version>${jersey.version}</version> -->
+<!-- 		</dependency> -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 </project>

@@ -17,25 +17,21 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper;
+package se.uu.ub.cora.gatekeeper.authentication;
 
-import se.uu.ub.cora.gatekeeper.authentication.User;
+import se.uu.ub.cora.beefeater.authentication.User;
+import se.uu.ub.cora.spider.authentication.Authenticator;
 
-public class UserPickerSpy implements UserPicker {
-
-	public boolean userPickerWasCalled = false;
-	public UserInfo usedUserInfo = null;
-	public User returnedUser = null;
-
+public class AuthenticatorImp implements Authenticator {
 	@Override
-	public User pickUser(UserInfo userInfo) {
-		usedUserInfo = userInfo;
-		userPickerWasCalled = true;
-		User user = new User("12345");
-		user.loginId = userInfo.idFromLogin;
-		user.loginDomain = userInfo.domainFromLogin;
-		returnedUser = user;
+	public User getUserForToken(String authToken) {
+		// the idea is to in the future change this to an https call to a
+		// running gatekeeper server
+		// return GatekeeperImp.INSTANCE.getUserForToken(authToken);
+		// TODO: this should be read from the json
+		User user = new User("someId");
+		user.roles.add("someRole");
 		return user;
-	}
 
+	}
 }

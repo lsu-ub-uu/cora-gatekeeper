@@ -17,25 +17,14 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper;
+package se.uu.ub.cora.gatekeeper.authentication;
 
-import se.uu.ub.cora.gatekeeper.authentication.User;
+import se.uu.ub.cora.gatekeeper.UserInfo;
 
-public class UserPickerSpy implements UserPicker {
+public interface Gatekeeper {
 
-	public boolean userPickerWasCalled = false;
-	public UserInfo usedUserInfo = null;
-	public User returnedUser = null;
+	User getUserForToken(String authToken);
 
-	@Override
-	public User pickUser(UserInfo userInfo) {
-		usedUserInfo = userInfo;
-		userPickerWasCalled = true;
-		User user = new User("12345");
-		user.loginId = userInfo.idFromLogin;
-		user.loginDomain = userInfo.domainFromLogin;
-		returnedUser = user;
-		return user;
-	}
+	String getAuthTokenForUserInfo(UserInfo userInfo);
 
 }

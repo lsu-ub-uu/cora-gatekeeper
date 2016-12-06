@@ -17,25 +17,18 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper;
+package se.uu.ub.cora.gatekeeper.authentication;
 
-import se.uu.ub.cora.gatekeeper.authentication.User;
+import se.uu.ub.cora.gatekeeper.dependency.GatekeeperLocator;
 
-public class UserPickerSpy implements UserPicker {
+public class GateKeeperLocatorSpy implements GatekeeperLocator {
 
-	public boolean userPickerWasCalled = false;
-	public UserInfo usedUserInfo = null;
-	public User returnedUser = null;
+	public GatekeeperSpy gatekeeperSpy;
 
 	@Override
-	public User pickUser(UserInfo userInfo) {
-		usedUserInfo = userInfo;
-		userPickerWasCalled = true;
-		User user = new User("12345");
-		user.loginId = userInfo.idFromLogin;
-		user.loginDomain = userInfo.domainFromLogin;
-		returnedUser = user;
-		return user;
+	public Gatekeeper locateGatekeeper() {
+		gatekeeperSpy = new GatekeeperSpy();
+		return gatekeeperSpy;
 	}
 
 }

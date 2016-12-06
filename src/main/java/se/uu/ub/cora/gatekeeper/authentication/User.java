@@ -17,25 +17,20 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper;
+package se.uu.ub.cora.gatekeeper.authentication;
 
-import se.uu.ub.cora.gatekeeper.authentication.User;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
-public class UserPickerSpy implements UserPicker {
+public class User {
 
-	public boolean userPickerWasCalled = false;
-	public UserInfo usedUserInfo = null;
-	public User returnedUser = null;
+	public final String id;
+	public String loginId;
+	public String loginDomain;
+	public final Set<String> roles = new LinkedHashSet<>();
 
-	@Override
-	public User pickUser(UserInfo userInfo) {
-		usedUserInfo = userInfo;
-		userPickerWasCalled = true;
-		User user = new User("12345");
-		user.loginId = userInfo.idFromLogin;
-		user.loginDomain = userInfo.domainFromLogin;
-		returnedUser = user;
-		return user;
+	public User(String id) {
+		this.id = id;
 	}
 
 }

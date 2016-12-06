@@ -23,34 +23,36 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import se.uu.ub.cora.beefeater.authentication.User;
+import se.uu.ub.cora.gatekeeper.authentication.Gatekeeper;
+import se.uu.ub.cora.gatekeeper.authentication.User;
 import se.uu.ub.cora.spider.authentication.AuthenticationException;
 
-public enum Gatekeeper {
+public enum GatekeeperImp implements Gatekeeper {
 	INSTANCE;
-	public UserPicker userPicker;
+	public UserPickerFactory userPickerFactory;
 	private Map<String, User> pickedUsers = new HashMap<>();
 
-	public void setUserPicker(UserPicker userPicker) {
-		this.userPicker = userPicker;
+	public void setUserPickerFactory(UserPickerFactory userPickerFactory) {
+		this.userPickerFactory = userPickerFactory;
 		addHardCodedTokensToPickedUsers();
 	}
 
 	private void addHardCodedTokensToPickedUsers() {
 		UserInfo userInfo = null;
 		userInfo = UserInfo.withIdInUserStorage("99999");
-		User pickedUser = userPicker.pickUser(userInfo);
+		User pickedUser = userPickerFactory.factor().pickUser(userInfo);
 		pickedUsers.put("dummySystemAdminAuthenticatedToken", pickedUser);
 
 		userInfo = UserInfo.withIdInUserStorage("121212");
-		User pickedUser2 = userPicker.pickUser(userInfo);
+		User pickedUser2 = userPickerFactory.factor().pickUser(userInfo);
 		pickedUsers.put("fitnesseUserToken", pickedUser2);
 
 		userInfo = UserInfo.withIdInUserStorage("131313");
-		User pickedUser3 = userPicker.pickUser(userInfo);
+		User pickedUser3 = userPickerFactory.factor().pickUser(userInfo);
 		pickedUsers.put("fitnesseAdminToken", pickedUser3);
 	}
 
+	@Override
 	public User getUserForToken(String authToken) {
 		if (authToken == null) {
 			return returnGuestUser();
@@ -60,7 +62,7 @@ public enum Gatekeeper {
 
 	private User returnGuestUser() {
 		UserInfo userInfo = UserInfo.withIdInUserStorage("12345");
-		return userPicker.pickUser(userInfo);
+		return userPickerFactory.factor().pickUser(userInfo);
 	}
 
 	private User tryToGetAuthenticatedUser(String authToken) {
@@ -78,8 +80,9 @@ public enum Gatekeeper {
 		return pickedUsers.get(authToken);
 	}
 
+	@Override
 	public String getAuthTokenForUserInfo(UserInfo userInfo) {
-		User pickedUser = userPicker.pickUser(userInfo);
+		User pickedUser = userPickerFactory.factor().pickUser(userInfo);
 		String generateAuthToken = generateAuthToken();
 		pickedUsers.put(generateAuthToken, pickedUser);
 		return generateAuthToken;

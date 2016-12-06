@@ -17,17 +17,10 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper;
+package se.uu.ub.cora.gatekeeper.tokenprovider;
 
-import se.uu.ub.cora.beefeater.authentication.User;
-import se.uu.ub.cora.spider.authentication.Authenticator;
+import se.uu.ub.cora.gatekeeper.UserInfo;
 
-public class AuthenticatorImp implements Authenticator {
-	@Override
-	public User getUserForToken(String authToken) {
-		// the idea is to in the future change this to an https call to a
-		// running
-		// gatekeeper server
-		return Gatekeeper.INSTANCE.getUserForToken(authToken);
-	}
+public interface GatekeeperTokenProvider {
+	public String getAuthTokenForUserInfo(UserInfo userInfo);
 }

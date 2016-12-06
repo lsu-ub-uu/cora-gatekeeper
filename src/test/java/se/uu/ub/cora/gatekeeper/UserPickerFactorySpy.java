@@ -19,23 +19,17 @@
 
 package se.uu.ub.cora.gatekeeper;
 
-import se.uu.ub.cora.gatekeeper.authentication.User;
+import java.util.ArrayList;
+import java.util.List;
 
-public class UserPickerSpy implements UserPicker {
-
-	public boolean userPickerWasCalled = false;
-	public UserInfo usedUserInfo = null;
-	public User returnedUser = null;
+public class UserPickerFactorySpy implements UserPickerFactory {
+	public List<UserPickerSpy> factoredUserPickers = new ArrayList<>();
 
 	@Override
-	public User pickUser(UserInfo userInfo) {
-		usedUserInfo = userInfo;
-		userPickerWasCalled = true;
-		User user = new User("12345");
-		user.loginId = userInfo.idFromLogin;
-		user.loginDomain = userInfo.domainFromLogin;
-		returnedUser = user;
-		return user;
+	public UserPicker factor() {
+		UserPickerSpy userPickerSpy = new UserPickerSpy();
+		factoredUserPickers.add(userPickerSpy);
+		return userPickerSpy;
 	}
 
 }

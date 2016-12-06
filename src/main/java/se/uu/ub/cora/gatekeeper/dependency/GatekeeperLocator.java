@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2016 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -17,25 +17,12 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper;
+package se.uu.ub.cora.gatekeeper.dependency;
 
-import se.uu.ub.cora.gatekeeper.authentication.User;
+import se.uu.ub.cora.gatekeeper.authentication.Gatekeeper;
 
-public class UserPickerSpy implements UserPicker {
+public interface GatekeeperLocator {
 
-	public boolean userPickerWasCalled = false;
-	public UserInfo usedUserInfo = null;
-	public User returnedUser = null;
-
-	@Override
-	public User pickUser(UserInfo userInfo) {
-		usedUserInfo = userInfo;
-		userPickerWasCalled = true;
-		User user = new User("12345");
-		user.loginId = userInfo.idFromLogin;
-		user.loginDomain = userInfo.domainFromLogin;
-		returnedUser = user;
-		return user;
-	}
+	Gatekeeper locateGatekeeper();
 
 }

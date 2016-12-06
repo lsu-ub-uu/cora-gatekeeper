@@ -17,27 +17,30 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper;
+package se.uu.ub.cora.gatekeeper.tokenprovider;
 
 import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.beefeater.authentication.User;
+import se.uu.ub.cora.gatekeeper.GatekeeperImp;
+import se.uu.ub.cora.gatekeeper.UserInfo;
+import se.uu.ub.cora.gatekeeper.UserPickerFactorySpy;
+import se.uu.ub.cora.gatekeeper.authentication.User;
 
 public class GatekeeperTokenProviderTest {
 	private static final int FIRST_NON_HARDCODED = 3;
-	private UserPickerSpy userPicker;
-	private Gatekeeper gatekeeper;
+	private UserPickerFactorySpy userPickerFactory;
+	private GatekeeperImp gatekeeper;
 	private User logedInUser;
 	private GatekeeperTokenProvider tokenProvider;
 
 	@BeforeMethod
 	public void setUp() {
-		userPicker = new UserPickerSpy();
-		Gatekeeper.INSTANCE.setUserPicker(userPicker);
-		gatekeeper = Gatekeeper.INSTANCE;
+		userPickerFactory = new UserPickerFactorySpy();
+		GatekeeperImp.INSTANCE.setUserPickerFactory(userPickerFactory);
+		gatekeeper = GatekeeperImp.INSTANCE;
 		tokenProvider = new GatekeeperTokenProviderImp();
 	}
 
@@ -46,7 +49,8 @@ public class GatekeeperTokenProviderTest {
 		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain("someLoginId", "someLoginDomain");
 		String authToken = tokenProvider.getAuthTokenForUserInfo(userInfo);
 
-		assertEquals(userPicker.usedUserInfos.get(FIRST_NON_HARDCODED), userInfo);
+		assertEquals(userPickerFactory.factoredUserPickers.get(FIRST_NON_HARDCODED).usedUserInfo,
+				userInfo);
 		logedInUser = gatekeeper.getUserForToken(authToken);
 		assertEquals(logedInUser.loginId, "someLoginId");
 	}

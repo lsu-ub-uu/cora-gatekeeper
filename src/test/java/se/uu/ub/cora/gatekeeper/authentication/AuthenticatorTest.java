@@ -17,7 +17,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper;
+package se.uu.ub.cora.gatekeeper.authentication;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
@@ -26,55 +26,61 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import se.uu.ub.cora.beefeater.authentication.User;
+import se.uu.ub.cora.gatekeeper.GatekeeperImp;
+import se.uu.ub.cora.gatekeeper.UserInfo;
+import se.uu.ub.cora.gatekeeper.UserPickerFactorySpy;
 import se.uu.ub.cora.spider.authentication.AuthenticationException;
 import se.uu.ub.cora.spider.authentication.Authenticator;
 
 public class AuthenticatorTest {
-	private UserPickerSpy userPicker;
+	private UserPickerFactorySpy userPickerFactory;
 	private Authenticator authenticator;
 	private User logedInUser;
 
 	@BeforeMethod
 	public void setUp() {
-		userPicker = new UserPickerSpy();
+		userPickerFactory = new UserPickerFactorySpy();
 		authenticator = new AuthenticatorImp();
-		Gatekeeper.INSTANCE.setUserPicker(userPicker);
+		GatekeeperImp.INSTANCE.setUserPickerFactory(userPickerFactory);
 	}
 
 	@Test
 	public void testHardCodedTokens() {
-		assertEquals(userPicker.usedUserInfos.get(0).idInUserStorage, "99999");
+		assertEquals(userPickerFactory.factoredUserPickers.get(0).usedUserInfo.idInUserStorage,
+				"99999");
 		logedInUser = authenticator.getUserForToken("dummySystemAdminAuthenticatedToken");
-		assertEquals(logedInUser, userPicker.returnedUsers.get(0));
+		assertEquals(logedInUser.id, "999999");
 
-		assertEquals(userPicker.usedUserInfos.get(1).idInUserStorage, "121212");
+		assertEquals(userPickerFactory.factoredUserPickers.get(1).usedUserInfo.idInUserStorage,
+				"121212");
 		logedInUser = authenticator.getUserForToken("fitnesseUserToken");
-		assertEquals(logedInUser, userPicker.returnedUsers.get(1));
+		assertEquals(logedInUser.id, "121212");
 
-		assertEquals(userPicker.usedUserInfos.get(2).idInUserStorage, "131313");
+		assertEquals(userPickerFactory.factoredUserPickers.get(2).usedUserInfo.idInUserStorage,
+				"131313");
 		logedInUser = authenticator.getUserForToken("fitnesseAdminToken");
-		assertEquals(logedInUser, userPicker.returnedUsers.get(2));
+		assertEquals(logedInUser.id, "131313");
 	}
 
 	@Test
 	public void testNoToken() {
 		logedInUser = authenticator.getUserForToken(null);
 		assertPluggedInUserPickerWasUsed();
-		assertUsedUserInfoIdInUserStorage("12345");
-		assertReturnedUserIsFromUserPicker();
+		assertUsedUserInfoIdInUserStorage(3, "12345");
+		assertReturnedUserIsFromUserPicker(3);
 	}
 
 	private void assertPluggedInUserPickerWasUsed() {
-		assertTrue(userPicker.userPickerWasCalled);
+		assertTrue(userPickerFactory.factoredUserPickers.get(0).userPickerWasCalled);
 	}
 
-	private void assertUsedUserInfoIdInUserStorage(String expectedIdInUserStorage) {
-		UserInfo usedUserInfo = userPicker.usedUserInfo;
+	private void assertUsedUserInfoIdInUserStorage(int factored, String expectedIdInUserStorage) {
+		UserInfo usedUserInfo = userPickerFactory.factoredUserPickers.get(factored).usedUserInfo;
 		assertEquals(usedUserInfo.idInUserStorage, expectedIdInUserStorage);
 	}
 
-	private void assertReturnedUserIsFromUserPicker() {
-		assertEquals(logedInUser, userPicker.returnedUser);
+	private void assertReturnedUserIsFromUserPicker(int factored) {
+		assertEquals(logedInUser, userPickerFactory.factoredUserPickers.get(factored).returnedUser);
 	}
 
 	@Test(expectedExceptions = AuthenticationException.class)
@@ -92,6 +98,6 @@ public class AuthenticatorTest {
 	}
 
 	private void assertPluggedInUserPickerWasUsedOnce() {
-		assertEquals(userPicker.returnedUsers.size(), 3);
+		assertEquals(userPickerFactory.factoredUserPickers.size(), 3);
 	}
 }
