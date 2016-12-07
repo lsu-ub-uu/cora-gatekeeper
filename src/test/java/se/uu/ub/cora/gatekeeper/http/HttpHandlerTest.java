@@ -1,6 +1,5 @@
 /*
- * Copyright 2015, 2016 Uppsala University Library
- * Copyright 2016 Olov McKie
+ * Copyright 2016 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -18,14 +17,13 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper.dependency;
+package se.uu.ub.cora.gatekeeper.http;
 
-import se.uu.ub.cora.gatekeeper.GatekeeperImp;
+import org.testng.annotations.Test;
 
-public final class GatekeeperLocatorImp implements GatekeeperLocator {
-
-	@Override
-	public GatekeeperImp locateGatekeeper() {
-		return GatekeeperImp.INSTANCE;
+public class HttpHandlerTest {
+	@Test
+	public void testHttpHandler() {
+		HttpHandler httpHandler = new HttpHandlerImp();
 	}
 }

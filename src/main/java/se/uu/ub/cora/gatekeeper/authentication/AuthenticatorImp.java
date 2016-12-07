@@ -19,19 +19,87 @@
 
 package se.uu.ub.cora.gatekeeper.authentication;
 
-import se.uu.ub.cora.beefeater.authentication.User;
-import se.uu.ub.cora.spider.authentication.Authenticator;
+import javax.ws.rs.core.Response;
 
-public class AuthenticatorImp implements Authenticator {
+import se.uu.ub.cora.beefeater.authentication.User;
+import se.uu.ub.cora.gatekeeper.http.HttpHandler;
+import se.uu.ub.cora.json.parser.JsonArray;
+import se.uu.ub.cora.json.parser.JsonObject;
+import se.uu.ub.cora.json.parser.JsonParser;
+import se.uu.ub.cora.json.parser.JsonValue;
+import se.uu.ub.cora.json.parser.org.OrgJsonParser;
+import se.uu.ub.cora.spider.authentication.Authenticator;
+import se.uu.ub.cora.spider.authorization.AuthorizationException;
+
+public final class AuthenticatorImp implements Authenticator {
+	private static final String CHILDREN = "children";
+	private HttpHandler httpHandler;
+	private User user;
+	private JsonObject jsonUser;
+	private String responseText;
+
+	public static AuthenticatorImp usingHttpHandler(HttpHandler httpHandler) {
+		return new AuthenticatorImp(httpHandler);
+	}
+
+	private AuthenticatorImp(HttpHandler httpHandler) {
+		this.httpHandler = httpHandler;
+	}
+
 	@Override
 	public User getUserForToken(String authToken) {
-		// the idea is to in the future change this to an https call to a
-		// running gatekeeper server
-		// return GatekeeperImp.INSTANCE.getUserForToken(authToken);
-		// TODO: this should be read from the json
-		User user = new User("someId");
-		user.roles.add("someRole");
-		return user;
-
+		getUserForTokenFromGatekeeper(authToken);
+		return createUserFromResponseText();
 	}
+
+	private void getUserForTokenFromGatekeeper(String authToken) {
+		httpHandler.setRequestMethod("GET");
+		httpHandler.setURL("http://localhost:8080/gatekeeper/user/" + authToken);
+		if (httpHandler.getResponseCode() != Response.Status.OK) {
+			throw new AuthorizationException("authToken gives no authorization");
+		}
+		responseText = httpHandler.getResponseText();
+	}
+
+	private User createUserFromResponseText() {
+		getJsonUserFromResponseText(responseText);
+		setIdInUser();
+		parseAndSetRolesInUser();
+		return user;
+	}
+
+	private void getJsonUserFromResponseText(String responseText) {
+		JsonParser jsonParser = new OrgJsonParser();
+		jsonUser = (JsonObject) jsonParser.parseString(responseText);
+	}
+
+	private void setIdInUser() {
+		String id = getIdFromJsonUser();
+		user = new User(id);
+	}
+
+	private String getIdFromJsonUser() {
+		return jsonUser.getValueAsJsonString("name").getStringValue();
+	}
+
+	private void parseAndSetRolesInUser() {
+		JsonArray rolesPlusChildren = getRolesPlusChildrenFromJsonUser();
+		for (JsonValue child : rolesPlusChildren) {
+			String roleName = getRoleNameFromRolePlusChild(child);
+			user.roles.add(roleName);
+		}
+	}
+
+	private JsonArray getRolesPlusChildrenFromJsonUser() {
+		JsonArray userChildren = jsonUser.getValueAsJsonArray(CHILDREN);
+		JsonObject rolesPlus = userChildren.getValueAsJsonObject(0);
+		return rolesPlus.getValueAsJsonArray(CHILDREN);
+	}
+
+	private String getRoleNameFromRolePlusChild(JsonValue child) {
+		JsonArray rolePlusChildren = ((JsonObject) child).getValueAsJsonArray(CHILDREN);
+		JsonObject role = rolePlusChildren.getValueAsJsonObject(0);
+		return role.getValueAsJsonString("value").getStringValue();
+	}
+
 }

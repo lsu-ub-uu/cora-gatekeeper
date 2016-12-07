@@ -20,84 +20,60 @@
 package se.uu.ub.cora.gatekeeper.authentication;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+
+import java.util.Iterator;
+
+import javax.ws.rs.core.Response;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import se.uu.ub.cora.beefeater.authentication.User;
-import se.uu.ub.cora.gatekeeper.GatekeeperImp;
-import se.uu.ub.cora.gatekeeper.UserInfo;
-import se.uu.ub.cora.gatekeeper.UserPickerFactorySpy;
-import se.uu.ub.cora.spider.authentication.AuthenticationException;
 import se.uu.ub.cora.spider.authentication.Authenticator;
+import se.uu.ub.cora.spider.authorization.AuthorizationException;
 
 public class AuthenticatorTest {
-	private UserPickerFactorySpy userPickerFactory;
 	private Authenticator authenticator;
 	private User logedInUser;
+	private HttpHandlerSpy httpHandler;
 
 	@BeforeMethod
 	public void setUp() {
-		userPickerFactory = new UserPickerFactorySpy();
-		authenticator = new AuthenticatorImp();
-		GatekeeperImp.INSTANCE.setUserPickerFactory(userPickerFactory);
+		httpHandler = new HttpHandlerSpy();
+		authenticator = AuthenticatorImp.usingHttpHandler(httpHandler);
+		String jsonAnswer = "{\"children\":[{\"children\":[{\"children\":["
+				+ "{\"name\":\"role\",\"value\":\"someRole1\"}],\"name\":\"rolePlus\"}"
+				+ ",{\"children\":[{\"name\":\"role\",\"value\":\"someRole2\"}]"
+				+ ",\"name\":\"rolePlus\"}],\"name\":\"rolesPlus\"}],\"name\":\"someId2\"}";
+		httpHandler.setResponseText(jsonAnswer);
 	}
 
 	@Test
-	public void testHardCodedTokens() {
-		assertEquals(userPickerFactory.factoredUserPickers.get(0).usedUserInfo.idInUserStorage,
-				"99999");
-		logedInUser = authenticator.getUserForToken("dummySystemAdminAuthenticatedToken");
-		assertEquals(logedInUser.id, "999999");
-
-		assertEquals(userPickerFactory.factoredUserPickers.get(1).usedUserInfo.idInUserStorage,
-				"121212");
-		logedInUser = authenticator.getUserForToken("fitnesseUserToken");
-		assertEquals(logedInUser.id, "121212");
-
-		assertEquals(userPickerFactory.factoredUserPickers.get(2).usedUserInfo.idInUserStorage,
-				"131313");
-		logedInUser = authenticator.getUserForToken("fitnesseAdminToken");
-		assertEquals(logedInUser.id, "131313");
+	public void testHttpHandlerCalledCorrectly() {
+		logedInUser = authenticator.getUserForToken("someToken");
+		assertEquals(httpHandler.requestMetod, "GET");
+		assertEquals(httpHandler.url, "http://localhost:8080/gatekeeper/user/someToken");
 	}
 
 	@Test
-	public void testNoToken() {
-		logedInUser = authenticator.getUserForToken(null);
-		assertPluggedInUserPickerWasUsed();
-		assertUsedUserInfoIdInUserStorage(3, "12345");
-		assertReturnedUserIsFromUserPicker(3);
-	}
-
-	private void assertPluggedInUserPickerWasUsed() {
-		assertTrue(userPickerFactory.factoredUserPickers.get(0).userPickerWasCalled);
-	}
-
-	private void assertUsedUserInfoIdInUserStorage(int factored, String expectedIdInUserStorage) {
-		UserInfo usedUserInfo = userPickerFactory.factoredUserPickers.get(factored).usedUserInfo;
-		assertEquals(usedUserInfo.idInUserStorage, expectedIdInUserStorage);
-	}
-
-	private void assertReturnedUserIsFromUserPicker(int factored) {
-		assertEquals(logedInUser, userPickerFactory.factoredUserPickers.get(factored).returnedUser);
-	}
-
-	@Test(expectedExceptions = AuthenticationException.class)
-	public void testNonAuthenticatedUser() {
-		authenticator.getUserForToken("dummyNonAuthenticatedToken");
+	public void testHttpAnswerParsedToUser() {
+		logedInUser = authenticator.getUserForToken("someToken");
+		assertEquals(logedInUser.id, "someId2");
 	}
 
 	@Test
-	public void testUserOnlyPickedOncePerAuthToken() {
-		logedInUser = authenticator.getUserForToken("fitnesseAdminToken");
-		assertPluggedInUserPickerWasUsedOnce();
-		logedInUser = authenticator.getUserForToken("fitnesseAdminToken");
-		assertPluggedInUserPickerWasUsedOnce();
-
+	public void testHttpAnswerParsedToUserRoles() {
+		logedInUser = authenticator.getUserForToken("someToken");
+		assertEquals(logedInUser.roles.size(), 2);
+		Iterator<String> iterator = logedInUser.roles.iterator();
+		assertEquals(iterator.next(), "someRole2");
+		assertEquals(iterator.next(), "someRole1");
 	}
 
-	private void assertPluggedInUserPickerWasUsedOnce() {
-		assertEquals(userPickerFactory.factoredUserPickers.size(), 3);
+	@Test(expectedExceptions = AuthorizationException.class)
+	public void testUnauthorizedToken() {
+		httpHandler.setResponseCode(Response.Status.UNAUTHORIZED);
+		logedInUser = authenticator.getUserForToken("dummyNonAuthenticatedToken");
 	}
+
 }

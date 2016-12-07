@@ -1,6 +1,5 @@
 /*
- * Copyright 2015, 2016 Uppsala University Library
- * Copyright 2016 Olov McKie
+ * Copyright 2016 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -18,14 +17,34 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper.dependency;
+package se.uu.ub.cora.gatekeeper.http;
 
-import se.uu.ub.cora.gatekeeper.GatekeeperImp;
+import javax.ws.rs.core.Response.Status;
 
-public final class GatekeeperLocatorImp implements GatekeeperLocator {
+public class HttpHandlerImp implements HttpHandler {
 
 	@Override
-	public GatekeeperImp locateGatekeeper() {
-		return GatekeeperImp.INSTANCE;
+	public void setRequestMethod(String requestMetod) {
+		// TODO Auto-generated method stub
+
 	}
+
+	@Override
+	public void setURL(String url) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public String getResponseText() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Status getResponseCode() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
