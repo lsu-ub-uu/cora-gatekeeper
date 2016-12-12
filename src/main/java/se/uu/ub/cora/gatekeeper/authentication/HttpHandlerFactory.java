@@ -19,44 +19,10 @@
 
 package se.uu.ub.cora.gatekeeper.authentication;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
 import se.uu.ub.cora.gatekeeper.http.HttpHandler;
 
-public class HttpHandlerSpy implements HttpHandler {
+public interface HttpHandlerFactory {
 
-	public String requestMetod;
-	public String url;
-	private String jsonAnswer;
-	private Status responseCode = Response.Status.OK;
-
-	@Override
-	public void setRequestMethod(String requestMetod) {
-		this.requestMetod = requestMetod;
-	}
-
-	public void setResponseText(String jsonAnswer) {
-		this.jsonAnswer = jsonAnswer;
-
-	}
-
-	@Override
-	public String getResponseText() {
-		return jsonAnswer;
-	}
-
-	public void setResponseCode(Status responseStatus) {
-		this.responseCode = responseStatus;
-	}
-
-	@Override
-	public Status getResponseCode() {
-		return responseCode;
-	}
-
-	public void setURL(String url) {
-		this.url = url;
-	}
+	HttpHandler factor(String url);
 
 }

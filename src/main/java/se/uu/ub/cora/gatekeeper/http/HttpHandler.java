@@ -25,8 +25,6 @@ public interface HttpHandler {
 
 	void setRequestMethod(String requestMetod);
 
-	void setURL(String url);
-
 	String getResponseText();
 
 	Status getResponseCode();

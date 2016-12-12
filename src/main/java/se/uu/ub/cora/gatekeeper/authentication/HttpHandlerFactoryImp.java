@@ -19,44 +19,32 @@
 
 package se.uu.ub.cora.gatekeeper.authentication;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import se.uu.ub.cora.gatekeeper.http.HttpHandler;
+import se.uu.ub.cora.gatekeeper.http.HttpHandlerImp;
 
-public class HttpHandlerSpy implements HttpHandler {
-
-	public String requestMetod;
-	public String url;
-	private String jsonAnswer;
-	private Status responseCode = Response.Status.OK;
+public class HttpHandlerFactoryImp implements HttpHandlerFactory {
 
 	@Override
-	public void setRequestMethod(String requestMetod) {
-		this.requestMetod = requestMetod;
-	}
-
-	public void setResponseText(String jsonAnswer) {
-		this.jsonAnswer = jsonAnswer;
-
-	}
-
-	@Override
-	public String getResponseText() {
-		return jsonAnswer;
-	}
-
-	public void setResponseCode(Status responseStatus) {
-		this.responseCode = responseStatus;
-	}
-
-	@Override
-	public Status getResponseCode() {
-		return responseCode;
-	}
-
-	public void setURL(String url) {
-		this.url = url;
+	public HttpHandler factor(String urlString) {
+		// TODO Auto-generated method stub
+		URL url;
+		HttpURLConnection urlConnection = null;
+		try {
+			url = new URL(urlString);
+			urlConnection = (HttpURLConnection) url.openConnection();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return HttpHandlerImp.usingURLConnection(urlConnection);
 	}
 
 }

@@ -19,11 +19,44 @@
 
 package se.uu.ub.cora.gatekeeper.http;
 
+import static org.testng.Assert.assertEquals;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import javax.ws.rs.core.Response;
+
 import org.testng.annotations.Test;
 
 public class HttpHandlerTest {
+
 	@Test
-	public void testHttpHandler() {
-		HttpHandler httpHandler = new HttpHandlerImp();
+	public void testSetRequestMethod() throws MalformedURLException {
+		URL url = new URL("http://google.se");
+		HttpURLConnectionSpy urlConnection = new HttpURLConnectionSpy(url);
+		HttpHandler httpHandler = HttpHandlerImp.usingURLConnection(urlConnection);
+		httpHandler.setRequestMethod("GET");
+		assertEquals(urlConnection.requestMethod, "GET");
 	}
+
+	@Test
+	public void testGetResponseCode() throws MalformedURLException {
+		URL url = new URL("http://google.se");
+		HttpURLConnectionSpy urlConnection = new HttpURLConnectionSpy(url);
+		HttpHandler httpHandler = HttpHandlerImp.usingURLConnection(urlConnection);
+
+		urlConnection.setResponseCode(200);
+		assertEquals(httpHandler.getResponseCode(), Response.Status.OK);
+	}
+
+	@Test
+	public void testGetResponseText() throws MalformedURLException {
+		URL url = new URL("http://google.se");
+		HttpURLConnectionSpy urlConnection = new HttpURLConnectionSpy(url);
+		HttpHandler httpHandler = HttpHandlerImp.usingURLConnection(urlConnection);
+
+		urlConnection.setResponseText("some text");
+		assertEquals(httpHandler.getResponseText(), "some text");
+	}
+
 }

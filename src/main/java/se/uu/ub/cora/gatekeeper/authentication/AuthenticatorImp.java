@@ -33,17 +33,18 @@ import se.uu.ub.cora.spider.authorization.AuthorizationException;
 
 public final class AuthenticatorImp implements Authenticator {
 	private static final String CHILDREN = "children";
-	private HttpHandler httpHandler;
+	private HttpHandlerFactory httpHandlerFactory;
 	private User user;
 	private JsonObject jsonUser;
 	private String responseText;
+	private HttpHandler httpHandler;
 
-	public static AuthenticatorImp usingHttpHandler(HttpHandler httpHandler) {
-		return new AuthenticatorImp(httpHandler);
+	public static AuthenticatorImp usingHttpHandlerFactory(HttpHandlerFactory httpHandlerFactory) {
+		return new AuthenticatorImp(httpHandlerFactory);
 	}
 
-	private AuthenticatorImp(HttpHandler httpHandler) {
-		this.httpHandler = httpHandler;
+	private AuthenticatorImp(HttpHandlerFactory httpHandlerFactory) {
+		this.httpHandlerFactory = httpHandlerFactory;
 	}
 
 	@Override
@@ -53,8 +54,12 @@ public final class AuthenticatorImp implements Authenticator {
 	}
 
 	private void getUserForTokenFromGatekeeper(String authToken) {
+		// TODO: read from context.xml
+		String url = "http://localhost:8080/gatekeeper/rest/user/" + authToken;
+		httpHandler = httpHandlerFactory.factor(url);
 		httpHandler.setRequestMethod("GET");
-		httpHandler.setURL("http://localhost:8080/gatekeeper/user/" + authToken);
+		// httpHandlerFactory.setURL("http://localhost:8080/gatekeeper/user/" +
+		// authToken);
 		if (httpHandler.getResponseCode() != Response.Status.OK) {
 			throw new AuthorizationException("authToken gives no authorization");
 		}

@@ -19,44 +19,32 @@
 
 package se.uu.ub.cora.gatekeeper.authentication;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
-import se.uu.ub.cora.gatekeeper.http.HttpHandler;
-
-public class HttpHandlerSpy implements HttpHandler {
-
-	public String requestMetod;
-	public String url;
-	private String jsonAnswer;
-	private Status responseCode = Response.Status.OK;
-
-	@Override
-	public void setRequestMethod(String requestMetod) {
-		this.requestMetod = requestMetod;
+@Path("/simple")
+public class SimplestPossible {
+	// This method is called if TEXT_PLAIN is request
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public String sayPlainTextHello() {
+		return "Hello Jersey";
 	}
 
-	public void setResponseText(String jsonAnswer) {
-		this.jsonAnswer = jsonAnswer;
-
+	// This method is called if XML is request
+	@GET
+	@Produces(MediaType.TEXT_XML)
+	public String sayXMLHello() {
+		return "<?xml version=\"1.0\"?>" + "<hello> Hello Jersey" + "</hello>";
 	}
 
-	@Override
-	public String getResponseText() {
-		return jsonAnswer;
+	// This method is called if HTML is request
+	@GET
+	@Produces(MediaType.TEXT_HTML)
+	public String sayHtmlHello() {
+		return "<html> " + "<title>" + "Hello Jersey" + "</title>" + "<body><h1>" + "Hello Jersey"
+				+ "</body></h1>" + "</html> ";
 	}
-
-	public void setResponseCode(Status responseStatus) {
-		this.responseCode = responseStatus;
-	}
-
-	@Override
-	public Status getResponseCode() {
-		return responseCode;
-	}
-
-	public void setURL(String url) {
-		this.url = url;
-	}
-
 }

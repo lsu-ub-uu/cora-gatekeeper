@@ -20,7 +20,7 @@
 
 	<artifactId>gatekeeper</artifactId>
 	<version>0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>gatekeeper</name>
 
@@ -30,7 +30,7 @@
 		<spider.version>0.12-SNAPSHOT</spider.version>
 		<basicstorage.version>0.3-SNAPSHOT</basicstorage.version>
 		<javax.ws.rs.version>2.0.1</javax.ws.rs.version>
-		<jersey.version>2.23.2</jersey.version>
+		<jersey.version>2.25</jersey.version>
 	</properties>
 
 	<scm>
@@ -105,11 +105,11 @@
 			<version>${jersey.version}</version>
 			<scope>compile</scope>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.glassfish.jersey.media</groupId> -->
-<!-- 			<artifactId>jersey-media-multipart</artifactId> -->
-<!-- 			<version>${jersey.version}</version> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.glassfish.jersey.media</groupId> -->
+		<!-- <artifactId>jersey-media-multipart</artifactId> -->
+		<!-- <version>${jersey.version}</version> -->
+		<!-- </dependency> -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
@@ -117,4 +117,30 @@
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
+	<build>
+		<finalName>gatekeeper</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-install-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>install</phase>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<packaging>jar</packaging>
+							<artifactId>${project.artifactId}connection</artifactId>
+							<groupId>${project.groupId}</groupId>
+							<version>${project.version}</version>
+							<file>
+								${project.build.directory}/${project.artifactId}-${project.version}.jar
+							</file>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>

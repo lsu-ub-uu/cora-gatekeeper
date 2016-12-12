@@ -74,6 +74,10 @@ public enum GatekeeperImp implements Gatekeeper {
 		if ("dummyNonAuthenticatedToken".equals(authToken)) {
 			throw new AuthenticationException("token not valid");
 		}
+		// TODO: added without test fix
+		if (!pickedUsers.containsKey(authToken)) {
+			throw new AuthenticationException("token not valid");
+		}
 	}
 
 	private User getAuthenticatedUser(String authToken) {

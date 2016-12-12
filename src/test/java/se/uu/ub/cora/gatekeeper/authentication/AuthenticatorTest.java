@@ -36,23 +36,20 @@ public class AuthenticatorTest {
 	private Authenticator authenticator;
 	private User logedInUser;
 	private HttpHandlerSpy httpHandler;
+	private HttpHandlerFactorySpy httpHandlerFactory;
 
 	@BeforeMethod
 	public void setUp() {
-		httpHandler = new HttpHandlerSpy();
-		authenticator = AuthenticatorImp.usingHttpHandler(httpHandler);
-		String jsonAnswer = "{\"children\":[{\"children\":[{\"children\":["
-				+ "{\"name\":\"role\",\"value\":\"someRole1\"}],\"name\":\"rolePlus\"}"
-				+ ",{\"children\":[{\"name\":\"role\",\"value\":\"someRole2\"}]"
-				+ ",\"name\":\"rolePlus\"}],\"name\":\"rolesPlus\"}],\"name\":\"someId2\"}";
-		httpHandler.setResponseText(jsonAnswer);
+		httpHandlerFactory = new HttpHandlerFactorySpy();
+		authenticator = AuthenticatorImp.usingHttpHandlerFactory(httpHandlerFactory);
 	}
 
 	@Test
 	public void testHttpHandlerCalledCorrectly() {
 		logedInUser = authenticator.getUserForToken("someToken");
+		httpHandler = httpHandlerFactory.getFactored(0);
 		assertEquals(httpHandler.requestMetod, "GET");
-		assertEquals(httpHandler.url, "http://localhost:8080/gatekeeper/user/someToken");
+		assertEquals(httpHandler.url, "http://localhost:8080/gatekeeper/rest/user/someToken");
 	}
 
 	@Test
@@ -72,7 +69,7 @@ public class AuthenticatorTest {
 
 	@Test(expectedExceptions = AuthorizationException.class)
 	public void testUnauthorizedToken() {
-		httpHandler.setResponseCode(Response.Status.UNAUTHORIZED);
+		httpHandlerFactory.setResponseCode(Response.Status.UNAUTHORIZED);
 		logedInUser = authenticator.getUserForToken("dummyNonAuthenticatedToken");
 	}
 

@@ -19,44 +19,19 @@
 
 package se.uu.ub.cora.gatekeeper.authentication;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
+import static org.testng.Assert.assertTrue;
+
+import org.testng.annotations.Test;
 
 import se.uu.ub.cora.gatekeeper.http.HttpHandler;
+import se.uu.ub.cora.gatekeeper.http.HttpHandlerImp;
 
-public class HttpHandlerSpy implements HttpHandler {
-
-	public String requestMetod;
-	public String url;
-	private String jsonAnswer;
-	private Status responseCode = Response.Status.OK;
-
-	@Override
-	public void setRequestMethod(String requestMetod) {
-		this.requestMetod = requestMetod;
+public class HttpHandlerFactoryTest {
+	@Test
+	public void testFactor() {
+		HttpHandlerFactory httpHandlerFactory = new HttpHandlerFactoryImp();
+		String url = "http://google.se";
+		HttpHandler httpHandler = httpHandlerFactory.factor(url);
+		assertTrue(httpHandler instanceof HttpHandlerImp);
 	}
-
-	public void setResponseText(String jsonAnswer) {
-		this.jsonAnswer = jsonAnswer;
-
-	}
-
-	@Override
-	public String getResponseText() {
-		return jsonAnswer;
-	}
-
-	public void setResponseCode(Status responseStatus) {
-		this.responseCode = responseStatus;
-	}
-
-	@Override
-	public Status getResponseCode() {
-		return responseCode;
-	}
-
-	public void setURL(String url) {
-		this.url = url;
-	}
-
 }

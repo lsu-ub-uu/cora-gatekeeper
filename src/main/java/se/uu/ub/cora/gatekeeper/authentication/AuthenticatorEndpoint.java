@@ -22,7 +22,9 @@ package se.uu.ub.cora.gatekeeper.authentication;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import se.uu.ub.cora.gatekeeper.dependency.GatekeeperInstanceProvider;
 import se.uu.ub.cora.json.builder.JsonArrayBuilder;
@@ -33,18 +35,38 @@ import se.uu.ub.cora.spider.authentication.AuthenticationException;
 @Path("user")
 public class AuthenticatorEndpoint {
 
+	private UriInfo uriInfo;
+	private String url;
+
+	public AuthenticatorEndpoint(@Context UriInfo uriInfo) {
+		this.uriInfo = uriInfo;
+		url = getBaseURLFromURI();
+	}
+
+	private String getBaseURLFromURI() {
+		String baseURI = uriInfo.getBaseUri().toString();
+		return baseURI + "user/";
+	}
+
 	private static final String NAME = "name";
 	private static final String CHILDREN = "children";
 	private Gatekeeper gatekeeper;
 	private OrgJsonBuilderFactoryAdapter orgJsonBuilderFactoryAdapter;
 
 	public AuthenticatorEndpoint() {
-		gatekeeper = GatekeeperInstanceProvider.getGatekeeper();
-		orgJsonBuilderFactoryAdapter = new OrgJsonBuilderFactoryAdapter();
+		// gatekeeper = GatekeeperInstanceProvider.getGatekeeper();
+		// orgJsonBuilderFactoryAdapter = new OrgJsonBuilderFactoryAdapter();
 	}
+
+	// @GET
+	// public Response basePath() {
+	// return Response.status(Response.Status.UNAUTHORIZED).build();
+	// }
 
 	@GET
 	@Path("{token}")
+	// @Consumes("application/uub+record+json")
+	// @Produces("application/uub+record+json")
 	public Response getUserForToken(@PathParam("token") String token) {
 		try {
 			return tryToGetUserForToken(token);
@@ -54,6 +76,8 @@ public class AuthenticatorEndpoint {
 	}
 
 	private Response tryToGetUserForToken(String token) {
+		gatekeeper = GatekeeperInstanceProvider.getGatekeeper();
+		orgJsonBuilderFactoryAdapter = new OrgJsonBuilderFactoryAdapter();
 		User user = gatekeeper.getUserForToken(token);
 		String json = convertUserToJson(user);
 		return Response.status(Response.Status.OK).entity(json).build();
