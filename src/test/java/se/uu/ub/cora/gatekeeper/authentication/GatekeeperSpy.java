@@ -20,8 +20,8 @@
 package se.uu.ub.cora.gatekeeper.authentication;
 
 import se.uu.ub.cora.gatekeeper.Gatekeeper;
-import se.uu.ub.cora.gatekeeperinterface.User;
-import se.uu.ub.cora.gatekeeperinterface.UserInfo;
+import se.uu.ub.cora.userpicker.User;
+import se.uu.ub.cora.userpicker.UserInfo;
 
 public class GatekeeperSpy implements Gatekeeper {
 

@@ -26,7 +26,7 @@
 
 	<properties>
 		<json.version>0.3-SNAPSHOT</json.version>
-		<gatekeeperinterface.version>0.1-SNAPSHOT</gatekeeperinterface.version>
+		<userpicker.version>0.1-SNAPSHOT</userpicker.version>
 		<javax.ws.rs.version>2.0.1</javax.ws.rs.version>
 		<jersey.version>2.25</jersey.version>
 	</properties>
@@ -72,8 +72,8 @@
 		</dependency>
 		<dependency>
 			<groupId>se.uu.ub.cora</groupId>
-			<artifactId>gatekeeperinterface</artifactId>
-			<version>${gatekeeperinterface.version}</version>
+			<artifactId>userpicker</artifactId>
+			<version>${userpicker.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

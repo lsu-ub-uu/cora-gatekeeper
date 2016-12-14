@@ -19,9 +19,9 @@
 
 package se.uu.ub.cora.gatekeeper;
 
-import se.uu.ub.cora.gatekeeperinterface.User;
-import se.uu.ub.cora.gatekeeperinterface.UserInfo;
-import se.uu.ub.cora.gatekeeperinterface.UserPicker;
+import se.uu.ub.cora.userpicker.User;
+import se.uu.ub.cora.userpicker.UserInfo;
+import se.uu.ub.cora.userpicker.UserPicker;
 
 public class UserPickerSpy implements UserPicker {
 

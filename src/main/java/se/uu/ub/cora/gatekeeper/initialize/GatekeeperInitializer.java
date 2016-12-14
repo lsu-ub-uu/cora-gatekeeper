@@ -28,7 +28,7 @@ import se.uu.ub.cora.gatekeeper.GatekeeperImp;
 import se.uu.ub.cora.gatekeeper.dependency.GatekeeperInstanceProvider;
 import se.uu.ub.cora.gatekeeper.dependency.GatekeeperLocator;
 import se.uu.ub.cora.gatekeeper.dependency.GatekeeperLocatorImp;
-import se.uu.ub.cora.gatekeeperinterface.UserPickerFactory;
+import se.uu.ub.cora.userpicker.UserPickerFactory;
 
 @WebListener
 public class GatekeeperInitializer implements ServletContextListener {

@@ -23,7 +23,7 @@ import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.gatekeeperinterface.UserInfo;
+import se.uu.ub.cora.userpicker.UserInfo;
 
 public class UserInfoTest {
 	@Test
