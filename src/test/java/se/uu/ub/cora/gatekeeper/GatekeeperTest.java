@@ -25,8 +25,9 @@ import static org.testng.Assert.assertTrue;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.gatekeeper.authentication.User;
-import se.uu.ub.cora.spider.authentication.AuthenticationException;
+import se.uu.ub.cora.gatekeeper.authentication.AuthenticationException;
+import se.uu.ub.cora.gatekeeperinterface.User;
+import se.uu.ub.cora.gatekeeperinterface.UserInfo;
 
 public class GatekeeperTest {
 	private static final int FIRST_NON_HARDCODED = 3;

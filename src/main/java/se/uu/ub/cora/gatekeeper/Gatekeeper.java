@@ -19,10 +19,13 @@
 
 package se.uu.ub.cora.gatekeeper;
 
-import se.uu.ub.cora.gatekeeper.authentication.User;
+import se.uu.ub.cora.gatekeeperinterface.User;
+import se.uu.ub.cora.gatekeeperinterface.UserInfo;
 
-public interface UserPicker {
+public interface Gatekeeper {
 
-	User pickUser(UserInfo userInfo);
+	User getUserForToken(String authToken);
+
+	String getAuthTokenForUserInfo(UserInfo userInfo);
 
 }

@@ -19,6 +19,7 @@
 
 package se.uu.ub.cora.gatekeeper.authentication;
 
+import se.uu.ub.cora.gatekeeper.Gatekeeper;
 import se.uu.ub.cora.gatekeeper.dependency.GatekeeperLocator;
 
 public class GateKeeperLocatorSpy implements GatekeeperLocator {

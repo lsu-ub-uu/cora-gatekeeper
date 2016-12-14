@@ -26,7 +26,7 @@ import java.util.Set;
 
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.gatekeeper.authentication.User;
+import se.uu.ub.cora.gatekeeperinterface.User;
 
 public class UserTest {
 	@Test

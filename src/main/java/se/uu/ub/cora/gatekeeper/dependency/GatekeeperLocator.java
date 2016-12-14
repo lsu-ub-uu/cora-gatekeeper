@@ -19,7 +19,7 @@
 
 package se.uu.ub.cora.gatekeeper.dependency;
 
-import se.uu.ub.cora.gatekeeper.authentication.Gatekeeper;
+import se.uu.ub.cora.gatekeeper.Gatekeeper;
 
 public interface GatekeeperLocator {
 

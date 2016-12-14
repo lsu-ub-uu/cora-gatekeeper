@@ -66,14 +66,22 @@ public class AuthenticatorEndpointTest {
 	@Test
 	public void testNonAuthenticatedToken() {
 		response = authenticatorEndpoint.getUserForToken("dummyNonAuthenticatedToken");
-
 		assertResponseStatusIs(Response.Status.UNAUTHORIZED);
 	}
 
 	@Test
 	public void testNoTokenShouldBeGuest() {
 		response = authenticatorEndpoint.getUserForToken(null);
+		assertResponseIsCorrectGuestUser();
+	}
 
+	@Test
+	public void testGetUserWithoutTokenShouldBeGuest() {
+		response = authenticatorEndpoint.getUserWithoutToken();
+		assertResponseIsCorrectGuestUser();
+	}
+
+	private void assertResponseIsCorrectGuestUser() {
 		assertResponseStatusIs(Response.Status.OK);
 		assertEntityExists();
 		String expected = "{\"children\":[{\"children\":["

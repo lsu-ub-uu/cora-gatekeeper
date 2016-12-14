@@ -26,8 +26,8 @@ import static org.testng.Assert.assertTrue;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import se.uu.ub.cora.gatekeeper.Gatekeeper;
 import se.uu.ub.cora.gatekeeper.GatekeeperImp;
-import se.uu.ub.cora.gatekeeper.authentication.Gatekeeper;
 
 public class GatekeeperLocatorTest {
 	private GatekeeperLocator locator = new GatekeeperLocatorImp();

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2015 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -19,29 +19,11 @@
 
 package se.uu.ub.cora.gatekeeper.authentication;
 
-import se.uu.ub.cora.beefeater.authentication.User;
-import se.uu.ub.cora.spider.authentication.AuthenticationException;
-import se.uu.ub.cora.spider.authentication.Authenticator;
+public class AuthenticationException extends RuntimeException {
 
-public class AuthenticatorSpy implements Authenticator {
+	private static final long serialVersionUID = -7209118389492113349L;
 
-	public boolean authenticationWasCalled = false;
-	public String authToken;
-
-	@Override
-	public User getUserForToken(String authToken) {
-		authenticationWasCalled = true;
-
-		this.authToken = authToken;
-		if ("dummyNonAuthenticatedToken".equals(authToken)) {
-			throw new AuthenticationException("token not valid");
-		}
-
-		User user = new User("12345");
-		user.loginId = "knownUser";
-		user.loginDomain = "system";
-		user.roles.add("guest");
-		return user;
+	public AuthenticationException(String message) {
+		super(message);
 	}
-
 }

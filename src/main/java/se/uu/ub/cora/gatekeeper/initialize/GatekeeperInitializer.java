@@ -25,10 +25,10 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 import se.uu.ub.cora.gatekeeper.GatekeeperImp;
-import se.uu.ub.cora.gatekeeper.UserPickerFactory;
 import se.uu.ub.cora.gatekeeper.dependency.GatekeeperInstanceProvider;
 import se.uu.ub.cora.gatekeeper.dependency.GatekeeperLocator;
 import se.uu.ub.cora.gatekeeper.dependency.GatekeeperLocatorImp;
+import se.uu.ub.cora.gatekeeperinterface.UserPickerFactory;
 
 @WebListener
 public class GatekeeperInitializer implements ServletContextListener {
@@ -50,7 +50,6 @@ public class GatekeeperInitializer implements ServletContextListener {
 		String userPickerFactoryString = getClassNameToInitializeAsUserPickerFactoryFromContext();
 		createInstanceOfUserPickerFactoryClass(userPickerFactoryString);
 
-		// TODO: added without test, fix..
 		GatekeeperLocator locator = new GatekeeperLocatorImp();
 		GatekeeperInstanceProvider.setGatekeeperLocator(locator);
 		GatekeeperImp.INSTANCE.setUserPickerFactory(userPickerFactory);
@@ -66,8 +65,8 @@ public class GatekeeperInitializer implements ServletContextListener {
 
 	private void createInstanceOfUserPickerFactoryClass(String userPickerFactoryString)
 			throws InstantiationException, IllegalAccessException, ClassNotFoundException {
-		userPickerFactory = (UserPickerFactory) Class.forName(userPickerFactoryString)
-				.newInstance();
+		Object newInstance = Class.forName(userPickerFactoryString).newInstance();
+		userPickerFactory = (UserPickerFactory) newInstance;
 	}
 
 	@Override
