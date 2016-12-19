@@ -17,7 +17,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper.authentication;
+package se.uu.ub.cora.gatekeeper.tokenprovider;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
@@ -29,38 +29,42 @@ import javax.ws.rs.core.Response.Status;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import se.uu.ub.cora.gatekeeper.authentication.GateKeeperLocatorSpy;
 import se.uu.ub.cora.gatekeeper.dependency.GatekeeperInstanceProvider;
 
-public class AuthenticatorEndpointTest {
-	private AuthenticatorEndpoint authenticatorEndpoint;
+public class TokenProviderEndpointTest {
 	private Response response;
 	private GateKeeperLocatorSpy locator;
+	private TokenProviderEndpoint tokenProviderEndpoint;
+	private String jsonUserInfo;
 
 	@BeforeMethod
 	public void setUp() {
 		locator = new GateKeeperLocatorSpy();
 		GatekeeperInstanceProvider.setGatekeeperLocator(locator);
-		authenticatorEndpoint = new AuthenticatorEndpoint();
+		tokenProviderEndpoint = new TokenProviderEndpoint();
+		jsonUserInfo = "{\"children\":[" + "{\"name\":\"idFromLogin\",\"value\":\"\"},"
+				+ "{\"name\":\"domainFromLogin\",\"value\":\"\"},"
+				+ "{\"name\":\"idInUserStorage\",\"value\":\"131313\"}"
+				+ "],\"name\":\"userInfo\"}";
 	}
 
 	@Test
 	public void testDependenciesAreCalled() {
-		String token = "someToken";
-		response = authenticatorEndpoint.getUserForToken(token);
+		response = tokenProviderEndpoint.getAuthTokenForUserInfo(jsonUserInfo);
 		assertTrue(locator.gatekeeperLocated);
-		assertTrue(locator.gatekeeperSpy.getUserForTokenWasCalled);
+		assertTrue(locator.gatekeeperSpy.getAuthTokenForUserInfoWasCalled);
 	}
 
 	@Test
-	public void testGetUserForToken() {
-		String token = "someToken";
-		response = authenticatorEndpoint.getUserForToken(token);
+	public void testGetToken() {
+		response = tokenProviderEndpoint.getAuthTokenForUserInfo(jsonUserInfo);
+
 		assertResponseStatusIs(Response.Status.OK);
 		assertEntityExists();
-		String expected = "{\"children\":[{\"children\":[{\"children\":["
-				+ "{\"name\":\"role\",\"value\":\"someRole1\"}],\"name\":\"rolePlus\"}"
-				+ ",{\"children\":[{\"name\":\"role\",\"value\":\"someRole2\"}]"
-				+ ",\"name\":\"rolePlus\"}],\"name\":\"rolesPlus\"}],\"name\":\"someId\"}";
+		String expected = "{\"children\":[" + "{\"name\":\"id\",\"value\":\"someAuthToken\"},"
+				+ "{\"name\":\"validForNoSeconds\",\"value\":\"600\"}"
+				+ "],\"name\":\"authToken\"}";
 		assertEquals(response.getEntity(), expected);
 	}
 
@@ -73,32 +77,13 @@ public class AuthenticatorEndpointTest {
 	}
 
 	@Test
-	public void testNonAuthenticatedToken() {
-		response = authenticatorEndpoint.getUserForToken("dummyNonAuthenticatedToken");
+	public void testNonUserInfoWithProblem() {
+		// someLoginIdWithProblem
+		String jsonUserInfo = "{\"children\":["
+				+ "{\"name\":\"idFromLogin\",\"value\":\"someLoginIdWithProblem\"},"
+				+ "{\"name\":\"domainFromLogin\",\"value\":\"\"},"
+				+ "{\"name\":\"idInUserStorage\",\"value\":\"\"}" + "],\"name\":\"userInfo\"}";
+		response = tokenProviderEndpoint.getAuthTokenForUserInfo(jsonUserInfo);
 		assertResponseStatusIs(Response.Status.UNAUTHORIZED);
 	}
-
-	@Test
-	public void testNoTokenShouldBeGuest() {
-		response = authenticatorEndpoint.getUserForToken(null);
-		assertResponseIsCorrectGuestUser();
-	}
-
-	@Test
-	public void testGetUserWithoutTokenShouldBeGuest() {
-		response = authenticatorEndpoint.getUserWithoutToken();
-		assertResponseIsCorrectGuestUser();
-	}
-
-	private void assertResponseIsCorrectGuestUser() {
-		assertResponseStatusIs(Response.Status.OK);
-		assertEntityExists();
-		String expected = "{\"children\":[{\"children\":["
-				+ "{\"children\":[{\"name\":\"role\",\"value\":\"someRole112345\"}]"
-				+ ",\"name\":\"rolePlus\"},{\"children\":["
-				+ "{\"name\":\"role\",\"value\":\"someRole212345\"}]"
-				+ ",\"name\":\"rolePlus\"}],\"name\":\"rolesPlus\"}]" + ",\"name\":\"12345\"}";
-		assertEquals(response.getEntity(), expected);
-	}
-
 }

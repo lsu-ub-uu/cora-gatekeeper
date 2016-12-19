@@ -26,6 +26,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import se.uu.ub.cora.gatekeeper.authentication.AuthenticationException;
+import se.uu.ub.cora.gatekeeper.tokenprovider.AuthToken;
 import se.uu.ub.cora.userpicker.User;
 import se.uu.ub.cora.userpicker.UserInfo;
 
@@ -109,12 +110,18 @@ public class GatekeeperTest {
 	@Test
 	public void testGetAuthTokenForUserInfo() {
 		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain("someLoginId", "someLoginDomain");
-		String authToken = gatekeeper.getAuthTokenForUserInfo(userInfo);
+		AuthToken authToken = gatekeeper.getAuthTokenForUserInfo(userInfo);
 
 		assertEquals(userPickerFactory.factoredUserPickers.get(FIRST_NON_HARDCODED).usedUserInfo,
 				userInfo);
-		logedInUser = gatekeeper.getUserForToken(authToken);
+		logedInUser = gatekeeper.getUserForToken(authToken.id);
 		assertEquals(logedInUser.loginId, "someLoginId");
 	}
 
+	@Test(expectedExceptions = AuthenticationException.class)
+	public void testGetAuthTokenWithProblem() {
+		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain("someLoginIdWithProblem",
+				"someLoginDomain");
+		gatekeeper.getAuthTokenForUserInfo(userInfo);
+	}
 }

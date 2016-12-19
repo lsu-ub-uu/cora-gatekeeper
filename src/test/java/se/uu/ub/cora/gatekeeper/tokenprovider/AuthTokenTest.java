@@ -17,21 +17,19 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper.authentication;
+package se.uu.ub.cora.gatekeeper.tokenprovider;
 
-import se.uu.ub.cora.gatekeeper.Gatekeeper;
-import se.uu.ub.cora.gatekeeper.dependency.GatekeeperLocator;
+import static org.testng.Assert.assertEquals;
 
-public class GateKeeperLocatorSpy implements GatekeeperLocator {
+import org.testng.annotations.Test;
 
-	public GatekeeperSpy gatekeeperSpy;
-	public boolean gatekeeperLocated = false;
-
-	@Override
-	public Gatekeeper locateGatekeeper() {
-		gatekeeperLocated = true;
-		gatekeeperSpy = new GatekeeperSpy();
-		return gatekeeperSpy;
+public class AuthTokenTest {
+	@Test
+	public void test() {
+		String id = "someId";
+		int validForNoSeconds = 600;
+		AuthToken authToken = AuthToken.withIdAndValidForNoSeconds(id, validForNoSeconds);
+		assertEquals(authToken.id, "someId");
+		assertEquals(authToken.validForNoSeconds, 600);
 	}
-
 }

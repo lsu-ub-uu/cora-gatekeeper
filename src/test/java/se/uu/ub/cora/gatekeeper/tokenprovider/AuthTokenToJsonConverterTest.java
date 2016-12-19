@@ -17,21 +17,21 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper.authentication;
+package se.uu.ub.cora.gatekeeper.tokenprovider;
 
-import se.uu.ub.cora.gatekeeper.Gatekeeper;
-import se.uu.ub.cora.gatekeeper.dependency.GatekeeperLocator;
+import static org.testng.Assert.assertEquals;
 
-public class GateKeeperLocatorSpy implements GatekeeperLocator {
+import org.testng.annotations.Test;
 
-	public GatekeeperSpy gatekeeperSpy;
-	public boolean gatekeeperLocated = false;
-
-	@Override
-	public Gatekeeper locateGatekeeper() {
-		gatekeeperLocated = true;
-		gatekeeperSpy = new GatekeeperSpy();
-		return gatekeeperSpy;
+public class AuthTokenToJsonConverterTest {
+	@Test
+	public void testAuthTokenToJsonConverter() {
+		AuthToken authToken = AuthToken.withIdAndValidForNoSeconds("someId", 599);
+		AuthTokenToJsonConverter converter = new AuthTokenToJsonConverter(authToken);
+		String json = converter.convertAuthTokenToJson();
+		String expected = "{\"children\":[" + "{\"name\":\"id\",\"value\":\"someId\"},"
+				+ "{\"name\":\"validForNoSeconds\",\"value\":\"599\"}"
+				+ "],\"name\":\"authToken\"}";
+		assertEquals(json, expected);
 	}
-
 }

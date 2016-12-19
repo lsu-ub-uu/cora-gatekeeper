@@ -24,12 +24,14 @@ import java.util.Map;
 import java.util.UUID;
 
 import se.uu.ub.cora.gatekeeper.authentication.AuthenticationException;
+import se.uu.ub.cora.gatekeeper.tokenprovider.AuthToken;
 import se.uu.ub.cora.userpicker.User;
 import se.uu.ub.cora.userpicker.UserInfo;
 import se.uu.ub.cora.userpicker.UserPickerFactory;
 
 public enum GatekeeperImp implements Gatekeeper {
 	INSTANCE;
+	private static final int VALID_FOR_NO_SECONDS = 600;
 	private UserPickerFactory userPickerFactory;
 	private Map<String, User> pickedUsers = new HashMap<>();
 
@@ -82,11 +84,19 @@ public enum GatekeeperImp implements Gatekeeper {
 	}
 
 	@Override
-	public String getAuthTokenForUserInfo(UserInfo userInfo) {
+	public AuthToken getAuthTokenForUserInfo(UserInfo userInfo) {
+		try {
+			return tryToGetAuthTokenForUserInfo(userInfo);
+		} catch (Exception e) {
+			throw new AuthenticationException("Could not pick user for userInfo: " + e);
+		}
+	}
+
+	private AuthToken tryToGetAuthTokenForUserInfo(UserInfo userInfo) {
 		User pickedUser = getUserPickerFactory().factor().pickUser(userInfo);
 		String generateAuthToken = generateAuthToken();
 		pickedUsers.put(generateAuthToken, pickedUser);
-		return generateAuthToken;
+		return AuthToken.withIdAndValidForNoSeconds(generateAuthToken, VALID_FOR_NO_SECONDS);
 	}
 
 	private String generateAuthToken() {

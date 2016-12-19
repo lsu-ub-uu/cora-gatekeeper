@@ -19,6 +19,7 @@
 
 package se.uu.ub.cora.gatekeeper;
 
+import se.uu.ub.cora.gatekeeper.tokenprovider.AuthToken;
 import se.uu.ub.cora.userpicker.User;
 import se.uu.ub.cora.userpicker.UserInfo;
 
@@ -26,6 +27,6 @@ public interface Gatekeeper {
 
 	User getUserForToken(String authToken);
 
-	String getAuthTokenForUserInfo(UserInfo userInfo);
+	AuthToken getAuthTokenForUserInfo(UserInfo userInfo);
 
 }

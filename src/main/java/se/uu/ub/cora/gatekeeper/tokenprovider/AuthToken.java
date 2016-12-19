@@ -17,21 +17,20 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper.authentication;
+package se.uu.ub.cora.gatekeeper.tokenprovider;
 
-import se.uu.ub.cora.gatekeeper.Gatekeeper;
-import se.uu.ub.cora.gatekeeper.dependency.GatekeeperLocator;
+public final class AuthToken {
 
-public class GateKeeperLocatorSpy implements GatekeeperLocator {
+	public String id;
+	public int validForNoSeconds;
 
-	public GatekeeperSpy gatekeeperSpy;
-	public boolean gatekeeperLocated = false;
+	private AuthToken(String id, int validForNoSeconds) {
+		this.id = id;
+		this.validForNoSeconds = validForNoSeconds;
+	}
 
-	@Override
-	public Gatekeeper locateGatekeeper() {
-		gatekeeperLocated = true;
-		gatekeeperSpy = new GatekeeperSpy();
-		return gatekeeperSpy;
+	public static AuthToken withIdAndValidForNoSeconds(String id, int validForNoSeconds) {
+		return new AuthToken(id, validForNoSeconds);
 	}
 
 }
