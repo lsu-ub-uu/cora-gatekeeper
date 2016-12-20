@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2015 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -17,12 +17,13 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper;
+package se.uu.ub.cora.gatekeeper.authentication;
 
-import se.uu.ub.cora.gatekeeper.authentication.User;
+public class AuthenticationException extends RuntimeException {
 
-public interface UserPicker {
+	private static final long serialVersionUID = -7209118389492113349L;
 
-	User pickUser(UserInfo userInfo);
-
+	public AuthenticationException(String message) {
+		super(message);
+	}
 }

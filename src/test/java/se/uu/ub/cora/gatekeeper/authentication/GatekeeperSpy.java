@@ -19,14 +19,19 @@
 
 package se.uu.ub.cora.gatekeeper.authentication;
 
-import se.uu.ub.cora.gatekeeper.UserInfo;
-import se.uu.ub.cora.spider.authentication.AuthenticationException;
+import se.uu.ub.cora.gatekeeper.Gatekeeper;
+import se.uu.ub.cora.gatekeeper.tokenprovider.AuthToken;
+import se.uu.ub.cora.userpicker.User;
+import se.uu.ub.cora.userpicker.UserInfo;
 
 public class GatekeeperSpy implements Gatekeeper {
 
+	public boolean getUserForTokenWasCalled = false;
+	public boolean getAuthTokenForUserInfoWasCalled = false;
+
 	@Override
 	public User getUserForToken(String authToken) {
-
+		getUserForTokenWasCalled = true;
 		if (authToken == null) {
 			User user = new User("12345");
 			user.roles.add("someRole112345");
@@ -44,9 +49,12 @@ public class GatekeeperSpy implements Gatekeeper {
 	}
 
 	@Override
-	public String getAuthTokenForUserInfo(UserInfo userInfo) {
-		// TODO Auto-generated method stub
-		return null;
+	public AuthToken getAuthTokenForUserInfo(UserInfo userInfo) {
+		if (userInfo.idFromLogin != null && userInfo.idFromLogin.equals("someLoginIdWithProblem")) {
+			throw new AuthenticationException("problem getting authToken for userInfo");
+		}
+		getAuthTokenForUserInfoWasCalled = true;
+		return AuthToken.withIdAndValidForNoSeconds("someAuthToken", 600);
 	}
 
 }

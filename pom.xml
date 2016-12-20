@@ -26,9 +26,7 @@
 
 	<properties>
 		<json.version>0.3-SNAPSHOT</json.version>
-		<beefeater.version>0.5-SNAPSHOT</beefeater.version>
-		<spider.version>0.12-SNAPSHOT</spider.version>
-		<basicstorage.version>0.3-SNAPSHOT</basicstorage.version>
+		<userpicker.version>0.1-SNAPSHOT</userpicker.version>
 		<javax.ws.rs.version>2.0.1</javax.ws.rs.version>
 		<jersey.version>2.25</jersey.version>
 	</properties>
@@ -74,18 +72,9 @@
 		</dependency>
 		<dependency>
 			<groupId>se.uu.ub.cora</groupId>
-			<artifactId>beefeater</artifactId>
-			<version>${beefeater.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>se.uu.ub.cora</groupId>
-			<artifactId>spider</artifactId>
-			<version>${spider.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>se.uu.ub.cora</groupId>
-			<artifactId>basicstorage</artifactId>
-			<version>${basicstorage.version}</version>
+			<artifactId>userpicker</artifactId>
+			<version>${userpicker.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.testng</groupId>
@@ -105,11 +94,6 @@
 			<version>${jersey.version}</version>
 			<scope>compile</scope>
 		</dependency>
-		<!-- <dependency> -->
-		<!-- <groupId>org.glassfish.jersey.media</groupId> -->
-		<!-- <artifactId>jersey-media-multipart</artifactId> -->
-		<!-- <version>${jersey.version}</version> -->
-		<!-- </dependency> -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
@@ -119,46 +103,5 @@
 	</dependencies>
 	<build>
 		<finalName>gatekeeper</finalName>
-<!-- 		<plugins> -->
-<!-- 			<plugin> -->
-<!-- 				<groupId>org.apache.maven.plugins</groupId> -->
-<!-- 				<artifactId>maven-jar-plugin</artifactId> -->
-<!-- 				<executions> -->
-<!-- 					<execution> -->
-<!-- 						<id>make-a-jar</id> -->
-<!-- 						<phase>compile</phase> -->
-						
-<!-- 						<goals> -->
-<!-- 							<goal>jar</goal> -->
-							
-<!-- 						</goals> -->
-<!-- 						<configuration> -->
-						
-<!-- 						</configuration> -->
-<!-- 					</execution> -->
-<!-- 				</executions> -->
-<!-- 			</plugin> -->
-<!-- 			<plugin> -->
-<!-- 				<groupId>org.apache.maven.plugins</groupId> -->
-<!-- 				<artifactId>maven-install-plugin</artifactId> -->
-<!-- 				<executions> -->
-<!-- 					<execution> -->
-<!-- 						<phase>install</phase> -->
-<!-- 						<goals> -->
-<!-- 							<goal>install-file</goal> -->
-<!-- 						</goals> -->
-<!-- 						<configuration> -->
-<!-- 							<packaging>jar</packaging> -->
-<!-- 							<artifactId>${project.artifactId}</artifactId> -->
-<!-- 							<groupId>${project.groupId}</groupId> -->
-<!-- 							<version>${project.version}</version> -->
-<!-- 							<file> -->
-<!-- 								${project.build.directory}/${project.artifactId}.jar -->
-<!-- 							</file> -->
-<!-- 						</configuration> -->
-<!-- 					</execution> -->
-<!-- 				</executions> -->
-<!-- 			</plugin> -->
-<!-- 		</plugins> -->
 	</build>
 </project>

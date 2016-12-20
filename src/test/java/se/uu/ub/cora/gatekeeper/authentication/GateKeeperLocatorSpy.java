@@ -19,14 +19,17 @@
 
 package se.uu.ub.cora.gatekeeper.authentication;
 
+import se.uu.ub.cora.gatekeeper.Gatekeeper;
 import se.uu.ub.cora.gatekeeper.dependency.GatekeeperLocator;
 
 public class GateKeeperLocatorSpy implements GatekeeperLocator {
 
 	public GatekeeperSpy gatekeeperSpy;
+	public boolean gatekeeperLocated = false;
 
 	@Override
 	public Gatekeeper locateGatekeeper() {
+		gatekeeperLocated = true;
 		gatekeeperSpy = new GatekeeperSpy();
 		return gatekeeperSpy;
 	}

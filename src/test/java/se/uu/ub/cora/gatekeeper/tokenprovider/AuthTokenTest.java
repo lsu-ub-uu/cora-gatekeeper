@@ -17,31 +17,19 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper.authentication;
+package se.uu.ub.cora.gatekeeper.tokenprovider;
 
-import se.uu.ub.cora.beefeater.authentication.User;
-import se.uu.ub.cora.spider.authentication.AuthenticationException;
-import se.uu.ub.cora.spider.authentication.Authenticator;
+import static org.testng.Assert.assertEquals;
 
-public class AuthenticatorSpy implements Authenticator {
+import org.testng.annotations.Test;
 
-	public boolean authenticationWasCalled = false;
-	public String authToken;
-
-	@Override
-	public User getUserForToken(String authToken) {
-		authenticationWasCalled = true;
-
-		this.authToken = authToken;
-		if ("dummyNonAuthenticatedToken".equals(authToken)) {
-			throw new AuthenticationException("token not valid");
-		}
-
-		User user = new User("12345");
-		user.loginId = "knownUser";
-		user.loginDomain = "system";
-		user.roles.add("guest");
-		return user;
+public class AuthTokenTest {
+	@Test
+	public void test() {
+		String id = "someId";
+		int validForNoSeconds = 600;
+		AuthToken authToken = AuthToken.withIdAndValidForNoSeconds(id, validForNoSeconds);
+		assertEquals(authToken.id, "someId");
+		assertEquals(authToken.validForNoSeconds, 600);
 	}
-
 }

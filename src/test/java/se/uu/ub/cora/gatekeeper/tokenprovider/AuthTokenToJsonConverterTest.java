@@ -17,8 +17,21 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper;
+package se.uu.ub.cora.gatekeeper.tokenprovider;
 
-public interface UserPickerFactory {
-	public UserPicker factor();
+import static org.testng.Assert.assertEquals;
+
+import org.testng.annotations.Test;
+
+public class AuthTokenToJsonConverterTest {
+	@Test
+	public void testAuthTokenToJsonConverter() {
+		AuthToken authToken = AuthToken.withIdAndValidForNoSeconds("someId", 599);
+		AuthTokenToJsonConverter converter = new AuthTokenToJsonConverter(authToken);
+		String json = converter.convertAuthTokenToJson();
+		String expected = "{\"children\":[" + "{\"name\":\"id\",\"value\":\"someId\"},"
+				+ "{\"name\":\"validForNoSeconds\",\"value\":\"599\"}"
+				+ "],\"name\":\"authToken\"}";
+		assertEquals(json, expected);
+	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2015 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -17,28 +17,16 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper;
+package se.uu.ub.cora.gatekeeper.authentication;
 
-public final class UserInfo {
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
-	public String idFromLogin;
-	public String domainFromLogin;
-	public String idInUserStorage;
+public class AuthenticationExceptionTest {
+	@Test
+	public void testInit() {
+		AuthenticationException notAuthenticated = new AuthenticationException("message");
 
-	private UserInfo(String idFromLogin, String domainFromLogin) {
-		this.idFromLogin = idFromLogin;
-		this.domainFromLogin = domainFromLogin;
-	}
-
-	private UserInfo(String idInUserStorage) {
-		this.idInUserStorage = idInUserStorage;
-	}
-
-	public static UserInfo withLoginIdAndLoginDomain(String idFromLogin, String domainFromLogin) {
-		return new UserInfo(idFromLogin, domainFromLogin);
-	}
-
-	public static UserInfo withIdInUserStorage(String idInUserStorage) {
-		return new UserInfo(idInUserStorage);
+		Assert.assertEquals(notAuthenticated.getMessage(), "message");
 	}
 }

@@ -23,13 +23,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import se.uu.ub.cora.gatekeeper.authentication.Gatekeeper;
-import se.uu.ub.cora.gatekeeper.authentication.User;
-import se.uu.ub.cora.spider.authentication.AuthenticationException;
+import se.uu.ub.cora.gatekeeper.authentication.AuthenticationException;
+import se.uu.ub.cora.gatekeeper.tokenprovider.AuthToken;
+import se.uu.ub.cora.userpicker.User;
+import se.uu.ub.cora.userpicker.UserInfo;
+import se.uu.ub.cora.userpicker.UserPickerFactory;
 
 public enum GatekeeperImp implements Gatekeeper {
 	INSTANCE;
-	public UserPickerFactory userPickerFactory;
+	private static final int VALID_FOR_NO_SECONDS = 600;
+	private UserPickerFactory userPickerFactory;
 	private Map<String, User> pickedUsers = new HashMap<>();
 
 	public void setUserPickerFactory(UserPickerFactory userPickerFactory) {
@@ -40,15 +43,15 @@ public enum GatekeeperImp implements Gatekeeper {
 	private void addHardCodedTokensToPickedUsers() {
 		UserInfo userInfo = null;
 		userInfo = UserInfo.withIdInUserStorage("99999");
-		User pickedUser = userPickerFactory.factor().pickUser(userInfo);
+		User pickedUser = getUserPickerFactory().factor().pickUser(userInfo);
 		pickedUsers.put("dummySystemAdminAuthenticatedToken", pickedUser);
 
 		userInfo = UserInfo.withIdInUserStorage("121212");
-		User pickedUser2 = userPickerFactory.factor().pickUser(userInfo);
+		User pickedUser2 = getUserPickerFactory().factor().pickUser(userInfo);
 		pickedUsers.put("fitnesseUserToken", pickedUser2);
 
 		userInfo = UserInfo.withIdInUserStorage("131313");
-		User pickedUser3 = userPickerFactory.factor().pickUser(userInfo);
+		User pickedUser3 = getUserPickerFactory().factor().pickUser(userInfo);
 		pickedUsers.put("fitnesseAdminToken", pickedUser3);
 	}
 
@@ -62,7 +65,7 @@ public enum GatekeeperImp implements Gatekeeper {
 
 	private User returnGuestUser() {
 		UserInfo userInfo = UserInfo.withIdInUserStorage("12345");
-		return userPickerFactory.factor().pickUser(userInfo);
+		return getUserPickerFactory().factor().pickUser(userInfo);
 	}
 
 	private User tryToGetAuthenticatedUser(String authToken) {
@@ -71,10 +74,6 @@ public enum GatekeeperImp implements Gatekeeper {
 	}
 
 	private void throwErrorIfInvalidToken(String authToken) {
-		if ("dummyNonAuthenticatedToken".equals(authToken)) {
-			throw new AuthenticationException("token not valid");
-		}
-		// TODO: added without test fix
 		if (!pickedUsers.containsKey(authToken)) {
 			throw new AuthenticationException("token not valid");
 		}
@@ -85,15 +84,28 @@ public enum GatekeeperImp implements Gatekeeper {
 	}
 
 	@Override
-	public String getAuthTokenForUserInfo(UserInfo userInfo) {
-		User pickedUser = userPickerFactory.factor().pickUser(userInfo);
+	public AuthToken getAuthTokenForUserInfo(UserInfo userInfo) {
+		try {
+			return tryToGetAuthTokenForUserInfo(userInfo);
+		} catch (Exception e) {
+			throw new AuthenticationException("Could not pick user for userInfo: " + e);
+		}
+	}
+
+	private AuthToken tryToGetAuthTokenForUserInfo(UserInfo userInfo) {
+		User pickedUser = getUserPickerFactory().factor().pickUser(userInfo);
 		String generateAuthToken = generateAuthToken();
 		pickedUsers.put(generateAuthToken, pickedUser);
-		return generateAuthToken;
+		return AuthToken.withIdAndValidForNoSeconds(generateAuthToken, VALID_FOR_NO_SECONDS);
 	}
 
 	private String generateAuthToken() {
 		return UUID.randomUUID().toString();
+	}
+
+	public UserPickerFactory getUserPickerFactory() {
+		// method needed for test
+		return userPickerFactory;
 	}
 
 }

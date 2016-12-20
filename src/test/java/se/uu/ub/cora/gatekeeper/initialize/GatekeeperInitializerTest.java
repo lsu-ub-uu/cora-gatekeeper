@@ -48,7 +48,7 @@ public class GatekeeperInitializerTest {
 		source.setInitParameter("userPickerFactoryClassName",
 				"se.uu.ub.cora.gatekeeper.UserPickerFactorySpy");
 		gatekeeperInitializer.contextInitialized(context);
-		assertTrue(GatekeeperImp.INSTANCE.userPickerFactory instanceof UserPickerFactorySpy);
+		assertTrue(GatekeeperImp.INSTANCE.getUserPickerFactory() instanceof UserPickerFactorySpy);
 	}
 
 	@Test(expectedExceptions = RuntimeException.class)

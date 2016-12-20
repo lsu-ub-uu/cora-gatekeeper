@@ -22,6 +22,9 @@ package se.uu.ub.cora.gatekeeper;
 import java.util.ArrayList;
 import java.util.List;
 
+import se.uu.ub.cora.userpicker.UserPicker;
+import se.uu.ub.cora.userpicker.UserPickerFactory;
+
 public class UserPickerFactorySpy implements UserPickerFactory {
 	public List<UserPickerSpy> factoredUserPickers = new ArrayList<>();
 

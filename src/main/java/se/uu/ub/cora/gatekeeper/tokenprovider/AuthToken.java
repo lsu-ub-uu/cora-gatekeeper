@@ -17,14 +17,20 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper.authentication;
+package se.uu.ub.cora.gatekeeper.tokenprovider;
 
-import se.uu.ub.cora.gatekeeper.UserInfo;
+public final class AuthToken {
 
-public interface Gatekeeper {
+	public String id;
+	public int validForNoSeconds;
 
-	User getUserForToken(String authToken);
+	private AuthToken(String id, int validForNoSeconds) {
+		this.id = id;
+		this.validForNoSeconds = validForNoSeconds;
+	}
 
-	String getAuthTokenForUserInfo(UserInfo userInfo);
+	public static AuthToken withIdAndValidForNoSeconds(String id, int validForNoSeconds) {
+		return new AuthToken(id, validForNoSeconds);
+	}
 
 }
