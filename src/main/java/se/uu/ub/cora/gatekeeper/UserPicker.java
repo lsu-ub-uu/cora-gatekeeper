@@ -19,7 +19,7 @@
 
 package se.uu.ub.cora.gatekeeper;
 
-import se.uu.ub.cora.beefeater.authentication.User;
+import se.uu.ub.cora.gatekeeper.authentication.User;
 
 public interface UserPicker {
 

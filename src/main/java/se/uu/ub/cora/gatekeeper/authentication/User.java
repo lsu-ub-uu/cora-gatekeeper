@@ -17,28 +17,20 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper;
+package se.uu.ub.cora.gatekeeper.authentication;
 
-public final class UserInfo {
+import java.util.LinkedHashSet;
+import java.util.Set;
 
-	public String idFromLogin;
-	public String domainFromLogin;
-	public String idInUserStorage;
+public class User {
 
-	private UserInfo(String idFromLogin, String domainFromLogin) {
-		this.idFromLogin = idFromLogin;
-		this.domainFromLogin = domainFromLogin;
+	public final String id;
+	public String loginId;
+	public String loginDomain;
+	public final Set<String> roles = new LinkedHashSet<>();
+
+	public User(String id) {
+		this.id = id;
 	}
 
-	private UserInfo(String idInUserStorage) {
-		this.idInUserStorage = idInUserStorage;
-	}
-
-	public static UserInfo withLoginIdAndLoginDomain(String idFromLogin, String domainFromLogin) {
-		return new UserInfo(idFromLogin, domainFromLogin);
-	}
-
-	public static UserInfo withIdInUserStorage(String idInUserStorage) {
-		return new UserInfo(idInUserStorage);
-	}
 }

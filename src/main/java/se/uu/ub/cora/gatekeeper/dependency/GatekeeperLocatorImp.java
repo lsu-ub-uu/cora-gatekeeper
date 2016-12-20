@@ -1,5 +1,6 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2015, 2016 Uppsala University Library
+ * Copyright 2016 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -17,28 +18,14 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper;
+package se.uu.ub.cora.gatekeeper.dependency;
 
-public final class UserInfo {
+import se.uu.ub.cora.gatekeeper.GatekeeperImp;
 
-	public String idFromLogin;
-	public String domainFromLogin;
-	public String idInUserStorage;
+public final class GatekeeperLocatorImp implements GatekeeperLocator {
 
-	private UserInfo(String idFromLogin, String domainFromLogin) {
-		this.idFromLogin = idFromLogin;
-		this.domainFromLogin = domainFromLogin;
-	}
-
-	private UserInfo(String idInUserStorage) {
-		this.idInUserStorage = idInUserStorage;
-	}
-
-	public static UserInfo withLoginIdAndLoginDomain(String idFromLogin, String domainFromLogin) {
-		return new UserInfo(idFromLogin, domainFromLogin);
-	}
-
-	public static UserInfo withIdInUserStorage(String idInUserStorage) {
-		return new UserInfo(idInUserStorage);
+	@Override
+	public GatekeeperImp locateGatekeeper() {
+		return GatekeeperImp.INSTANCE;
 	}
 }

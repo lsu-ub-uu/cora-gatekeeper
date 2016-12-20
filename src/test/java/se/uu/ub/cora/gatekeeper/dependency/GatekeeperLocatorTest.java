@@ -1,5 +1,6 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2016 Olov McKie
+ * Copyright 2015 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -17,27 +18,30 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper;
+package se.uu.ub.cora.gatekeeper.dependency;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-public class UserInfoTest {
-	@Test
-	public void testUserInfoUserInStorage() {
-		String idInUserStorage = "someIdFromStorage";
+import se.uu.ub.cora.gatekeeper.GatekeeperImp;
+import se.uu.ub.cora.gatekeeper.authentication.Gatekeeper;
 
-		UserInfo userInfo = UserInfo.withIdInUserStorage(idInUserStorage);
-		assertEquals(userInfo.idInUserStorage, "someIdFromStorage");
+public class GatekeeperLocatorTest {
+	private GatekeeperLocator locator = new GatekeeperLocatorImp();
+
+	@BeforeTest
+	public void setUp() {
 	}
 
 	@Test
-	public void testUserInfo() {
-		String idFromLogin = "idFromLogin";
-		String domainFromLogin = "domainFromLogin";
-
-		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain(idFromLogin, domainFromLogin);
-		assertEquals(userInfo.idFromLogin, "idFromLogin");
+	public void testLocateGatekeeper() {
+		Gatekeeper gatekeeper = locator.locateGatekeeper();
+		assertTrue(gatekeeper instanceof GatekeeperImp);
+		Gatekeeper gatekeeper2 = locator.locateGatekeeper();
+		assertEquals(gatekeeper, gatekeeper2);
 	}
+
 }

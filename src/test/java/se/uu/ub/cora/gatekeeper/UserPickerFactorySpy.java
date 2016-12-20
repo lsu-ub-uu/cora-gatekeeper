@@ -19,26 +19,17 @@
 
 package se.uu.ub.cora.gatekeeper;
 
-public final class UserInfo {
+import java.util.ArrayList;
+import java.util.List;
 
-	public String idFromLogin;
-	public String domainFromLogin;
-	public String idInUserStorage;
+public class UserPickerFactorySpy implements UserPickerFactory {
+	public List<UserPickerSpy> factoredUserPickers = new ArrayList<>();
 
-	private UserInfo(String idFromLogin, String domainFromLogin) {
-		this.idFromLogin = idFromLogin;
-		this.domainFromLogin = domainFromLogin;
+	@Override
+	public UserPicker factor() {
+		UserPickerSpy userPickerSpy = new UserPickerSpy();
+		factoredUserPickers.add(userPickerSpy);
+		return userPickerSpy;
 	}
 
-	private UserInfo(String idInUserStorage) {
-		this.idInUserStorage = idInUserStorage;
-	}
-
-	public static UserInfo withLoginIdAndLoginDomain(String idFromLogin, String domainFromLogin) {
-		return new UserInfo(idFromLogin, domainFromLogin);
-	}
-
-	public static UserInfo withIdInUserStorage(String idInUserStorage) {
-		return new UserInfo(idInUserStorage);
-	}
 }

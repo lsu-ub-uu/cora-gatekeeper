@@ -17,28 +17,14 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper;
+package se.uu.ub.cora.gatekeeper.authentication;
 
-public final class UserInfo {
+import se.uu.ub.cora.gatekeeper.UserInfo;
 
-	public String idFromLogin;
-	public String domainFromLogin;
-	public String idInUserStorage;
+public interface Gatekeeper {
 
-	private UserInfo(String idFromLogin, String domainFromLogin) {
-		this.idFromLogin = idFromLogin;
-		this.domainFromLogin = domainFromLogin;
-	}
+	User getUserForToken(String authToken);
 
-	private UserInfo(String idInUserStorage) {
-		this.idInUserStorage = idInUserStorage;
-	}
+	String getAuthTokenForUserInfo(UserInfo userInfo);
 
-	public static UserInfo withLoginIdAndLoginDomain(String idFromLogin, String domainFromLogin) {
-		return new UserInfo(idFromLogin, domainFromLogin);
-	}
-
-	public static UserInfo withIdInUserStorage(String idInUserStorage) {
-		return new UserInfo(idInUserStorage);
-	}
 }

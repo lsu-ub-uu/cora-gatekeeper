@@ -17,43 +17,31 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper;
+package se.uu.ub.cora.gatekeeper.authentication;
 
 import se.uu.ub.cora.beefeater.authentication.User;
 import se.uu.ub.cora.spider.authentication.AuthenticationException;
 import se.uu.ub.cora.spider.authentication.Authenticator;
 
-public class AuthenticatorImp implements Authenticator {
+public class AuthenticatorSpy implements Authenticator {
 
-	private static final String SYSTEM = "system";
-	private UserPicker userPicker;
-
-	public AuthenticatorImp(UserPicker userPicker) {
-		this.userPicker = userPicker;
-	}
+	public boolean authenticationWasCalled = false;
+	public String authToken;
 
 	@Override
-	public User tryToGetActiveUser(String authToken) {
+	public User getUserForToken(String authToken) {
+		authenticationWasCalled = true;
+
+		this.authToken = authToken;
 		if ("dummyNonAuthenticatedToken".equals(authToken)) {
 			throw new AuthenticationException("token not valid");
 		}
-		if ("dummySystemAdminAuthenticatedToken".equals(authToken)) {
-			UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain("99999", SYSTEM);
-			return userPicker.pickUser(userInfo);
-		}
 
-		if ("fitnesseUserToken".equals(authToken)) {
-			UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain("121212", SYSTEM);
-			return userPicker.pickUser(userInfo);
-		}
-
-		if ("fitnesseAdminToken".equals(authToken)) {
-			UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain("131313", SYSTEM);
-			return userPicker.pickUser(userInfo);
-		}
-
-		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain("12345", SYSTEM);
-		return userPicker.pickUser(userInfo);
+		User user = new User("12345");
+		user.loginId = "knownUser";
+		user.loginDomain = "system";
+		user.roles.add("guest");
+		return user;
 	}
 
 }

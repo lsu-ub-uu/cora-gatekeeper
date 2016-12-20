@@ -17,28 +17,18 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper;
+package se.uu.ub.cora.gatekeeper.authentication;
 
-public final class UserInfo {
+import se.uu.ub.cora.gatekeeper.dependency.GatekeeperLocator;
 
-	public String idFromLogin;
-	public String domainFromLogin;
-	public String idInUserStorage;
+public class GateKeeperLocatorSpy implements GatekeeperLocator {
 
-	private UserInfo(String idFromLogin, String domainFromLogin) {
-		this.idFromLogin = idFromLogin;
-		this.domainFromLogin = domainFromLogin;
+	public GatekeeperSpy gatekeeperSpy;
+
+	@Override
+	public Gatekeeper locateGatekeeper() {
+		gatekeeperSpy = new GatekeeperSpy();
+		return gatekeeperSpy;
 	}
 
-	private UserInfo(String idInUserStorage) {
-		this.idInUserStorage = idInUserStorage;
-	}
-
-	public static UserInfo withLoginIdAndLoginDomain(String idFromLogin, String domainFromLogin) {
-		return new UserInfo(idFromLogin, domainFromLogin);
-	}
-
-	public static UserInfo withIdInUserStorage(String idInUserStorage) {
-		return new UserInfo(idInUserStorage);
-	}
 }
