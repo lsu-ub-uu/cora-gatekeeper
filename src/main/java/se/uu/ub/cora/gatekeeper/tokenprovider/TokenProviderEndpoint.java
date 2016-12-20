@@ -29,8 +29,7 @@ import se.uu.ub.cora.gatekeeper.dependency.GatekeeperInstanceProvider;
 import se.uu.ub.cora.userpicker.UserInfo;
 
 @Path("authToken")
-public class TokenProviderEndpoint {
-	private Gatekeeper gatekeeper;
+public final class TokenProviderEndpoint {
 
 	@POST
 	public Response getAuthTokenForUserInfo(String jsonUserInfo) {
@@ -42,7 +41,7 @@ public class TokenProviderEndpoint {
 	}
 
 	private Response tryToGetAuthTokenForUserInfo(String jsonUserInfo) {
-		gatekeeper = GatekeeperInstanceProvider.getGatekeeper();
+		Gatekeeper gatekeeper = GatekeeperInstanceProvider.getGatekeeper();
 		UserInfo userInfo = convertJsonToUserInfo(jsonUserInfo);
 
 		AuthToken authTokenForUserInfo = gatekeeper.getAuthTokenForUserInfo(userInfo);

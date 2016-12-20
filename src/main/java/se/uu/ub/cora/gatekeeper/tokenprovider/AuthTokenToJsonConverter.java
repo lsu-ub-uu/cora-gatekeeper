@@ -28,7 +28,7 @@ public final class AuthTokenToJsonConverter {
 	private static final String NAME = "name";
 	private static final String CHILDREN = "children";
 	private AuthToken authToken;
-	private OrgJsonBuilderFactoryAdapter orgJsonBuilderFactoryAdapter = new OrgJsonBuilderFactoryAdapter();;
+	private OrgJsonBuilderFactoryAdapter orgJsonBuilderFactoryAdapter = new OrgJsonBuilderFactoryAdapter();
 
 	public AuthTokenToJsonConverter(AuthToken authToken) {
 		this.authToken = authToken;
