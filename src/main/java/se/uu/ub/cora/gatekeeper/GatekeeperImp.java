@@ -27,31 +27,31 @@ import se.uu.ub.cora.gatekeeper.authentication.AuthenticationException;
 import se.uu.ub.cora.gatekeeper.tokenprovider.AuthToken;
 import se.uu.ub.cora.userpicker.User;
 import se.uu.ub.cora.userpicker.UserInfo;
-import se.uu.ub.cora.userpicker.UserPickerFactory;
+import se.uu.ub.cora.userpicker.UserPickerProvider;
 
 public enum GatekeeperImp implements Gatekeeper {
 	INSTANCE;
 	private static final int VALID_FOR_NO_SECONDS = 600;
-	private UserPickerFactory userPickerFactory;
+	private UserPickerProvider userPickerProvider;
 	private Map<String, User> pickedUsers = new HashMap<>();
 
-	public void setUserPickerFactory(UserPickerFactory userPickerFactory) {
-		this.userPickerFactory = userPickerFactory;
+	public void setUserPickerProvider(UserPickerProvider userPickerProvider) {
+		this.userPickerProvider = userPickerProvider;
 		addHardCodedTokensToPickedUsers();
 	}
 
 	private void addHardCodedTokensToPickedUsers() {
 		UserInfo userInfo = null;
 		userInfo = UserInfo.withIdInUserStorage("99999");
-		User pickedUser = getUserPickerFactory().factor().pickUser(userInfo);
+		User pickedUser = userPickerProvider.getUserPicker().pickUser(userInfo);
 		pickedUsers.put("dummySystemAdminAuthenticatedToken", pickedUser);
 
 		userInfo = UserInfo.withIdInUserStorage("121212");
-		User pickedUser2 = getUserPickerFactory().factor().pickUser(userInfo);
+		User pickedUser2 = userPickerProvider.getUserPicker().pickUser(userInfo);
 		pickedUsers.put("fitnesseUserToken", pickedUser2);
 
 		userInfo = UserInfo.withIdInUserStorage("131313");
-		User pickedUser3 = getUserPickerFactory().factor().pickUser(userInfo);
+		User pickedUser3 = userPickerProvider.getUserPicker().pickUser(userInfo);
 		pickedUsers.put("fitnesseAdminToken", pickedUser3);
 	}
 
@@ -65,7 +65,7 @@ public enum GatekeeperImp implements Gatekeeper {
 
 	private User returnGuestUser() {
 		UserInfo userInfo = UserInfo.withIdInUserStorage("12345");
-		return getUserPickerFactory().factor().pickUser(userInfo);
+		return userPickerProvider.getUserPicker().pickUser(userInfo);
 	}
 
 	private User tryToGetAuthenticatedUser(String authToken) {
@@ -93,7 +93,7 @@ public enum GatekeeperImp implements Gatekeeper {
 	}
 
 	private AuthToken tryToGetAuthTokenForUserInfo(UserInfo userInfo) {
-		User pickedUser = getUserPickerFactory().factor().pickUser(userInfo);
+		User pickedUser = userPickerProvider.getUserPicker().pickUser(userInfo);
 		String generateAuthToken = generateAuthToken();
 		pickedUsers.put(generateAuthToken, pickedUser);
 		return AuthToken.withIdAndValidForNoSeconds(generateAuthToken, VALID_FOR_NO_SECONDS);
@@ -103,9 +103,9 @@ public enum GatekeeperImp implements Gatekeeper {
 		return UUID.randomUUID().toString();
 	}
 
-	public UserPickerFactory getUserPickerFactory() {
+	public UserPickerProvider getUserPickerProvider() {
 		// method needed for test
-		return userPickerFactory;
+		return userPickerProvider;
 	}
 
 }

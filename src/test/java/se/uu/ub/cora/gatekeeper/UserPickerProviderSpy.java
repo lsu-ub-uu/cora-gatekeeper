@@ -21,18 +21,29 @@ package se.uu.ub.cora.gatekeeper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import se.uu.ub.cora.userpicker.UserPicker;
-import se.uu.ub.cora.userpicker.UserPickerFactory;
+import se.uu.ub.cora.userpicker.UserPickerProvider;
 
-public class UserPickerFactorySpy implements UserPickerFactory {
+public class UserPickerProviderSpy implements UserPickerProvider {
 	public List<UserPickerSpy> factoredUserPickers = new ArrayList<>();
+	private Map<String, String> initInfo;
+
+	public UserPickerProviderSpy(Map<String, String> initInfo) {
+		this.initInfo = initInfo;
+	}
 
 	@Override
-	public UserPicker factor() {
+	public UserPicker getUserPicker() {
 		UserPickerSpy userPickerSpy = new UserPickerSpy();
 		factoredUserPickers.add(userPickerSpy);
 		return userPickerSpy;
+	}
+
+	@Override
+	public Map<String, String> getInitInfo() {
+		return initInfo;
 	}
 
 }

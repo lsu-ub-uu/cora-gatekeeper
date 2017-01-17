@@ -19,6 +19,12 @@
 
 package se.uu.ub.cora.gatekeeper.initialize;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -28,12 +34,13 @@ import se.uu.ub.cora.gatekeeper.GatekeeperImp;
 import se.uu.ub.cora.gatekeeper.dependency.GatekeeperInstanceProvider;
 import se.uu.ub.cora.gatekeeper.dependency.GatekeeperLocator;
 import se.uu.ub.cora.gatekeeper.dependency.GatekeeperLocatorImp;
-import se.uu.ub.cora.userpicker.UserPickerFactory;
+import se.uu.ub.cora.userpicker.UserPickerProvider;
 
 @WebListener
 public class GatekeeperInitializer implements ServletContextListener {
-	private UserPickerFactory userPickerFactory;
+	public UserPickerProvider userPickerProvider;
 	private ServletContext servletContext;
+	private HashMap<String, String> initInfo;
 
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
@@ -45,28 +52,40 @@ public class GatekeeperInitializer implements ServletContextListener {
 		}
 	}
 
-	private void tryToInitialize()
-			throws InstantiationException, IllegalAccessException, ClassNotFoundException {
-		String userPickerFactoryString = getClassNameToInitializeAsUserPickerFactoryFromContext();
-		createInstanceOfUserPickerFactoryClass(userPickerFactoryString);
+	private void tryToInitialize() throws InstantiationException, IllegalAccessException,
+			ClassNotFoundException, NoSuchMethodException, InvocationTargetException {
+		String userPickerProviderString = getClassNameToInitializeAsUserPickerProviderFromContext();
+		collectInitInformation();
+		createInstanceOfUserPickerProviderClass(userPickerProviderString);
 
 		GatekeeperLocator locator = new GatekeeperLocatorImp();
 		GatekeeperInstanceProvider.setGatekeeperLocator(locator);
-		GatekeeperImp.INSTANCE.setUserPickerFactory(userPickerFactory);
+		GatekeeperImp.INSTANCE.setUserPickerProvider(userPickerProvider);
 	}
 
-	private String getClassNameToInitializeAsUserPickerFactoryFromContext() {
-		String initParameter = servletContext.getInitParameter("userPickerFactoryClassName");
+	private String getClassNameToInitializeAsUserPickerProviderFromContext() {
+		String initParameter = servletContext.getInitParameter("userPickerProviderClassName");
 		if (initParameter == null) {
-			throw new RuntimeException("Context must have a userPickerFactoryClassName set.");
+			throw new RuntimeException("Context must have a userPickerProviderClassName set.");
 		}
 		return initParameter;
 	}
 
-	private void createInstanceOfUserPickerFactoryClass(String userPickerFactoryString)
-			throws InstantiationException, IllegalAccessException, ClassNotFoundException {
-		Object newInstance = Class.forName(userPickerFactoryString).newInstance();
-		userPickerFactory = (UserPickerFactory) newInstance;
+	private void collectInitInformation() {
+		initInfo = new HashMap<>();
+		Enumeration<String> initParameterNames = servletContext.getInitParameterNames();
+		while (initParameterNames.hasMoreElements()) {
+			String key = initParameterNames.nextElement();
+			initInfo.put(key, servletContext.getInitParameter(key));
+		}
+	}
+
+	private void createInstanceOfUserPickerProviderClass(String userPickerProviderString)
+			throws InstantiationException, IllegalAccessException, ClassNotFoundException,
+			NoSuchMethodException, InvocationTargetException {
+		Constructor<?> constructor = Class.forName(userPickerProviderString)
+				.getConstructor(Map.class);
+		userPickerProvider = (UserPickerProvider) constructor.newInstance(initInfo);
 	}
 
 	@Override

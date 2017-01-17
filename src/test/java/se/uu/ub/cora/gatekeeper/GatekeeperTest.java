@@ -22,6 +22,9 @@ package se.uu.ub.cora.gatekeeper;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -32,14 +35,16 @@ import se.uu.ub.cora.userpicker.UserInfo;
 
 public class GatekeeperTest {
 	private static final int FIRST_NON_HARDCODED = 3;
-	private UserPickerFactorySpy userPickerFactory;
+	private UserPickerProviderSpy userPickerFactory;
 	private GatekeeperImp gatekeeper;
 	private User logedInUser;
 
 	@BeforeMethod
 	public void setUp() {
-		userPickerFactory = new UserPickerFactorySpy();
-		GatekeeperImp.INSTANCE.setUserPickerFactory(userPickerFactory);
+		Map<String, String> initInfo = new HashMap<>();
+		initInfo.put("storageOnDiskBasePath", "");
+		userPickerFactory = new UserPickerProviderSpy(initInfo);
+		GatekeeperImp.INSTANCE.setUserPickerProvider(userPickerFactory);
 		gatekeeper = GatekeeperImp.INSTANCE;
 	}
 

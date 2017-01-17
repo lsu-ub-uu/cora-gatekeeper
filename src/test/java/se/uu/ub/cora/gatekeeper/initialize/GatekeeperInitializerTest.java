@@ -19,6 +19,7 @@
 
 package se.uu.ub.cora.gatekeeper.initialize;
 
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
 import javax.servlet.ServletContext;
@@ -28,7 +29,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import se.uu.ub.cora.gatekeeper.GatekeeperImp;
-import se.uu.ub.cora.gatekeeper.UserPickerFactorySpy;
+import se.uu.ub.cora.gatekeeper.UserPickerProviderSpy;
+import se.uu.ub.cora.userpicker.UserPickerProvider;
 
 public class GatekeeperInitializerTest {
 	private GatekeeperInitializer gatekeeperInitializer;
@@ -45,15 +47,27 @@ public class GatekeeperInitializerTest {
 
 	@Test
 	public void testInitializeSystem() {
-		source.setInitParameter("userPickerFactoryClassName",
-				"se.uu.ub.cora.gatekeeper.UserPickerFactorySpy");
+		source.setInitParameter("userPickerProviderClassName",
+				"se.uu.ub.cora.gatekeeper.UserPickerProviderSpy");
 		gatekeeperInitializer.contextInitialized(context);
-		assertTrue(GatekeeperImp.INSTANCE.getUserPickerFactory() instanceof UserPickerFactorySpy);
+		assertTrue(GatekeeperImp.INSTANCE.getUserPickerProvider() instanceof UserPickerProviderSpy);
 	}
 
 	@Test(expectedExceptions = RuntimeException.class)
-	public void testInitializeSystemWithoutUserPickerFactory() {
+	public void testInitializeSystemWithoutUserPickerFactoryClassName() {
 		gatekeeperInitializer.contextInitialized(context);
+	}
+
+	@Test
+	public void testInitializeSystemInitInfoSetInDependencyProvider() {
+		source.setInitParameter("userPickerProviderClassName",
+				"se.uu.ub.cora.gatekeeper.UserPickerProviderSpy");
+		source.setInitParameter("storageOnDiskBasePath", "/mnt/data/basicstorage");
+		gatekeeperInitializer.contextInitialized(context);
+
+		UserPickerProvider userPickerProviderSpy = gatekeeperInitializer.userPickerProvider;
+		assertEquals(userPickerProviderSpy.getInitInfo().get("storageOnDiskBasePath"),
+				"/mnt/data/basicstorage");
 	}
 
 	@Test
