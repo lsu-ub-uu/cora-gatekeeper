@@ -30,7 +30,6 @@ import org.testng.annotations.Test;
 
 import se.uu.ub.cora.gatekeeper.GatekeeperImp;
 import se.uu.ub.cora.gatekeeper.UserPickerProviderSpy;
-import se.uu.ub.cora.userpicker.UserPickerProvider;
 
 public class GatekeeperInitializerTest {
 	private GatekeeperInitializer gatekeeperInitializer;
@@ -65,7 +64,7 @@ public class GatekeeperInitializerTest {
 		source.setInitParameter("storageOnDiskBasePath", "/mnt/data/basicstorage");
 		gatekeeperInitializer.contextInitialized(context);
 
-		UserPickerProvider userPickerProviderSpy = gatekeeperInitializer.userPickerProvider;
+		UserPickerProviderSpy userPickerProviderSpy = (UserPickerProviderSpy) gatekeeperInitializer.userPickerProvider;
 		assertEquals(userPickerProviderSpy.getInitInfo().get("storageOnDiskBasePath"),
 				"/mnt/data/basicstorage");
 	}

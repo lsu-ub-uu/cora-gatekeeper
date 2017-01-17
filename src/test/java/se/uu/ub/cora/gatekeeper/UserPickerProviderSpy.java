@@ -41,7 +41,6 @@ public class UserPickerProviderSpy implements UserPickerProvider {
 		return userPickerSpy;
 	}
 
-	@Override
 	public Map<String, String> getInitInfo() {
 		return initInfo;
 	}
