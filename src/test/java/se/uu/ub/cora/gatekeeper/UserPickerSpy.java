@@ -26,6 +26,7 @@ import se.uu.ub.cora.userpicker.UserPicker;
 public class UserPickerSpy implements UserPicker {
 
 	public boolean userPickerWasCalled = false;
+	public boolean pickGuestWasCalled = false;
 	public UserInfo usedUserInfo = null;
 	public User returnedUser = null;
 
@@ -39,6 +40,16 @@ public class UserPickerSpy implements UserPicker {
 		User user = new User("12345");
 		user.loginId = userInfo.idFromLogin;
 		user.loginDomain = userInfo.domainFromLogin;
+		returnedUser = user;
+		return user;
+	}
+
+	@Override
+	public User pickGuest() {
+		pickGuestWasCalled = true;
+		User user = new User("guestUserIdDecidedByStorage");
+		user.loginId = "someLoginId";
+		user.loginDomain = "someLoginDomain";
 		returnedUser = user;
 		return user;
 	}

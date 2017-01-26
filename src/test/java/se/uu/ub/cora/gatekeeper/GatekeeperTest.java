@@ -73,25 +73,14 @@ public class GatekeeperTest {
 	}
 
 	@Test
-	public void testNoToken() {
+	public void testNoTokenAlsoKnownAsGuest() {
 		logedInUser = gatekeeper.getUserForToken(null);
-		assertPluggedInUserPickerWasUsed();
-		assertUsedUserInfoIdInUserStorage(3, "12345");
-		assertReturnedUserIsFromUserPicker(3);
+		assertPluggedInUserPickerWasUsedToPickGuest();
 	}
 
-	private void assertPluggedInUserPickerWasUsed() {
-		assertTrue(userPickerFactory.factoredUserPickers.get(0).userPickerWasCalled);
-	}
-
-	private void assertUsedUserInfoIdInUserStorage(int factoredNo, String expectedIdInUserStorage) {
-		UserInfo usedUserInfo = userPickerFactory.factoredUserPickers.get(factoredNo).usedUserInfo;
-		assertEquals(usedUserInfo.idInUserStorage, expectedIdInUserStorage);
-	}
-
-	private void assertReturnedUserIsFromUserPicker(int factoredNo) {
-		assertEquals(logedInUser,
-				userPickerFactory.factoredUserPickers.get(factoredNo).returnedUser);
+	private void assertPluggedInUserPickerWasUsedToPickGuest() {
+		assertTrue(
+				userPickerFactory.factoredUserPickers.get(FIRST_NON_HARDCODED).pickGuestWasCalled);
 	}
 
 	@Test(expectedExceptions = AuthenticationException.class)

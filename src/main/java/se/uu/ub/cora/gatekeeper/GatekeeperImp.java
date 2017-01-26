@@ -64,8 +64,7 @@ public enum GatekeeperImp implements Gatekeeper {
 	}
 
 	private User returnGuestUser() {
-		UserInfo userInfo = UserInfo.withIdInUserStorage("12345");
-		return userPickerProvider.getUserPicker().pickUser(userInfo);
+		return userPickerProvider.getUserPicker().pickGuest();
 	}
 
 	private User tryToGetAuthenticatedUser(String authToken) {
