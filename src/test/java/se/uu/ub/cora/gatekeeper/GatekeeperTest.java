@@ -34,7 +34,7 @@ import se.uu.ub.cora.userpicker.User;
 import se.uu.ub.cora.userpicker.UserInfo;
 
 public class GatekeeperTest {
-	private static final int FIRST_NON_HARDCODED = 3;
+	private static final int FIRST_NON_HARDCODED = 0;
 	private UserPickerProviderSpy userPickerFactory;
 	private GatekeeperImp gatekeeper;
 	private User logedInUser;
@@ -54,23 +54,23 @@ public class GatekeeperTest {
 		GatekeeperImp.valueOf(GatekeeperImp.INSTANCE.toString());
 	}
 
-	@Test
-	public void testHardCodedTokens() {
-		assertEquals(userPickerFactory.factoredUserPickers.get(0).usedUserInfo.idInUserStorage,
-				"99999");
-		logedInUser = gatekeeper.getUserForToken("dummySystemAdminAuthenticatedToken");
-		assertEquals(logedInUser, userPickerFactory.factoredUserPickers.get(0).returnedUser);
-
-		assertEquals(userPickerFactory.factoredUserPickers.get(1).usedUserInfo.idInUserStorage,
-				"121212");
-		logedInUser = gatekeeper.getUserForToken("fitnesseUserToken");
-		assertEquals(logedInUser, userPickerFactory.factoredUserPickers.get(1).returnedUser);
-
-		assertEquals(userPickerFactory.factoredUserPickers.get(2).usedUserInfo.idInUserStorage,
-				"131313");
-		logedInUser = gatekeeper.getUserForToken("fitnesseAdminToken");
-		assertEquals(logedInUser, userPickerFactory.factoredUserPickers.get(2).returnedUser);
-	}
+//	@Test
+//	public void testHardCodedTokens() {
+//		assertEquals(userPickerFactory.factoredUserPickers.get(0).usedUserInfo.idInUserStorage,
+//				"99999");
+//		logedInUser = gatekeeper.getUserForToken("dummySystemAdminAuthenticatedToken");
+//		assertEquals(logedInUser, userPickerFactory.factoredUserPickers.get(0).returnedUser);
+//
+//		assertEquals(userPickerFactory.factoredUserPickers.get(1).usedUserInfo.idInUserStorage,
+//				"121212");
+//		logedInUser = gatekeeper.getUserForToken("fitnesseUserToken");
+//		assertEquals(logedInUser, userPickerFactory.factoredUserPickers.get(1).returnedUser);
+//
+//		assertEquals(userPickerFactory.factoredUserPickers.get(2).usedUserInfo.idInUserStorage,
+//				"131313");
+//		logedInUser = gatekeeper.getUserForToken("fitnesseAdminToken");
+//		assertEquals(logedInUser, userPickerFactory.factoredUserPickers.get(2).returnedUser);
+//	}
 
 	@Test
 	public void testNoTokenAlsoKnownAsGuest() {
@@ -90,15 +90,18 @@ public class GatekeeperTest {
 
 	@Test
 	public void testUserOnlyPickedOncePerAuthToken() {
-		logedInUser = gatekeeper.getUserForToken("fitnesseAdminToken");
+		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain("someLoginId", "someLoginDomain");
+		AuthToken authToken = gatekeeper.getAuthTokenForUserInfo(userInfo);
+
+		logedInUser = gatekeeper.getUserForToken(authToken.id);
 		assertPluggedInUserPickerWasUsedOnce();
-		logedInUser = gatekeeper.getUserForToken("fitnesseAdminToken");
+		logedInUser = gatekeeper.getUserForToken(authToken.id);
 		assertPluggedInUserPickerWasUsedOnce();
 
 	}
 
 	private void assertPluggedInUserPickerWasUsedOnce() {
-		assertEquals(userPickerFactory.factoredUserPickers.size(), 3);
+		assertEquals(userPickerFactory.factoredUserPickers.size(), 1);
 	}
 
 	@Test

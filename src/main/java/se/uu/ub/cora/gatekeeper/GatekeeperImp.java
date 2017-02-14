@@ -41,7 +41,7 @@ public enum GatekeeperImp implements Gatekeeper {
 	}
 
 	private void addHardCodedTokensToPickedUsers() {
-		UserInfo userInfo = null;
+		/*UserInfo userInfo = null;
 		userInfo = UserInfo.withIdInUserStorage("99999");
 		User pickedUser = userPickerProvider.getUserPicker().pickUser(userInfo);
 		pickedUsers.put("dummySystemAdminAuthenticatedToken", pickedUser);
@@ -52,7 +52,7 @@ public enum GatekeeperImp implements Gatekeeper {
 
 		userInfo = UserInfo.withIdInUserStorage("131313");
 		User pickedUser3 = userPickerProvider.getUserPicker().pickUser(userInfo);
-		pickedUsers.put("fitnesseAdminToken", pickedUser3);
+		pickedUsers.put("fitnesseAdminToken", pickedUser3);*/
 	}
 
 	@Override
