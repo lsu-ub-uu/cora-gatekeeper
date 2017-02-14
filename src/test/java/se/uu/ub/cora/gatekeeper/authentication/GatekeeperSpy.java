@@ -57,4 +57,9 @@ public class GatekeeperSpy implements Gatekeeper {
 		return AuthToken.withIdAndValidForNoSeconds("someAuthToken", 600);
 	}
 
+	@Override
+	public void removeAuthTokenForUser(String authTokenId, UserInfo userInfo) {
+
+	}
+
 }

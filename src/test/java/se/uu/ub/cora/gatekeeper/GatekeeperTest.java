@@ -19,9 +19,6 @@
 
 package se.uu.ub.cora.gatekeeper;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +29,8 @@ import se.uu.ub.cora.gatekeeper.authentication.AuthenticationException;
 import se.uu.ub.cora.gatekeeper.tokenprovider.AuthToken;
 import se.uu.ub.cora.userpicker.User;
 import se.uu.ub.cora.userpicker.UserInfo;
+
+import static org.testng.Assert.*;
 
 public class GatekeeperTest {
 	private static final int FIRST_NON_HARDCODED = 3;
@@ -118,4 +117,47 @@ public class GatekeeperTest {
 				"someLoginDomain");
 		gatekeeper.getAuthTokenForUserInfo(userInfo);
 	}
+
+	@Test(expectedExceptions = AuthenticationException.class)
+	public void testRemoveAuthTokenForUser(){
+		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain("someLoginId", "someLoginDomain");
+		AuthToken authToken = gatekeeper.getAuthTokenForUserInfo(userInfo);
+
+		logedInUser = gatekeeper.getUserForToken(authToken.id);
+		assertEquals(logedInUser.loginId, "someLoginId");
+		gatekeeper.removeAuthTokenForUser(authToken.id, userInfo);
+		gatekeeper.getUserForToken(authToken.id);
+	}
+
+	@Test(expectedExceptions = AuthenticationException.class)
+	public void testRemoveAuthTokenForUserTokenDoesNotExist(){
+		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain("someLoginId", "someLoginDomain");
+
+		gatekeeper.removeAuthTokenForUser("someNonExistingToken", userInfo);
+		gatekeeper.getUserForToken("someNonExistingToken");
+	}
+
+	@Test
+	public void testRemoveAuthTokenForUserUserInfoIdNotTheSame(){
+		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain("someLoginId", "someLoginDomain");
+		AuthToken authToken = gatekeeper.getAuthTokenForUserInfo(userInfo);
+
+		logedInUser = gatekeeper.getUserForToken(authToken.id);
+		assertEquals(logedInUser.loginId, "someLoginId");
+		UserInfo someOtherUserInfo = UserInfo.withLoginIdAndLoginDomain("someOtherLoginId", "someLoginDomain");
+		gatekeeper.removeAuthTokenForUser(authToken.id, someOtherUserInfo);
+		assertNotNull(gatekeeper.getUserForToken(authToken.id));
+	}
+
+//	@Test
+//	public void testRemoveAuthTokenForUserUserInfoDomainNotTheSame(){
+//		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain("someLoginId", "someLoginDomain");
+//		AuthToken authToken = gatekeeper.getAuthTokenForUserInfo(userInfo);
+//
+//		logedInUser = gatekeeper.getUserForToken(authToken.id);
+//		assertEquals(logedInUser.loginId, "someLoginId");
+//		UserInfo someOtherUserInfo = UserInfo.withLoginIdAndLoginDomain("someLoginId", "someOtherLoginDomain");
+//		gatekeeper.removeAuthTokenForUser(authToken.id, someOtherUserInfo);
+//		assertNotNull(gatekeeper.getUserForToken(authToken.id));
+//	}
 }
