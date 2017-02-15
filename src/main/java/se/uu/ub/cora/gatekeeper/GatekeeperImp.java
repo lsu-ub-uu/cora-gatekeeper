@@ -41,8 +41,7 @@ public enum GatekeeperImp implements Gatekeeper {
 	}
 
 	private void addHardCodedTokensToPickedUsers() {
-		UserInfo userInfo = null;
-		userInfo = UserInfo.withIdInUserStorage("99999");
+		UserInfo userInfo = UserInfo.withIdInUserStorage("99999");
 		User pickedUser = userPickerProvider.getUserPicker().pickUser(userInfo);
 		pickedUsers.put("dummySystemAdminAuthenticatedToken", pickedUser);
 
@@ -108,21 +107,31 @@ public enum GatekeeperImp implements Gatekeeper {
 	}
 
 	@Override
-	public void removeAuthTokenForUser(String authTokenId, User user) {
-		if(pickedUsers.containsKey(authTokenId)) {
-			removeAuthTokenIfUserIdMatches(authTokenId, user);
+	public void removeAuthTokenForUser(String authTokenId, String idInUserStorage) {
+		authTokenExists(authTokenId);
+		removeAuthTokenIfUserIdMatches(authTokenId, idInUserStorage);
+	}
+
+	private void authTokenExists(String authTokenId) {
+		if (!pickedUsers.containsKey(authTokenId)) {
+			throw new AuthenticationException("AuthToken does not exist");
 		}
 	}
 
-	private void removeAuthTokenIfUserIdMatches(String authTokenId, User incomingUser) {
-		User storedUser = pickedUsers.get(authTokenId);
-		if (userInfoLoginIdEqualsStoredLoginId(incomingUser, storedUser)){
-            pickedUsers.remove(authTokenId);
-        }
+	private void removeAuthTokenIfUserIdMatches(String authTokenId, String idInUserStorage) {
+		ensureUserIdMathchesTokensUserId(authTokenId, idInUserStorage);
+		pickedUsers.remove(authTokenId);
 	}
 
-	private boolean userInfoLoginIdEqualsStoredLoginId(User incomingUser, User storedUser) {
-		return storedUser.loginId.equals(incomingUser.loginId);
+	private void ensureUserIdMathchesTokensUserId(String authTokenId, String idInUserStorage) {
+		User storedUser = pickedUsers.get(authTokenId);
+		if (!userInfoLoginIdEqualsStoredLoginId(idInUserStorage, storedUser)) {
+			throw new AuthenticationException("idInUserStorage does not exist");
+		}
+	}
+
+	private boolean userInfoLoginIdEqualsStoredLoginId(String idInUserStorage, User storedUser) {
+		return storedUser.id.equals(idInUserStorage);
 	}
 
 }

@@ -58,8 +58,9 @@ public class GatekeeperSpy implements Gatekeeper {
 	}
 
 	@Override
-	public void removeAuthTokenForUser(String authTokenId, User user) {
-
+	public void removeAuthTokenForUser(String authTokenId, String idInUserStorage) {
+		if ("someNonExistingAuthToken".equals(authTokenId)) {
+			throw new AuthenticationException("authToken does not exist");
+		}
 	}
-
 }
