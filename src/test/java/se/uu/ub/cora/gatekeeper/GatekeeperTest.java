@@ -125,39 +125,34 @@ public class GatekeeperTest {
 
 		logedInUser = gatekeeper.getUserForToken(authToken.id);
 		assertEquals(logedInUser.loginId, "someLoginId");
-		gatekeeper.removeAuthTokenForUser(authToken.id, userInfo);
+
+		User user = new User("someStorageId");
+		user.loginId = "someLoginId";
+		gatekeeper.removeAuthTokenForUser(authToken.id, user);
 		gatekeeper.getUserForToken(authToken.id);
 	}
 
 	@Test(expectedExceptions = AuthenticationException.class)
 	public void testRemoveAuthTokenForUserTokenDoesNotExist(){
-		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain("someLoginId", "someLoginDomain");
+//		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain("someLoginId", "someLoginDomain");
 
-		gatekeeper.removeAuthTokenForUser("someNonExistingToken", userInfo);
+		User user = new User("someStorageId");
+		user.loginId = "someLoginId";
+		gatekeeper.removeAuthTokenForUser("someNonExistingToken", user);
 		gatekeeper.getUserForToken("someNonExistingToken");
 	}
 
 	@Test
-	public void testRemoveAuthTokenForUserUserInfoIdNotTheSame(){
+	public void testRemoveAuthTokenForUserUserIdNotTheSame(){
 		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain("someLoginId", "someLoginDomain");
 		AuthToken authToken = gatekeeper.getAuthTokenForUserInfo(userInfo);
 
 		logedInUser = gatekeeper.getUserForToken(authToken.id);
 		assertEquals(logedInUser.loginId, "someLoginId");
-		UserInfo someOtherUserInfo = UserInfo.withLoginIdAndLoginDomain("someOtherLoginId", "someLoginDomain");
-		gatekeeper.removeAuthTokenForUser(authToken.id, someOtherUserInfo);
+
+		User user = new User("someStorageId");
+		user.loginId = "someOtherLoginId";
+		gatekeeper.removeAuthTokenForUser(authToken.id, user);
 		assertNotNull(gatekeeper.getUserForToken(authToken.id));
 	}
-
-//	@Test
-//	public void testRemoveAuthTokenForUserUserInfoDomainNotTheSame(){
-//		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain("someLoginId", "someLoginDomain");
-//		AuthToken authToken = gatekeeper.getAuthTokenForUserInfo(userInfo);
-//
-//		logedInUser = gatekeeper.getUserForToken(authToken.id);
-//		assertEquals(logedInUser.loginId, "someLoginId");
-//		UserInfo someOtherUserInfo = UserInfo.withLoginIdAndLoginDomain("someLoginId", "someOtherLoginDomain");
-//		gatekeeper.removeAuthTokenForUser(authToken.id, someOtherUserInfo);
-//		assertNotNull(gatekeeper.getUserForToken(authToken.id));
-//	}
 }

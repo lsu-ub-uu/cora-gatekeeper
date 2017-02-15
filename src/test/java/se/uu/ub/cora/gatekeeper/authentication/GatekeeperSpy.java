@@ -58,7 +58,7 @@ public class GatekeeperSpy implements Gatekeeper {
 	}
 
 	@Override
-	public void removeAuthTokenForUser(String authTokenId, UserInfo userInfo) {
+	public void removeAuthTokenForUser(String authTokenId, User user) {
 
 	}
 

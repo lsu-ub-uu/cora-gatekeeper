@@ -29,5 +29,5 @@ public interface Gatekeeper {
 
 	AuthToken getAuthTokenForUserInfo(UserInfo userInfo);
 
-	void removeAuthTokenForUser(String authTokenId, UserInfo userInfo);
+	void removeAuthTokenForUser(String authTokenId, User user);
 }
