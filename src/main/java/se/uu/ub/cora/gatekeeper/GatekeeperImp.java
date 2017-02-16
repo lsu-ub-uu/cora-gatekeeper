@@ -41,8 +41,7 @@ public enum GatekeeperImp implements Gatekeeper {
 	}
 
 	private void addHardCodedTokensToPickedUsers() {
-		/*UserInfo userInfo = null;
-		userInfo = UserInfo.withIdInUserStorage("99999");
+		UserInfo userInfo = UserInfo.withIdInUserStorage("99999");
 		User pickedUser = userPickerProvider.getUserPicker().pickUser(userInfo);
 		pickedUsers.put("dummySystemAdminAuthenticatedToken", pickedUser);
 
@@ -52,7 +51,7 @@ public enum GatekeeperImp implements Gatekeeper {
 
 		userInfo = UserInfo.withIdInUserStorage("131313");
 		User pickedUser3 = userPickerProvider.getUserPicker().pickUser(userInfo);
-		pickedUsers.put("fitnesseAdminToken", pickedUser3);*/
+		pickedUsers.put("fitnesseAdminToken", pickedUser3);
 	}
 
 	@Override
@@ -105,6 +104,34 @@ public enum GatekeeperImp implements Gatekeeper {
 	public UserPickerProvider getUserPickerProvider() {
 		// method needed for test
 		return userPickerProvider;
+	}
+
+	@Override
+	public void removeAuthTokenForUser(String authTokenId, String idInUserStorage) {
+		authTokenExists(authTokenId);
+		removeAuthTokenIfUserIdMatches(authTokenId, idInUserStorage);
+	}
+
+	private void authTokenExists(String authTokenId) {
+		if (!pickedUsers.containsKey(authTokenId)) {
+			throw new AuthenticationException("AuthToken does not exist");
+		}
+	}
+
+	private void removeAuthTokenIfUserIdMatches(String authTokenId, String idInUserStorage) {
+		ensureUserIdMathchesTokensUserId(authTokenId, idInUserStorage);
+		pickedUsers.remove(authTokenId);
+	}
+
+	private void ensureUserIdMathchesTokensUserId(String authTokenId, String idInUserStorage) {
+		User storedUser = pickedUsers.get(authTokenId);
+		if (!userInfoLoginIdEqualsStoredLoginId(idInUserStorage, storedUser)) {
+			throw new AuthenticationException("idInUserStorage does not exist");
+		}
+	}
+
+	private boolean userInfoLoginIdEqualsStoredLoginId(String idInUserStorage, User storedUser) {
+		return storedUser.id.equals(idInUserStorage);
 	}
 
 }

@@ -19,8 +19,10 @@
 
 package se.uu.ub.cora.gatekeeper.tokenprovider;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
 import se.uu.ub.cora.gatekeeper.Gatekeeper;
@@ -58,5 +60,22 @@ public final class TokenProviderEndpoint {
 	private String convertAuthTokenToJson(AuthToken authTokenForUserInfo) {
 		AuthTokenToJsonConverter converter = new AuthTokenToJsonConverter(authTokenForUserInfo);
 		return converter.convertAuthTokenToJson();
+	}
+
+	@DELETE
+	@Path("{userid}")
+	public Response removeAuthTokenForUser(String authToken,
+			@PathParam("userid") String idInUserStorage) {
+		try {
+			return tryToRemoveAuthTokenForUser(authToken, idInUserStorage);
+		} catch (AuthenticationException e) {
+			return Response.status(Response.Status.NOT_FOUND).build();
+		}
+	}
+
+	private Response tryToRemoveAuthTokenForUser(String authToken, String idInUserStorage) {
+		Gatekeeper gatekeeper = GatekeeperInstanceProvider.getGatekeeper();
+		gatekeeper.removeAuthTokenForUser(authToken, idInUserStorage);
+		return Response.status(Response.Status.OK).build();
 	}
 }

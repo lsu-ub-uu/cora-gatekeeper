@@ -86,4 +86,20 @@ public class TokenProviderEndpointTest {
 		response = tokenProviderEndpoint.getAuthTokenForUserInfo(jsonUserInfo);
 		assertResponseStatusIs(Response.Status.UNAUTHORIZED);
 	}
+
+	@Test
+	public void testRemoveAuthTokenForUser() {
+		String authToken = "someAuthToken";
+		String idInUserStorage = "someId";
+		response = tokenProviderEndpoint.removeAuthTokenForUser(authToken, idInUserStorage);
+		assertResponseStatusIs(Response.Status.OK);
+	}
+
+	@Test
+	public void testRemoveAuthTokenForUserWithProblem() {
+		String authToken = "someNonExistingAuthToken";
+		String idInUserStorage = "someId";
+		response = tokenProviderEndpoint.removeAuthTokenForUser(authToken, idInUserStorage);
+		assertResponseStatusIs(Response.Status.NOT_FOUND);
+	}
 }
