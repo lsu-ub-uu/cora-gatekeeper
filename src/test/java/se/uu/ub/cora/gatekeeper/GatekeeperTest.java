@@ -54,24 +54,6 @@ public class GatekeeperTest {
 		GatekeeperImp.valueOf(GatekeeperImp.INSTANCE.toString());
 	}
 
-//	@Test
-//	public void testHardCodedTokens() {
-//		assertEquals(userPickerFactory.factoredUserPickers.get(0).usedUserInfo.idInUserStorage,
-//				"99999");
-//		logedInUser = gatekeeper.getUserForToken("dummySystemAdminAuthenticatedToken");
-//		assertEquals(logedInUser, userPickerFactory.factoredUserPickers.get(0).returnedUser);
-//
-//		assertEquals(userPickerFactory.factoredUserPickers.get(1).usedUserInfo.idInUserStorage,
-//				"121212");
-//		logedInUser = gatekeeper.getUserForToken("fitnesseUserToken");
-//		assertEquals(logedInUser, userPickerFactory.factoredUserPickers.get(1).returnedUser);
-//
-//		assertEquals(userPickerFactory.factoredUserPickers.get(2).usedUserInfo.idInUserStorage,
-//				"131313");
-//		logedInUser = gatekeeper.getUserForToken("fitnesseAdminToken");
-//		assertEquals(logedInUser, userPickerFactory.factoredUserPickers.get(2).returnedUser);
-//	}
-
 	@Test
 	public void testNoTokenAlsoKnownAsGuest() {
 		logedInUser = gatekeeper.getUserForToken(null);
