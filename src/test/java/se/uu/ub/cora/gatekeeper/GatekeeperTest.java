@@ -130,6 +130,5 @@ public class GatekeeperTest {
 		assertEquals(logedInUser.loginId, "someLoginId");
 
 		gatekeeper.removeAuthTokenForUser(authToken.id, "someOtherLoginId");
-		// assertNotNull(gatekeeper.getUserForToken(authToken.id));
 	}
 }
