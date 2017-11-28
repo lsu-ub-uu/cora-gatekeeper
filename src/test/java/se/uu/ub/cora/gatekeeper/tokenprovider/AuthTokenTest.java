@@ -28,8 +28,11 @@ public class AuthTokenTest {
 	public void test() {
 		String id = "someId";
 		int validForNoSeconds = 600;
-		AuthToken authToken = AuthToken.withIdAndValidForNoSeconds(id, validForNoSeconds);
-		assertEquals(authToken.id, "someId");
+		String idInUserStorage = "141414";
+		AuthToken authToken = AuthToken.withIdAndValidForNoSecondsAndIdInUserStorage(id, validForNoSeconds,
+				idInUserStorage);
+		assertEquals(authToken.token, "someId");
 		assertEquals(authToken.validForNoSeconds, 600);
+		assertEquals(authToken.idInUserStorage, "141414");
 	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2016, 2017 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -25,6 +25,7 @@ import se.uu.ub.cora.json.builder.org.OrgJsonBuilderFactoryAdapter;
 
 public final class AuthTokenToJsonConverter {
 
+	private static final String VALUE = "value";
 	private static final String NAME = "name";
 	private static final String CHILDREN = "children";
 	private AuthToken authToken;
@@ -41,6 +42,7 @@ public final class AuthTokenToJsonConverter {
 		addIdToJson(authToken, userChildren);
 
 		addValidForNoSecondsToJson(authToken, userChildren);
+		addIdInUserStorageToJson(authToken, userChildren);
 
 		return userBuilder.toJsonFormattedString();
 	}
@@ -53,14 +55,20 @@ public final class AuthTokenToJsonConverter {
 
 	private void addIdToJson(AuthToken authToken, JsonArrayBuilder userChildren) {
 		JsonObjectBuilder id = createObjectBuilderWithName("id");
-		id.addKeyString("value", authToken.id);
+		id.addKeyString(VALUE, authToken.token);
 		userChildren.addJsonObjectBuilder(id);
 	}
 
 	private void addValidForNoSecondsToJson(AuthToken authToken, JsonArrayBuilder userChildren) {
 		JsonObjectBuilder validForNoSeconds = createObjectBuilderWithName("validForNoSeconds");
-		validForNoSeconds.addKeyString("value", String.valueOf(authToken.validForNoSeconds));
+		validForNoSeconds.addKeyString(VALUE, String.valueOf(authToken.validForNoSeconds));
 		userChildren.addJsonObjectBuilder(validForNoSeconds);
+	}
+
+	private void addIdInUserStorageToJson(AuthToken authToken, JsonArrayBuilder userChildren) {
+		JsonObjectBuilder idInUserStorage = createObjectBuilderWithName("idInUserStorage");
+		idInUserStorage.addKeyString(VALUE, String.valueOf(authToken.idInUserStorage));
+		userChildren.addJsonObjectBuilder(idInUserStorage);
 	}
 
 	private JsonArrayBuilder returnAndAddChildrenToBuilder(JsonObjectBuilder userBuilder) {

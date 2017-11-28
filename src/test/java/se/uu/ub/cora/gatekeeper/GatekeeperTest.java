@@ -20,6 +20,7 @@
 package se.uu.ub.cora.gatekeeper;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 import java.util.HashMap;
@@ -75,9 +76,9 @@ public class GatekeeperTest {
 		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain("someLoginId", "someLoginDomain");
 		AuthToken authToken = gatekeeper.getAuthTokenForUserInfo(userInfo);
 
-		logedInUser = gatekeeper.getUserForToken(authToken.id);
+		logedInUser = gatekeeper.getUserForToken(authToken.token);
 		assertPluggedInUserPickerWasUsedOnce();
-		logedInUser = gatekeeper.getUserForToken(authToken.id);
+		logedInUser = gatekeeper.getUserForToken(authToken.token);
 		assertPluggedInUserPickerWasUsedOnce();
 
 	}
@@ -93,7 +94,19 @@ public class GatekeeperTest {
 
 		assertEquals(userPickerFactory.factoredUserPickers.get(FIRST_NON_HARDCODED).usedUserInfo,
 				userInfo);
-		logedInUser = gatekeeper.getUserForToken(authToken.id);
+		assertNotNull(authToken.token);
+		assertEquals(authToken.validForNoSeconds, 600);
+		assertEquals(authToken.idInUserStorage, "12345");
+	}
+
+	@Test
+	public void testGetUserForToken() {
+		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain("someLoginId", "someLoginDomain");
+		AuthToken authToken = gatekeeper.getAuthTokenForUserInfo(userInfo);
+
+		assertEquals(userPickerFactory.factoredUserPickers.get(FIRST_NON_HARDCODED).usedUserInfo,
+				userInfo);
+		logedInUser = gatekeeper.getUserForToken(authToken.token);
 		assertEquals(logedInUser.loginId, "someLoginId");
 	}
 
@@ -109,11 +122,11 @@ public class GatekeeperTest {
 		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain("someLoginId", "someLoginDomain");
 		AuthToken authToken = gatekeeper.getAuthTokenForUserInfo(userInfo);
 
-		logedInUser = gatekeeper.getUserForToken(authToken.id);
+		logedInUser = gatekeeper.getUserForToken(authToken.token);
 		assertEquals(logedInUser.loginId, "someLoginId");
 
-		gatekeeper.removeAuthTokenForUser(authToken.id, "12345");
-		gatekeeper.getUserForToken(authToken.id);
+		gatekeeper.removeAuthTokenForUser(authToken.token, "12345");
+		gatekeeper.getUserForToken(authToken.token);
 	}
 
 	@Test(expectedExceptions = AuthenticationException.class)
@@ -126,9 +139,9 @@ public class GatekeeperTest {
 		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain("someLoginId", "someLoginDomain");
 		AuthToken authToken = gatekeeper.getAuthTokenForUserInfo(userInfo);
 
-		logedInUser = gatekeeper.getUserForToken(authToken.id);
+		logedInUser = gatekeeper.getUserForToken(authToken.token);
 		assertEquals(logedInUser.loginId, "someLoginId");
 
-		gatekeeper.removeAuthTokenForUser(authToken.id, "someOtherLoginId");
+		gatekeeper.removeAuthTokenForUser(authToken.token, "someOtherLoginId");
 	}
 }

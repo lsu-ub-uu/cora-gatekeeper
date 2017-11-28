@@ -63,7 +63,8 @@ public class TokenProviderEndpointTest {
 		assertResponseStatusIs(Response.Status.OK);
 		assertEntityExists();
 		String expected = "{\"children\":[" + "{\"name\":\"id\",\"value\":\"someAuthToken\"},"
-				+ "{\"name\":\"validForNoSeconds\",\"value\":\"600\"}"
+				+ "{\"name\":\"validForNoSeconds\",\"value\":\"600\"},"
+				+ "{\"name\":\"idInUserStorage\",\"value\":\"someIdFromStorage\"}"
 				+ "],\"name\":\"authToken\"}";
 		assertEquals(response.getEntity(), expected);
 	}

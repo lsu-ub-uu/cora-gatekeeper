@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2016, 2017 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -26,11 +26,13 @@ import org.testng.annotations.Test;
 public class AuthTokenToJsonConverterTest {
 	@Test
 	public void testAuthTokenToJsonConverter() {
-		AuthToken authToken = AuthToken.withIdAndValidForNoSeconds("someId", 599);
+		AuthToken authToken = AuthToken.withIdAndValidForNoSecondsAndIdInUserStorage("someId", 599,
+				"someIdFromStorage");
 		AuthTokenToJsonConverter converter = new AuthTokenToJsonConverter(authToken);
 		String json = converter.convertAuthTokenToJson();
 		String expected = "{\"children\":[" + "{\"name\":\"id\",\"value\":\"someId\"},"
-				+ "{\"name\":\"validForNoSeconds\",\"value\":\"599\"}"
+				+ "{\"name\":\"validForNoSeconds\",\"value\":\"599\"},"
+				+ "{\"name\":\"idInUserStorage\",\"value\":\"someIdFromStorage\"}"
 				+ "],\"name\":\"authToken\"}";
 		assertEquals(json, expected);
 	}

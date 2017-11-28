@@ -79,7 +79,8 @@ public enum GatekeeperImp implements Gatekeeper {
 		User pickedUser = userPickerProvider.getUserPicker().pickUser(userInfo);
 		String generateAuthToken = generateAuthToken();
 		pickedUsers.put(generateAuthToken, pickedUser);
-		return AuthToken.withIdAndValidForNoSeconds(generateAuthToken, VALID_FOR_NO_SECONDS);
+		return AuthToken.withIdAndValidForNoSecondsAndIdInUserStorage(generateAuthToken,
+				VALID_FOR_NO_SECONDS, pickedUser.id);
 	}
 
 	private String generateAuthToken() {
