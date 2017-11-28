@@ -21,9 +21,9 @@ package se.uu.ub.cora.gatekeeper.tokenprovider;
 
 public final class AuthToken {
 
-	public String token;
-	public int validForNoSeconds;
-	public String idInUserStorage;
+	public final String token;
+	public final int validForNoSeconds;
+	public final String idInUserStorage;
 
 	private AuthToken(String id, int validForNoSeconds, String idInUserStorage) {
 		this.token = id;
