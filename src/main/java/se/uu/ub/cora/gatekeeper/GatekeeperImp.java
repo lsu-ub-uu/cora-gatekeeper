@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2016, 2017 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -77,10 +77,22 @@ public enum GatekeeperImp implements Gatekeeper {
 
 	private AuthToken tryToGetAuthTokenForUserInfo(UserInfo userInfo) {
 		User pickedUser = userPickerProvider.getUserPicker().pickUser(userInfo);
-		String generateAuthToken = generateAuthToken();
-		pickedUsers.put(generateAuthToken, pickedUser);
-		return AuthToken.withIdAndValidForNoSecondsAndIdInUserStorage(generateAuthToken,
-				VALID_FOR_NO_SECONDS, pickedUser.id);
+		String generatedAuthToken = generateAuthToken();
+		pickedUsers.put(generatedAuthToken, pickedUser);
+		return createAuthTokenUsingPickedUserAndGeneratedAuthToken(pickedUser, generatedAuthToken);
+	}
+
+	private AuthToken createAuthTokenUsingPickedUserAndGeneratedAuthToken(User pickedUser,
+			String generatedAuthToken) {
+		AuthToken authToken = AuthToken.withIdAndValidForNoSecondsAndIdInUserStorageAndIdFromLogin(
+				generatedAuthToken, VALID_FOR_NO_SECONDS, pickedUser.id, pickedUser.loginId);
+		if (pickedUser.firstName != null) {
+			authToken.firstName = pickedUser.firstName;
+		}
+		if (pickedUser.lastName != null) {
+			authToken.lastName = pickedUser.lastName;
+		}
+		return authToken;
 	}
 
 	private String generateAuthToken() {

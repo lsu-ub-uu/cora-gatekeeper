@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2016, 2017 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -62,8 +62,7 @@ public class GatekeeperTest {
 	}
 
 	private void assertPluggedInUserPickerWasUsedToPickGuest() {
-		assertTrue(
-				userPickerFactory.factoredUserPickers.get(FIRST_NON_HARDCODED).pickGuestWasCalled);
+		assertTrue(userPickerFactory.factoredUserPickers.get(FIRST_NON_HARDCODED).pickGuestWasCalled);
 	}
 
 	@Test(expectedExceptions = AuthenticationException.class)
@@ -97,17 +96,51 @@ public class GatekeeperTest {
 		assertNotNull(authToken.token);
 		assertEquals(authToken.validForNoSeconds, 600);
 		assertEquals(authToken.idInUserStorage, "12345");
+		assertEquals(authToken.idFromLogin, "someLoginId");
 	}
 
 	@Test
-	public void testGetUserForToken() {
-		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain("someLoginId", "someLoginDomain");
+	public void testGetAuthTokenForUserInfoWithIdStorage() {
+		UserInfo userInfo = UserInfo.withIdInUserStorage("someIdInStorage");
 		AuthToken authToken = gatekeeper.getAuthTokenForUserInfo(userInfo);
 
 		assertEquals(userPickerFactory.factoredUserPickers.get(FIRST_NON_HARDCODED).usedUserInfo,
 				userInfo);
+
+		assertNotNull(authToken.token);
+		assertEquals(authToken.validForNoSeconds, 600);
+		assertEquals(authToken.idInUserStorage, "someIdInStorage");
+		assertEquals(authToken.idFromLogin, "loginIdFromUserPickerSpy");
+	}
+
+	@Test
+	public void testGetAuthTokenForUserInfoWithIdStorageThatReturnsName() {
+		UserInfo userInfo = UserInfo.withIdInUserStorage("someIdInStorageReturningName");
+		AuthToken authToken = gatekeeper.getAuthTokenForUserInfo(userInfo);
+
+		assertEquals(userPickerFactory.factoredUserPickers.get(FIRST_NON_HARDCODED).usedUserInfo,
+				userInfo);
+
+		assertNotNull(authToken.token);
+		assertEquals(authToken.validForNoSeconds, 600);
+		assertEquals(authToken.idInUserStorage, "someIdInStorageReturningName");
+		assertEquals(authToken.idFromLogin, "loginIdFromUserPickerSpy");
+		assertEquals(authToken.firstName, "firstNameFromUserPickerSpy");
+		assertEquals(authToken.lastName, "lastNameFromUserPickerSpy");
+	}
+
+	@Test
+	public void testGetUserForToken() {
+		AuthToken authToken = getTokenFromLoginToUseInTestNormallySentFromClient();
+
 		logedInUser = gatekeeper.getUserForToken(authToken.token);
 		assertEquals(logedInUser.loginId, "someLoginId");
+	}
+
+	private AuthToken getTokenFromLoginToUseInTestNormallySentFromClient() {
+		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain("someLoginId", "someLoginDomain");
+		AuthToken authToken = gatekeeper.getAuthTokenForUserInfo(userInfo);
+		return authToken;
 	}
 
 	@Test(expectedExceptions = AuthenticationException.class)

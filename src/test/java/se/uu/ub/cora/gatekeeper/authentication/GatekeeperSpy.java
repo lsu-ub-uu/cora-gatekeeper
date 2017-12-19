@@ -54,8 +54,8 @@ public class GatekeeperSpy implements Gatekeeper {
 			throw new AuthenticationException("problem getting authToken for userInfo");
 		}
 		getAuthTokenForUserInfoWasCalled = true;
-		return AuthToken.withIdAndValidForNoSecondsAndIdInUserStorage("someAuthToken", 600,
-				"someIdFromStorage");
+		return AuthToken.withIdAndValidForNoSecondsAndIdInUserStorageAndIdFromLogin("someAuthToken", 600,
+				"someIdFromStorage", "someIdFromLogin");
 	}
 
 	@Override
