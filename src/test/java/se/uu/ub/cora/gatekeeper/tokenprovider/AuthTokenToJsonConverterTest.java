@@ -50,8 +50,8 @@ public class AuthTokenToJsonConverterTest {
 				+ "{\"name\":\"validForNoSeconds\",\"value\":\"599\"}," + "{"
 				+ "\"name\":\"idInUserStorage\",\"value\":\"someIdFromStorage\"},"
 				+ "{\"name\":\"idFromLogin\",\"value\":\"someIdFromLogin\"},"
-				+ "{\"name\":\"firstName\",\"value\":\"someFirstName\"}"
-				+ "{\"name\":\"lastName\",\"value\":\"lastFirstName\"}" + "],\"name\":\"authToken\"}";
+				+ "{\"name\":\"firstName\",\"value\":\"someFirstName\"},"
+				+ "{\"name\":\"lastName\",\"value\":\"someLastName\"}" + "],\"name\":\"authToken\"}";
 		assertEquals(json, expected);
 	}
 }
