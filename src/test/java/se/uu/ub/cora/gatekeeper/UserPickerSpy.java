@@ -32,6 +32,9 @@ public class UserPickerSpy implements UserPicker {
 
 	@Override
 	public User pickUser(UserInfo userInfo) {
+		if (null != userInfo.idInUserStorage) {
+			return fakeUserFromStorage(userInfo);
+		}
 		if (userInfo.idFromLogin != null && userInfo.idFromLogin.equals("someLoginIdWithProblem")) {
 			throw new RuntimeException("problem finding user");
 		}
@@ -40,6 +43,21 @@ public class UserPickerSpy implements UserPicker {
 		User user = new User("12345");
 		user.loginId = userInfo.idFromLogin;
 		user.loginDomain = userInfo.domainFromLogin;
+		returnedUser = user;
+		return user;
+	}
+
+	private User fakeUserFromStorage(UserInfo userInfo) {
+		usedUserInfo = userInfo;
+		userPickerWasCalled = true;
+		User user = new User(userInfo.idInUserStorage);
+		user.loginId = "loginIdFromUserPickerSpy";
+		user.loginDomain = "loginDomainFromUserPickerSpy";
+		if (userInfo.idInUserStorage.equals("someIdInStorageReturningName")) {
+			user.firstName = "firstNameFromUserPickerSpy";
+			user.lastName = "lastNameFromUserPickerSpy";
+		}
+
 		returnedUser = user;
 		return user;
 	}

@@ -45,8 +45,7 @@ public class TokenProviderEndpointTest {
 		tokenProviderEndpoint = new TokenProviderEndpoint();
 		jsonUserInfo = "{\"children\":[" + "{\"name\":\"idFromLogin\",\"value\":\"\"},"
 				+ "{\"name\":\"domainFromLogin\",\"value\":\"\"},"
-				+ "{\"name\":\"idInUserStorage\",\"value\":\"131313\"}"
-				+ "],\"name\":\"userInfo\"}";
+				+ "{\"name\":\"idInUserStorage\",\"value\":\"131313\"}" + "],\"name\":\"userInfo\"}";
 	}
 
 	@Test
@@ -64,7 +63,8 @@ public class TokenProviderEndpointTest {
 		assertEntityExists();
 		String expected = "{\"children\":[" + "{\"name\":\"id\",\"value\":\"someAuthToken\"},"
 				+ "{\"name\":\"validForNoSeconds\",\"value\":\"600\"},"
-				+ "{\"name\":\"idInUserStorage\",\"value\":\"someIdFromStorage\"}"
+				+ "{\"name\":\"idInUserStorage\",\"value\":\"someIdFromStorage\"},"
+				+ "{\"name\":\"idFromLogin\",\"value\":\"someIdFromLogin\"}"
 				+ "],\"name\":\"authToken\"}";
 		assertEquals(response.getEntity(), expected);
 	}

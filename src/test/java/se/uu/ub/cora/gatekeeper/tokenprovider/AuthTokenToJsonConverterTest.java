@@ -26,14 +26,32 @@ import org.testng.annotations.Test;
 public class AuthTokenToJsonConverterTest {
 	@Test
 	public void testAuthTokenToJsonConverter() {
-		AuthToken authToken = AuthToken.withIdAndValidForNoSecondsAndIdInUserStorage("someId", 599,
-				"someIdFromStorage");
+		AuthToken authToken = AuthToken.withIdAndValidForNoSecondsAndIdInUserStorageAndIdFromLogin(
+				"someId", 599, "someIdFromStorage", "someIdFromLogin");
 		AuthTokenToJsonConverter converter = new AuthTokenToJsonConverter(authToken);
 		String json = converter.convertAuthTokenToJson();
 		String expected = "{\"children\":[" + "{\"name\":\"id\",\"value\":\"someId\"},"
-				+ "{\"name\":\"validForNoSeconds\",\"value\":\"599\"},"
-				+ "{\"name\":\"idInUserStorage\",\"value\":\"someIdFromStorage\"}"
+				+ "{\"name\":\"validForNoSeconds\",\"value\":\"599\"}," + "{"
+				+ "\"name\":\"idInUserStorage\",\"value\":\"someIdFromStorage\"},"
+				+ "{\"name\":\"idFromLogin\",\"value\":\"someIdFromLogin\"}"
 				+ "],\"name\":\"authToken\"}";
+		assertEquals(json, expected);
+	}
+
+	@Test
+	public void testAuthTokenToJsonConverterWithName() {
+		AuthToken authToken = AuthToken.withIdAndValidForNoSecondsAndIdInUserStorageAndIdFromLogin(
+				"someId", 599, "someIdFromStorage", "someIdFromLogin");
+		authToken.firstName = "someFirstName";
+		authToken.lastName = "someLastName";
+		AuthTokenToJsonConverter converter = new AuthTokenToJsonConverter(authToken);
+		String json = converter.convertAuthTokenToJson();
+		String expected = "{\"children\":[" + "{\"name\":\"id\",\"value\":\"someId\"},"
+				+ "{\"name\":\"validForNoSeconds\",\"value\":\"599\"}," + "{"
+				+ "\"name\":\"idInUserStorage\",\"value\":\"someIdFromStorage\"},"
+				+ "{\"name\":\"idFromLogin\",\"value\":\"someIdFromLogin\"},"
+				+ "{\"name\":\"firstName\",\"value\":\"someFirstName\"},"
+				+ "{\"name\":\"lastName\",\"value\":\"someLastName\"}" + "],\"name\":\"authToken\"}";
 		assertEquals(json, expected);
 	}
 }

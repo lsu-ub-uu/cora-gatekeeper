@@ -39,11 +39,12 @@ public final class AuthTokenToJsonConverter {
 		JsonObjectBuilder userBuilder = createObjectBuilderWithName("authToken");
 		JsonArrayBuilder userChildren = returnAndAddChildrenToBuilder(userBuilder);
 
-		addIdToJson(authToken, userChildren);
+		addIdToJson(userChildren);
 
-		addValidForNoSecondsToJson(authToken, userChildren);
-		addIdInUserStorageToJson(authToken, userChildren);
-
+		addValidForNoSecondsToJson(userChildren);
+		addIdInUserStorageToJson(userChildren);
+		addIdFromLoginToJson(userChildren);
+		possiblyAddNameToJson(userChildren);
 		return userBuilder.toJsonFormattedString();
 	}
 
@@ -53,22 +54,49 @@ public final class AuthTokenToJsonConverter {
 		return roleBuilder;
 	}
 
-	private void addIdToJson(AuthToken authToken, JsonArrayBuilder userChildren) {
+	private void addIdToJson(JsonArrayBuilder userChildren) {
 		JsonObjectBuilder id = createObjectBuilderWithName("id");
 		id.addKeyString(VALUE, authToken.token);
 		userChildren.addJsonObjectBuilder(id);
 	}
 
-	private void addValidForNoSecondsToJson(AuthToken authToken, JsonArrayBuilder userChildren) {
+	private void addValidForNoSecondsToJson(JsonArrayBuilder userChildren) {
 		JsonObjectBuilder validForNoSeconds = createObjectBuilderWithName("validForNoSeconds");
 		validForNoSeconds.addKeyString(VALUE, String.valueOf(authToken.validForNoSeconds));
 		userChildren.addJsonObjectBuilder(validForNoSeconds);
 	}
 
-	private void addIdInUserStorageToJson(AuthToken authToken, JsonArrayBuilder userChildren) {
+	private void addIdInUserStorageToJson(JsonArrayBuilder userChildren) {
 		JsonObjectBuilder idInUserStorage = createObjectBuilderWithName("idInUserStorage");
 		idInUserStorage.addKeyString(VALUE, String.valueOf(authToken.idInUserStorage));
 		userChildren.addJsonObjectBuilder(idInUserStorage);
+	}
+
+	private void addIdFromLoginToJson(JsonArrayBuilder userChildren) {
+		JsonObjectBuilder idFromLogin = createObjectBuilderWithName("idFromLogin");
+		idFromLogin.addKeyString(VALUE, String.valueOf(authToken.idFromLogin));
+		userChildren.addJsonObjectBuilder(idFromLogin);
+	}
+
+	private void possiblyAddNameToJson(JsonArrayBuilder userChildren) {
+		possiblyAddFirstNameToJson(userChildren);
+		possiblyAddLastNameToJson(userChildren);
+	}
+
+	private void possiblyAddFirstNameToJson(JsonArrayBuilder userChildren) {
+		if (null != authToken.firstName) {
+			JsonObjectBuilder firstName = createObjectBuilderWithName("firstName");
+			firstName.addKeyString(VALUE, String.valueOf(authToken.firstName));
+			userChildren.addJsonObjectBuilder(firstName);
+		}
+	}
+
+	private void possiblyAddLastNameToJson(JsonArrayBuilder userChildren) {
+		if (null != authToken.lastName) {
+			JsonObjectBuilder lastName = createObjectBuilderWithName("lastName");
+			lastName.addKeyString(VALUE, String.valueOf(authToken.lastName));
+			userChildren.addJsonObjectBuilder(lastName);
+		}
 	}
 
 	private JsonArrayBuilder returnAndAddChildrenToBuilder(JsonObjectBuilder userBuilder) {
