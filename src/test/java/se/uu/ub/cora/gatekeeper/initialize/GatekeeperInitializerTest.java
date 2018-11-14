@@ -52,9 +52,21 @@ public class GatekeeperInitializerTest {
 		assertTrue(GatekeeperImp.INSTANCE.getUserPickerProvider() instanceof UserPickerProviderSpy);
 	}
 
-	@Test(expectedExceptions = RuntimeException.class)
+	@Test(expectedExceptions = RuntimeException.class, expectedExceptionsMessageRegExp = ""
+			+ "Error starting Gatekeeper: "
+			+ "Context must have a userPickerProviderClassName set.")
 	public void testInitializeSystemWithoutUserPickerFactoryClassName() {
 		gatekeeperInitializer.contextInitialized(context);
+	}
+
+	@Test(expectedExceptions = RuntimeException.class, expectedExceptionsMessageRegExp = ""
+			+ "Error starting Gatekeeper: "
+			+ "Invocation exception from UserPickerProviderThrowsInvocationTargetOnStartupSpy")
+	public void testHandlingAndGettingCorrectErrorMessageFromErrorsThrowsOnStartup() {
+		source.setInitParameter("userPickerProviderClassName",
+				"se.uu.ub.cora.gatekeeper.UserPickerProviderThrowsInvocationTargetOnStartupSpy");
+		gatekeeperInitializer.contextInitialized(context);
+		assertTrue(GatekeeperImp.INSTANCE.getUserPickerProvider() instanceof UserPickerProviderSpy);
 	}
 
 	@Test

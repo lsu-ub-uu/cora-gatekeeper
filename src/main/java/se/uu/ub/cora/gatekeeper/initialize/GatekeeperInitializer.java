@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2016, 2018 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -47,9 +47,17 @@ public class GatekeeperInitializer implements ServletContextListener {
 		servletContext = arg0.getServletContext();
 		try {
 			tryToInitialize();
+		} catch (InvocationTargetException e) {
+			throwRuntimeExceptionWithRootCauseForInvocationException(e);
 		} catch (Exception e) {
 			throw new RuntimeException("Error starting Gatekeeper: " + e.getMessage());
 		}
+	}
+
+	private void throwRuntimeExceptionWithRootCauseForInvocationException(
+			InvocationTargetException e) {
+		throw new RuntimeException(
+				"Error starting Gatekeeper: " + e.getTargetException().getMessage());
 	}
 
 	private void tryToInitialize() throws InstantiationException, IllegalAccessException,
