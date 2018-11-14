@@ -48,16 +48,11 @@ public class GatekeeperInitializer implements ServletContextListener {
 		try {
 			tryToInitialize();
 		} catch (InvocationTargetException e) {
-			throwRuntimeExceptionWithRootCauseForInvocationException(e);
+			throw new RuntimeException(
+			"Error starting Gatekeeper: " + e.getTargetException().getMessage());
 		} catch (Exception e) {
 			throw new RuntimeException("Error starting Gatekeeper: " + e.getMessage());
 		}
-	}
-
-	private void throwRuntimeExceptionWithRootCauseForInvocationException(
-			InvocationTargetException e) {
-		throw new RuntimeException(
-				"Error starting Gatekeeper: " + e.getTargetException().getMessage());
 	}
 
 	private void tryToInitialize() throws InstantiationException, IllegalAccessException,
