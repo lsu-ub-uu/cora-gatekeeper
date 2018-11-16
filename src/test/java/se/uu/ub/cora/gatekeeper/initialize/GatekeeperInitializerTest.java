@@ -20,6 +20,8 @@
 package se.uu.ub.cora.gatekeeper.initialize;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertSame;
 import static org.testng.Assert.assertTrue;
 
 import javax.servlet.ServletContext;
@@ -30,6 +32,7 @@ import org.testng.annotations.Test;
 
 import se.uu.ub.cora.gatekeeper.GatekeeperImp;
 import se.uu.ub.cora.gatekeeper.UserPickerProviderSpy;
+import se.uu.ub.cora.gatekeeper.dependency.GatekeeperInstanceProvider;
 
 public class GatekeeperInitializerTest {
 	private GatekeeperInitializer gatekeeperInitializer;
@@ -50,6 +53,9 @@ public class GatekeeperInitializerTest {
 				"se.uu.ub.cora.gatekeeper.UserPickerProviderSpy");
 		gatekeeperInitializer.contextInitialized(context);
 		assertTrue(GatekeeperImp.INSTANCE.getUserPickerProvider() instanceof UserPickerProviderSpy);
+		assertNotNull(GatekeeperInstanceProvider.getGatekeeper());
+		assertSame(GatekeeperInstanceProvider.getGatekeeper(),
+				GatekeeperInstanceProvider.getGatekeeper());
 	}
 
 	@Test(expectedExceptions = RuntimeException.class, expectedExceptionsMessageRegExp = ""

@@ -36,7 +36,7 @@ import se.uu.ub.cora.userpicker.UserInfo;
 
 public class GatekeeperTest {
 	private static final int FIRST_NON_HARDCODED = 0;
-	private UserPickerProviderSpy userPickerFactory;
+	private UserPickerProviderSpy userPickerProvider;
 	private GatekeeperImp gatekeeper;
 	private User logedInUser;
 
@@ -44,8 +44,8 @@ public class GatekeeperTest {
 	public void setUp() {
 		Map<String, String> initInfo = new HashMap<>();
 		initInfo.put("storageOnDiskBasePath", "");
-		userPickerFactory = new UserPickerProviderSpy(initInfo);
-		GatekeeperImp.INSTANCE.setUserPickerProvider(userPickerFactory);
+		userPickerProvider = new UserPickerProviderSpy(initInfo);
+		GatekeeperImp.INSTANCE.setUserPickerProvider(userPickerProvider);
 		gatekeeper = GatekeeperImp.INSTANCE;
 	}
 
@@ -59,10 +59,14 @@ public class GatekeeperTest {
 	public void testNoTokenAlsoKnownAsGuest() {
 		logedInUser = gatekeeper.getUserForToken(null);
 		assertPluggedInUserPickerWasUsedToPickGuest();
+
+		User expectedGuest = userPickerProvider.factoredUserPickers.get(0).returnedUser;
+		assertEquals(logedInUser, expectedGuest);
 	}
 
 	private void assertPluggedInUserPickerWasUsedToPickGuest() {
-		assertTrue(userPickerFactory.factoredUserPickers.get(FIRST_NON_HARDCODED).pickGuestWasCalled);
+		assertTrue(
+				userPickerProvider.factoredUserPickers.get(FIRST_NON_HARDCODED).pickGuestWasCalled);
 	}
 
 	@Test(expectedExceptions = AuthenticationException.class)
@@ -83,7 +87,7 @@ public class GatekeeperTest {
 	}
 
 	private void assertPluggedInUserPickerWasUsedOnce() {
-		assertEquals(userPickerFactory.factoredUserPickers.size(), 1);
+		assertEquals(userPickerProvider.factoredUserPickers.size(), 1);
 	}
 
 	@Test
@@ -91,7 +95,7 @@ public class GatekeeperTest {
 		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain("someLoginId", "someLoginDomain");
 		AuthToken authToken = gatekeeper.getAuthTokenForUserInfo(userInfo);
 
-		assertEquals(userPickerFactory.factoredUserPickers.get(FIRST_NON_HARDCODED).usedUserInfo,
+		assertEquals(userPickerProvider.factoredUserPickers.get(FIRST_NON_HARDCODED).usedUserInfo,
 				userInfo);
 		assertNotNull(authToken.token);
 		assertEquals(authToken.validForNoSeconds, 600);
@@ -104,7 +108,7 @@ public class GatekeeperTest {
 		UserInfo userInfo = UserInfo.withIdInUserStorage("someIdInStorage");
 		AuthToken authToken = gatekeeper.getAuthTokenForUserInfo(userInfo);
 
-		assertEquals(userPickerFactory.factoredUserPickers.get(FIRST_NON_HARDCODED).usedUserInfo,
+		assertEquals(userPickerProvider.factoredUserPickers.get(FIRST_NON_HARDCODED).usedUserInfo,
 				userInfo);
 
 		assertNotNull(authToken.token);
@@ -118,7 +122,7 @@ public class GatekeeperTest {
 		UserInfo userInfo = UserInfo.withIdInUserStorage("someIdInStorageReturningName");
 		AuthToken authToken = gatekeeper.getAuthTokenForUserInfo(userInfo);
 
-		assertEquals(userPickerFactory.factoredUserPickers.get(FIRST_NON_HARDCODED).usedUserInfo,
+		assertEquals(userPickerProvider.factoredUserPickers.get(FIRST_NON_HARDCODED).usedUserInfo,
 				userInfo);
 
 		assertNotNull(authToken.token);
