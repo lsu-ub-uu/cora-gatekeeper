@@ -16,18 +16,18 @@
 	<parent>
 		<groupId>se.uu.ub.cora</groupId>
 		<artifactId>cora-parent</artifactId>
-		<version>0.7-SNAPSHOT</version>
+		<version>0.8-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>gatekeeper</artifactId>
-	<version>0.4-SNAPSHOT</version>
+	<version>0.5-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<name>gatekeeper</name>
 
 	<properties>
-		<json.version>0.4-SNAPSHOT</json.version>
-		<userpicker.version>0.4-SNAPSHOT</userpicker.version>
+		<json.version>0.5-SNAPSHOT</json.version>
+		<userpicker.version>0.5-SNAPSHOT</userpicker.version>
 		<javax.ws.rs.version>2.1.1</javax.ws.rs.version>
 		<jersey.version>2.27</jersey.version>
 	</properties>
