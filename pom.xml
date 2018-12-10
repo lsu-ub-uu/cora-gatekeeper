@@ -16,26 +16,26 @@
 	<parent>
 		<groupId>se.uu.ub.cora</groupId>
 		<artifactId>cora-parent</artifactId>
-		<version>0.8-SNAPSHOT</version>
+		<version>0.8.6</version>
 	</parent>
 
 	<artifactId>gatekeeper</artifactId>
-	<version>0.5-SNAPSHOT</version>
+	<version>0.5.0-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<name>gatekeeper</name>
 
 	<properties>
-		<json.version>0.5-SNAPSHOT</json.version>
-		<userpicker.version>0.5-SNAPSHOT</userpicker.version>
+		<json.version>0.5.7</json.version>
+		<userpicker.version>0.5.0</userpicker.version>
 		<javax.ws.rs.version>2.1.1</javax.ws.rs.version>
 		<jersey.version>2.27</jersey.version>
 	</properties>
 
 	<scm>
-		<connection>scm:git:https://github.com/lsu-ub-uu/gatekeeper.git</connection>
-		<developerConnection>scm:git:https://github.com/lsu-ub-uu/gatekeeper.git</developerConnection>
-		<url>https://github.com/lsu-ub-uu/gatekeeper.git</url>
+		<connection>scm:git:https://github.com/lsu-ub-uu/cora-gatekeeper.git</connection>
+		<developerConnection>scm:git:https://github.com/lsu-ub-uu/cora-gatekeeper.git</developerConnection>
+		<url>https://github.com/lsu-ub-uu/cora-gatekeeper.git</url>
 	</scm>
 
 
