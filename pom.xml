@@ -25,7 +25,7 @@
 
 	<properties>
 		<json.version>0.5.7</json.version>
-		<userpicker.version>0.5.0</userpicker.version>
+		<userpicker.version>0.6.0</userpicker.version>
 		<javax.ws.rs.version>2.1.1</javax.ws.rs.version>
 		<jersey.version>2.27</jersey.version>
 	</properties>
