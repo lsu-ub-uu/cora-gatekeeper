@@ -17,29 +17,43 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper;
+package se.uu.ub.cora.gatekeeper.user;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
+
+import java.util.Set;
 
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.gatekeeper.user.UserInfo;
-
-public class UserInfoTest {
+public class UserTest {
 	@Test
-	public void testUserInfoUserInStorage() {
-		String idInUserStorage = "someIdFromStorage";
-
-		UserInfo userInfo = UserInfo.withIdInUserStorage(idInUserStorage);
-		assertEquals(userInfo.idInUserStorage, "someIdFromStorage");
+	public void init() {
+		String id = "someUserId";
+		User user = new User(id);
+		assertEquals(user.id, "someUserId");
 	}
 
 	@Test
-	public void testUserInfo() {
-		String idFromLogin = "idFromLogin";
-		String domainFromLogin = "domainFromLogin";
+	public void testLoginInfo() {
+		String id = "122345";
+		User user = new User(id);
+		user.loginId = "someUserId";
+		user.loginDomain = "someDomain";
+		assertEquals(user.id, "122345");
+		assertEquals(user.loginId, "someUserId");
+		assertEquals(user.loginDomain, "someDomain");
+	}
 
-		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain(idFromLogin, domainFromLogin);
-		assertEquals(userInfo.idFromLogin, "idFromLogin");
+	@Test
+	public void testRoleSet() {
+		String id = "122345";
+		User user = new User(id);
+		user.roles.add("admin");
+		user.roles.add("guest");
+		Set<String> roles = user.roles;
+		assertEquals(roles.size(), 2);
+		assertTrue(roles.contains("guest"));
+		assertTrue(roles.contains("admin"));
 	}
 }

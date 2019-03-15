@@ -22,12 +22,12 @@ package se.uu.ub.cora.gatekeeper.tokenprovider;
 import java.util.HashMap;
 import java.util.Map;
 
+import se.uu.ub.cora.gatekeeper.user.UserInfo;
 import se.uu.ub.cora.json.parser.JsonArray;
 import se.uu.ub.cora.json.parser.JsonObject;
 import se.uu.ub.cora.json.parser.JsonParser;
 import se.uu.ub.cora.json.parser.JsonValue;
 import se.uu.ub.cora.json.parser.org.OrgJsonParser;
-import se.uu.ub.cora.userpicker.UserInfo;
 
 public final class JsonToUserInfoConverter {
 

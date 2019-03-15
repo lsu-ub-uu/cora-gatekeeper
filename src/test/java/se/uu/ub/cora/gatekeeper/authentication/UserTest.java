@@ -26,7 +26,7 @@ import java.util.Set;
 
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.userpicker.User;
+import se.uu.ub.cora.gatekeeper.user.User;
 
 public class UserTest {
 	@Test

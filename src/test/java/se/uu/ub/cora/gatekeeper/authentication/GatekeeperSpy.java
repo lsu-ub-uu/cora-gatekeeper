@@ -21,8 +21,8 @@ package se.uu.ub.cora.gatekeeper.authentication;
 
 import se.uu.ub.cora.gatekeeper.Gatekeeper;
 import se.uu.ub.cora.gatekeeper.tokenprovider.AuthToken;
-import se.uu.ub.cora.userpicker.User;
-import se.uu.ub.cora.userpicker.UserInfo;
+import se.uu.ub.cora.gatekeeper.user.User;
+import se.uu.ub.cora.gatekeeper.user.UserInfo;
 
 public class GatekeeperSpy implements Gatekeeper {
 

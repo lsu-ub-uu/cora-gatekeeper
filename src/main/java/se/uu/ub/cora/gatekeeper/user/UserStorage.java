@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2017, 2018 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -17,17 +17,13 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper;
+package se.uu.ub.cora.gatekeeper.user;
 
-import se.uu.ub.cora.gatekeeper.tokenprovider.AuthToken;
-import se.uu.ub.cora.gatekeeper.user.User;
-import se.uu.ub.cora.gatekeeper.user.UserInfo;
+import se.uu.ub.cora.bookkeeper.data.DataGroup;
 
-public interface Gatekeeper {
+public interface UserStorage {
 
-	User getUserForToken(String authToken);
+	DataGroup getUserById(String id);
 
-	AuthToken getAuthTokenForUserInfo(UserInfo userInfo);
-
-	void removeAuthTokenForUser(String authTokenId, String idInUserStorage);
+	DataGroup getUserByIdFromLogin(String idFromLogin);
 }

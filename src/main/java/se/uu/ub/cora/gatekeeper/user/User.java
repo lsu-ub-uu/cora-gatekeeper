@@ -17,29 +17,21 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper;
+package se.uu.ub.cora.gatekeeper.user;
 
-import static org.testng.Assert.assertEquals;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
-import org.testng.annotations.Test;
+public class User {
 
-import se.uu.ub.cora.gatekeeper.user.UserInfo;
+	public final String id;
+	public String loginId;
+	public String loginDomain;
+	public final Set<String> roles = new LinkedHashSet<>();
+	public String firstName;
+	public String lastName;
 
-public class UserInfoTest {
-	@Test
-	public void testUserInfoUserInStorage() {
-		String idInUserStorage = "someIdFromStorage";
-
-		UserInfo userInfo = UserInfo.withIdInUserStorage(idInUserStorage);
-		assertEquals(userInfo.idInUserStorage, "someIdFromStorage");
-	}
-
-	@Test
-	public void testUserInfo() {
-		String idFromLogin = "idFromLogin";
-		String domainFromLogin = "domainFromLogin";
-
-		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain(idFromLogin, domainFromLogin);
-		assertEquals(userInfo.idFromLogin, "idFromLogin");
+	public User(String id) {
+		this.id = id;
 	}
 }

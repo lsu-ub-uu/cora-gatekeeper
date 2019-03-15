@@ -31,8 +31,8 @@ import org.testng.annotations.Test;
 
 import se.uu.ub.cora.gatekeeper.authentication.AuthenticationException;
 import se.uu.ub.cora.gatekeeper.tokenprovider.AuthToken;
-import se.uu.ub.cora.userpicker.User;
-import se.uu.ub.cora.userpicker.UserInfo;
+import se.uu.ub.cora.gatekeeper.user.User;
+import se.uu.ub.cora.gatekeeper.user.UserInfo;
 
 public class GatekeeperTest {
 	private static final int FIRST_NON_HARDCODED = 0;

@@ -17,13 +17,11 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper;
+package se.uu.ub.cora.gatekeeper.user;
 
 import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;
-
-import se.uu.ub.cora.gatekeeper.user.UserInfo;
 
 public class UserInfoTest {
 	@Test
@@ -40,6 +38,14 @@ public class UserInfoTest {
 		String domainFromLogin = "domainFromLogin";
 
 		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain(idFromLogin, domainFromLogin);
+		assertEquals(userInfo.idFromLogin, "idFromLogin");
+	}
+
+	@Test
+	public void testUserInfoWithLoginId() {
+		String idFromLogin = "idFromLogin";
+
+		UserInfo userInfo = UserInfo.withLoginId(idFromLogin);
 		assertEquals(userInfo.idFromLogin, "idFromLogin");
 	}
 }

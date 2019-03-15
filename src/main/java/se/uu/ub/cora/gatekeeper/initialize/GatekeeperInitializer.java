@@ -24,6 +24,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ServiceLoader;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -34,7 +35,8 @@ import se.uu.ub.cora.gatekeeper.GatekeeperImp;
 import se.uu.ub.cora.gatekeeper.dependency.GatekeeperInstanceProvider;
 import se.uu.ub.cora.gatekeeper.dependency.GatekeeperLocator;
 import se.uu.ub.cora.gatekeeper.dependency.GatekeeperLocatorImp;
-import se.uu.ub.cora.userpicker.UserPickerProvider;
+import se.uu.ub.cora.gatekeeper.user.UserPicker;
+import se.uu.ub.cora.gatekeeper.user.UserPickerProvider;
 
 @WebListener
 public class GatekeeperInitializer implements ServletContextListener {
@@ -57,6 +59,7 @@ public class GatekeeperInitializer implements ServletContextListener {
 
 	private void tryToInitialize() throws InstantiationException, IllegalAccessException,
 			ClassNotFoundException, NoSuchMethodException, InvocationTargetException {
+		createInstanceOfUserPickerProvider();
 		String userPickerProviderString = getClassNameToInitializeAsUserPickerProviderFromContext();
 		collectInitInformation();
 		createInstanceOfUserPickerProviderClass(userPickerProviderString);
@@ -64,6 +67,20 @@ public class GatekeeperInitializer implements ServletContextListener {
 		GatekeeperLocator locator = new GatekeeperLocatorImp();
 		GatekeeperInstanceProvider.setGatekeeperLocator(locator);
 		GatekeeperImp.INSTANCE.setUserPickerProvider(userPickerProvider);
+	}
+
+	private void createInstanceOfUserPickerProvider() {
+		// TODO Auto-generated method stub
+		ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+		ServiceLoader<UserPickerProvider> loader = ServiceLoader.load(UserPickerProvider.class,
+				contextClassLoader);
+		for (UserPickerProvider userPickerProvider : loader) {
+			// TODO:
+			UserPicker userPicker = userPickerProvider.getUserPicker();
+			String s = "";
+			s += "";
+		}
+
 	}
 
 	private String getClassNameToInitializeAsUserPickerProviderFromContext() {

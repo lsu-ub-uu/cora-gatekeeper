@@ -28,7 +28,7 @@ import javax.ws.rs.core.Response;
 import se.uu.ub.cora.gatekeeper.Gatekeeper;
 import se.uu.ub.cora.gatekeeper.authentication.AuthenticationException;
 import se.uu.ub.cora.gatekeeper.dependency.GatekeeperInstanceProvider;
-import se.uu.ub.cora.userpicker.UserInfo;
+import se.uu.ub.cora.gatekeeper.user.UserInfo;
 
 @Path("authToken")
 public final class TokenProviderEndpoint {

@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import se.uu.ub.cora.userpicker.UserPicker;
-import se.uu.ub.cora.userpicker.UserPickerProvider;
+import se.uu.ub.cora.gatekeeper.user.UserPicker;
+import se.uu.ub.cora.gatekeeper.user.UserPickerProvider;
 
 public class UserPickerProviderThrowsInvocationTargetOnStartupSpy implements UserPickerProvider {
 	public List<UserPickerSpy> factoredUserPickers = new ArrayList<>();

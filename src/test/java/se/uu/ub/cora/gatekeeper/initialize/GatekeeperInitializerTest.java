@@ -41,6 +41,7 @@ public class GatekeeperInitializerTest {
 
 	@BeforeMethod
 	public void setUp() {
+		Thread.currentThread().setContextClassLoader(new DummyClassLoader());
 		gatekeeperInitializer = new GatekeeperInitializer();
 		source = new ServletContextSpy();
 		context = new ServletContextEvent(source);
@@ -85,6 +86,19 @@ public class GatekeeperInitializerTest {
 		UserPickerProviderSpy userPickerProviderSpy = (UserPickerProviderSpy) gatekeeperInitializer.userPickerProvider;
 		assertEquals(userPickerProviderSpy.getInitInfo().get("storageOnDiskBasePath"),
 				"/mnt/data/basicstorage");
+	}
+
+	@Test
+	public void testLoadingUserPickerUsingServiceProvider() throws Exception {
+		Thread.currentThread().setContextClassLoader(new DummyClassLoader());
+		// URL[] urls = new URL[] {};
+		// urls[0] = new URL("se/uu/ub/cora/gatekeeper/user/");
+		//
+		// URLClassLoader urlClassLoader = new URLClassLoader(urls);
+		// Thread.currentThread().setContextClassLoader(urlClassLoader);
+		gatekeeperInitializer.contextInitialized(context);
+		// TOOD: here
+		assertTrue(GatekeeperImp.INSTANCE.getUserPickerProvider() instanceof UserPickerProviderSpy);
 	}
 
 	@Test

@@ -25,9 +25,9 @@ import java.util.UUID;
 
 import se.uu.ub.cora.gatekeeper.authentication.AuthenticationException;
 import se.uu.ub.cora.gatekeeper.tokenprovider.AuthToken;
-import se.uu.ub.cora.userpicker.User;
-import se.uu.ub.cora.userpicker.UserInfo;
-import se.uu.ub.cora.userpicker.UserPickerProvider;
+import se.uu.ub.cora.gatekeeper.user.User;
+import se.uu.ub.cora.gatekeeper.user.UserInfo;
+import se.uu.ub.cora.gatekeeper.user.UserPickerProvider;
 
 public enum GatekeeperImp implements Gatekeeper {
 	INSTANCE;

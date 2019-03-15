@@ -17,29 +17,12 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper;
+package se.uu.ub.cora.gatekeeper.user;
 
-import static org.testng.Assert.assertEquals;
+public interface UserPicker {
 
-import org.testng.annotations.Test;
+	User pickGuest();
 
-import se.uu.ub.cora.gatekeeper.user.UserInfo;
+	User pickUser(UserInfo userInfo);
 
-public class UserInfoTest {
-	@Test
-	public void testUserInfoUserInStorage() {
-		String idInUserStorage = "someIdFromStorage";
-
-		UserInfo userInfo = UserInfo.withIdInUserStorage(idInUserStorage);
-		assertEquals(userInfo.idInUserStorage, "someIdFromStorage");
-	}
-
-	@Test
-	public void testUserInfo() {
-		String idFromLogin = "idFromLogin";
-		String domainFromLogin = "domainFromLogin";
-
-		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain(idFromLogin, domainFromLogin);
-		assertEquals(userInfo.idFromLogin, "idFromLogin");
-	}
 }

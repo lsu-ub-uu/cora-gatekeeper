@@ -26,7 +26,7 @@ import javax.ws.rs.core.Response;
 
 import se.uu.ub.cora.gatekeeper.Gatekeeper;
 import se.uu.ub.cora.gatekeeper.dependency.GatekeeperInstanceProvider;
-import se.uu.ub.cora.userpicker.User;
+import se.uu.ub.cora.gatekeeper.user.User;
 import se.uu.ub.cora.json.builder.JsonArrayBuilder;
 import se.uu.ub.cora.json.builder.JsonObjectBuilder;
 import se.uu.ub.cora.json.builder.org.OrgJsonBuilderFactoryAdapter;
