@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017 Uppsala University Library
+ * Copyright 2019 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -16,14 +16,14 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
+package se.uu.ub.cora.gatekeeper.initialize;
 
-package se.uu.ub.cora.gatekeeper.user;
+public class GatekeeperInitializationException extends RuntimeException {
 
-import java.util.Map;
+	private static final long serialVersionUID = 1106993019564065759L;
 
-public interface UserPickerProvider {
-	UserPicker getUserPicker();
-
-	void startUsingInitInfo(Map<String, String> initInfo);
+	public GatekeeperInitializationException(String message) {
+		super(message);
+	}
 
 }

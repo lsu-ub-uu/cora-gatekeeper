@@ -47,6 +47,9 @@ public class GatekeeperInitializer implements ServletContextListener {
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
 		servletContext = arg0.getServletContext();
+		// TODO: make call to a new class InitializerPartTwo
+		// that takes the collected initInfo and an Iterable with the found services
+		// let this initializerPartTwo set as this currently does
 		try {
 			tryToInitialize();
 		} catch (InvocationTargetException e) {
@@ -71,16 +74,23 @@ public class GatekeeperInitializer implements ServletContextListener {
 
 	private void createInstanceOfUserPickerProvider() {
 		// TODO Auto-generated method stub
-		ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
-		ServiceLoader<UserPickerProvider> loader = ServiceLoader.load(UserPickerProvider.class,
-				contextClassLoader);
+		// ClassLoader contextClassLoader =
+		// Thread.currentThread().getContextClassLoader();
+
+		// Iterable<UserPickerProvider> loader =
+		// ServiceLoader.load(UserPickerProvider.class,
+		// contextClassLoader);
+		Iterable<UserPickerProvider> loader = ServiceLoader.load(UserPickerProvider.class);
+		loadFoundServices(loader);
+	}
+
+	private void loadFoundServices(Iterable<UserPickerProvider> loader) {
 		for (UserPickerProvider userPickerProvider : loader) {
-			// TODO:
-			UserPicker userPicker = userPickerProvider.getUserPicker();
 			String s = "";
 			s += "";
+			// TODO:
+			UserPicker userPicker = userPickerProvider.getUserPicker();
 		}
-
 	}
 
 	private String getClassNameToInitializeAsUserPickerProviderFromContext() {

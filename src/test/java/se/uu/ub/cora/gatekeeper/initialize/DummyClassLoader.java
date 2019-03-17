@@ -158,14 +158,16 @@ public class DummyClassLoader extends ClassLoader {
 		// return enumInstance;
 
 		// Class.forName("se.uu.ub.cora.gatekeeper.UserPickerProviderSpy")
-		ClassLoader urlLoader = ClassLoader.getSystemClassLoader();
-		Enumeration<URL> resources22 = urlLoader.getResources("se.uu.ub.cora.gatekeeper.user");
+		// ClassLoader urlLoader = ClassLoader.getSystemClassLoader();
+		// Enumeration<URL> resources22 =
+		// urlLoader.getResources("se.uu.ub.cora.gatekeeper.user");
+		// // return resources;
+		//
+		// // return vector.elements();
+		// Enumeration<URL> resources = super.getResources(
+		// "META-INF/services/se.uu.ub.cora.gatekeeper.user.DummyUserPickerProvider");
 		// return resources;
-
-		// return vector.elements();
-		Enumeration<URL> resources = super.getResources(
-				"META-INF/services/se.uu.ub.cora.gatekeeper.user.DummyUserPickerProvider");
-		return resources;
+		return super.getResources(name);
 	}
 
 	@Override

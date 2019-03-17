@@ -49,4 +49,10 @@ public class UserPickerProviderThrowsInvocationTargetOnStartupSpy implements Use
 		return initInfo;
 	}
 
+	@Override
+	public void startUsingInitInfo(Map<String, String> initInfo) {
+		// TODO Auto-generated method stub
+
+	}
+
 }

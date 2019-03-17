@@ -45,4 +45,10 @@ public class UserPickerProviderSpy implements UserPickerProvider {
 		return initInfo;
 	}
 
+	@Override
+	public void startUsingInitInfo(Map<String, String> initInfo) {
+		this.initInfo = initInfo;
+
+	}
+
 }

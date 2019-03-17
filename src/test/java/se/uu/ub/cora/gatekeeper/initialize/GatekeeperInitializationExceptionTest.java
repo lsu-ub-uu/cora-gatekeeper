@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017 Uppsala University Library
+ * Copyright 2019 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -16,14 +16,18 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
+package se.uu.ub.cora.gatekeeper.initialize;
 
-package se.uu.ub.cora.gatekeeper.user;
+import static org.testng.Assert.assertEquals;
 
-import java.util.Map;
+import org.testng.annotations.Test;
 
-public interface UserPickerProvider {
-	UserPicker getUserPicker();
+public class GatekeeperInitializationExceptionTest {
+	@Test
+	public void testInit() {
+		GatekeeperInitializationException notAuthenticated = new GatekeeperInitializationException(
+				"message");
 
-	void startUsingInitInfo(Map<String, String> initInfo);
-
+		assertEquals(notAuthenticated.getMessage(), "message");
+	}
 }
