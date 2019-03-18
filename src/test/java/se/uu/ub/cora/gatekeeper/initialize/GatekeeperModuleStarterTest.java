@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import se.uu.ub.cora.gatekeeper.UserPickerProviderSpy;
@@ -32,11 +33,26 @@ import se.uu.ub.cora.gatekeeper.user.UserPickerProvider;
 
 public class GatekeeperModuleStarterTest {
 
+	private Map<String, String> initInfo;
+	private List<UserPickerProvider> implementations;
+
+	@BeforeMethod
+	public void beforeMethod() {
+		initInfo = new HashMap<>();
+		initInfo.put("guestUserId", "someGuestUserId");
+		implementations = new ArrayList<>();
+		implementations.add(new UserPickerProviderSpy(null));
+
+	}
+
 	@Test(expectedExceptions = GatekeeperInitializationException.class, expectedExceptionsMessageRegExp = ""
 			+ "No implementations found for UserPickerProvider")
 	public void testStartModuleThrowsErrorIfNoImplementations() throws Exception {
-		Map<String, String> initInfo = new HashMap<>();
-		Iterable<UserPickerProvider> implementations = new ArrayList<UserPickerProvider>();
+		implementations.clear();
+		startGatekeeperModuleStarter();
+	}
+
+	private void startGatekeeperModuleStarter() {
 		GatekeeperModuleStarter starter = GatekeeperModuleStarter
 				.usingInitInfoAndImplementations(initInfo, implementations);
 		starter.startProvider();
@@ -45,24 +61,22 @@ public class GatekeeperModuleStarterTest {
 	@Test(expectedExceptions = GatekeeperInitializationException.class, expectedExceptionsMessageRegExp = ""
 			+ "More than one implementation found for UserPickerProvider")
 	public void testStartModuleThrowsErrorIfMoreThanOneImplementations() throws Exception {
-		Map<String, String> initInfo = new HashMap<>();
-		List<UserPickerProvider> implementations = new ArrayList<UserPickerProvider>();
 		implementations.add(new UserPickerProviderSpy(null));
-		implementations.add(new UserPickerProviderSpy(null));
-		GatekeeperModuleStarter starter = GatekeeperModuleStarter
-				.usingInitInfoAndImplementations(initInfo, implementations);
-		starter.startProvider();
+		startGatekeeperModuleStarter();
+	}
+
+	@Test(expectedExceptions = GatekeeperInitializationException.class, expectedExceptionsMessageRegExp = ""
+			+ "InitInfo must contain guestUserId")
+	public void testStartModuleThrowsErrorIfMissingGuestUserId() throws Exception {
+		initInfo.clear();
+		startGatekeeperModuleStarter();
 	}
 
 	@Test()
 	public void testStartModuleInitInfoSentToImplementation() throws Exception {
-		Map<String, String> initInfo = new HashMap<>();
-		List<UserPickerProvider> implementations = new ArrayList<UserPickerProvider>();
-		UserPickerProviderSpy userPickerProviderSpy = new UserPickerProviderSpy(null);
-		implementations.add(userPickerProviderSpy);
-		GatekeeperModuleStarter starter = GatekeeperModuleStarter
-				.usingInitInfoAndImplementations(initInfo, implementations);
-		starter.startProvider();
+		UserPickerProviderSpy userPickerProviderSpy = (UserPickerProviderSpy) implementations
+				.get(0);
+		startGatekeeperModuleStarter();
 		assertEquals(userPickerProviderSpy.getInitInfo(), initInfo);
 	}
 }

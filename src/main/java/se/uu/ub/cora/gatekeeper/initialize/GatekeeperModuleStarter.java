@@ -54,8 +54,24 @@ public class GatekeeperModuleStarter {
 		// }
 
 		UserPickerProvider userPickerProvider = getImplementationThrowErrorIfNoneOrMoreThanOne();
+		String guestUserId = tryToGetInitParameter("guestUserId");
+
+		// userStorage.startUsingInitInfo(initInfo);
+		// userPickerProvider.startUsingUserStorageAndGuestUserId(userStorage,
+		// initInfo);
 		userPickerProvider.startUsingInitInfo(initInfo);
 
+	}
+
+	private String tryToGetInitParameter(String parameterName) {
+		throwErrorIfKeyIsMissingFromInitInfo(parameterName);
+		return initInfo.get(parameterName);
+	}
+
+	private void throwErrorIfKeyIsMissingFromInitInfo(String key) {
+		if (!initInfo.containsKey(key)) {
+			throw new GatekeeperInitializationException("InitInfo must contain " + key);
+		}
 	}
 
 	private UserPickerProvider getImplementationThrowErrorIfNoneOrMoreThanOne() {

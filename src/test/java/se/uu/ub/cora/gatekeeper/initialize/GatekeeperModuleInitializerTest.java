@@ -49,12 +49,15 @@ public class GatekeeperModuleInitializerTest {
 
 	private void makeSureErrorIsThrownAsNoImplementationsExistInThisModule(
 			ServletContextEvent context, GatekeeperModuleInitializer initializer) {
+		Exception caughtException = null;
 		try {
 			initializer.contextInitialized(context);
 		} catch (Exception e) {
-			assertTrue(e instanceof GatekeeperInitializationException);
-			assertEquals(e.getMessage(), "No implementations found for UserPickerProvider");
+			caughtException = e;
 		}
+		assertTrue(caughtException instanceof GatekeeperInitializationException);
+		assertEquals(caughtException.getMessage(),
+				"No implementations found for UserPickerProvider");
 	}
 
 	private void assertStarterIsGatekeeperModuleStarter(GatekeeperModuleStarter starter) {

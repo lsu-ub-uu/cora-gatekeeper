@@ -8,6 +8,6 @@ module se.uu.ub.cora.gatekeeper {
 
 	uses se.uu.ub.cora.gatekeeper.user.UserPickerProvider;
 
-	provides se.uu.ub.cora.gatekeeper.user.UserPickerProvider
-			with se.uu.ub.cora.gatekeeper.user.RealDummyUserPickerProvider;
+	// provides se.uu.ub.cora.gatekeeper.user.UserPickerProvider
+	// with se.uu.ub.cora.gatekeeper.user.RealDummyUserPickerProvider;
 }
