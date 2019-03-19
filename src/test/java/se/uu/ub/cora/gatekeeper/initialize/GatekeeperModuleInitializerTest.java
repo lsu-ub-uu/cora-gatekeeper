@@ -30,6 +30,7 @@ import javax.servlet.ServletContextEvent;
 import org.testng.annotations.Test;
 
 import se.uu.ub.cora.gatekeeper.user.UserPickerProvider;
+import se.uu.ub.cora.gatekeeper.user.UserStorage;
 
 public class GatekeeperModuleInitializerTest {
 	@Test
@@ -44,7 +45,8 @@ public class GatekeeperModuleInitializerTest {
 		GatekeeperModuleStarter starter = initializer.getStarter();
 		assertStarterIsGatekeeperModuleStarter(starter);
 		assertInitParametersArePassedOnToStarter(starter);
-		assertImplementationsAreCollectedUsingServiceLoader(starter);
+		assertUserPickerProviderImplementationsAreCollectedUsingServiceLoader(starter);
+		assertUserStorageImplementationsAreCollectedUsingServiceLoader(starter);
 	}
 
 	private void makeSureErrorIsThrownAsNoImplementationsExistInThisModule(
@@ -71,9 +73,15 @@ public class GatekeeperModuleInitializerTest {
 		assertEquals(initInfo.get("initParam2"), "initValue2");
 	}
 
-	private void assertImplementationsAreCollectedUsingServiceLoader(
+	private void assertUserPickerProviderImplementationsAreCollectedUsingServiceLoader(
 			GatekeeperModuleStarter starter) {
-		Iterable<UserPickerProvider> iterable = starter.getImplementations();
+		Iterable<UserPickerProvider> iterable = starter.getUserPickerProviderImplementations();
+		assertTrue(iterable instanceof ServiceLoader);
+	}
+
+	private void assertUserStorageImplementationsAreCollectedUsingServiceLoader(
+			GatekeeperModuleStarter starter) {
+		Iterable<UserStorage> iterable = starter.getUserStorageImplementations();
 		assertTrue(iterable instanceof ServiceLoader);
 	}
 

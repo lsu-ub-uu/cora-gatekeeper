@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017 Uppsala University Library
+ * Copyright 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -16,12 +16,23 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
+package se.uu.ub.cora.gatekeeper.initialize;
 
-package se.uu.ub.cora.gatekeeper.user;
+import se.uu.ub.cora.bookkeeper.data.DataGroup;
+import se.uu.ub.cora.gatekeeper.user.UserStorage;
 
-public interface UserPickerProvider {
-	UserPicker getUserPicker();
+public class UserStorageSpy implements UserStorage {
 
-	void startUsingUserStorageAndGuestUserId(UserStorage userStorage, String guestUserId);
+	@Override
+	public DataGroup getUserById(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DataGroup getUserByIdFromLogin(String idFromLogin) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

@@ -26,6 +26,7 @@ import java.util.Map;
 
 import se.uu.ub.cora.gatekeeper.user.UserPicker;
 import se.uu.ub.cora.gatekeeper.user.UserPickerProvider;
+import se.uu.ub.cora.gatekeeper.user.UserStorage;
 
 public class UserPickerProviderThrowsInvocationTargetOnStartupSpy implements UserPickerProvider {
 	public List<UserPickerSpy> factoredUserPickers = new ArrayList<>();
@@ -50,7 +51,7 @@ public class UserPickerProviderThrowsInvocationTargetOnStartupSpy implements Use
 	}
 
 	@Override
-	public void startUsingInitInfo(Map<String, String> initInfo) {
+	public void startUsingUserStorageAndGuestUserId(UserStorage userStorage, String guestUserId) {
 		// TODO Auto-generated method stub
 
 	}

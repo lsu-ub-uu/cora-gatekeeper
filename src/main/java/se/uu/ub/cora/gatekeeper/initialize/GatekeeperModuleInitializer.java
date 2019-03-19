@@ -28,6 +28,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 import se.uu.ub.cora.gatekeeper.user.UserPickerProvider;
+import se.uu.ub.cora.gatekeeper.user.UserStorage;
 
 @WebListener
 public class GatekeeperModuleInitializer implements ServletContextListener {
@@ -37,7 +38,8 @@ public class GatekeeperModuleInitializer implements ServletContextListener {
 	// that takes the collected initInfo and an Iterable with the found services
 	// let this initializerPartTwo set as this currently does
 	private GatekeeperModuleStarter starter;
-	private Iterable<UserPickerProvider> implementations;
+	private Iterable<UserPickerProvider> userPickerProviderImplementations;
+	private ServiceLoader<UserStorage> userStorageImplementations;
 
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
@@ -47,9 +49,10 @@ public class GatekeeperModuleInitializer implements ServletContextListener {
 
 	private void initializeGatekeeper() {
 		collectInitInformation();
-		collectImplementations();
+		collectUserPickerProviderImplementations();
+		collectUserStorageImplementations();
 		createGatekeeperStarter();
-		starter.startProvider();
+		starter.start();
 	}
 
 	private void collectInitInformation() {
@@ -60,13 +63,17 @@ public class GatekeeperModuleInitializer implements ServletContextListener {
 		}
 	}
 
-	private void collectImplementations() {
-		implementations = ServiceLoader.load(UserPickerProvider.class);
+	private void collectUserPickerProviderImplementations() {
+		userPickerProviderImplementations = ServiceLoader.load(UserPickerProvider.class);
+	}
+
+	private void collectUserStorageImplementations() {
+		userStorageImplementations = ServiceLoader.load(UserStorage.class);
 	}
 
 	private void createGatekeeperStarter() {
-		starter = GatekeeperModuleStarter.usingInitInfoAndImplementations(initInfo,
-				implementations);
+		starter = GatekeeperModuleStarter.usingInitInfoAndUserPickerProvidersAndUserStorages(
+				initInfo, userPickerProviderImplementations, userStorageImplementations);
 	}
 
 	GatekeeperModuleStarter getStarter() {

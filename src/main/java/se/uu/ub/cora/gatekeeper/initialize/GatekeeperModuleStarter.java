@@ -20,47 +20,43 @@ package se.uu.ub.cora.gatekeeper.initialize;
 
 import java.util.Map;
 
+import se.uu.ub.cora.gatekeeper.GatekeeperImp;
+import se.uu.ub.cora.gatekeeper.dependency.GatekeeperInstanceProvider;
+import se.uu.ub.cora.gatekeeper.dependency.GatekeeperLocator;
+import se.uu.ub.cora.gatekeeper.dependency.GatekeeperLocatorImp;
 import se.uu.ub.cora.gatekeeper.user.UserPickerProvider;
+import se.uu.ub.cora.gatekeeper.user.UserStorage;
 
 public class GatekeeperModuleStarter {
-
-	public static GatekeeperModuleStarter usingInitInfoAndImplementations(
-			Map<String, String> initInfo, Iterable<UserPickerProvider> implementations) {
-		return new GatekeeperModuleStarter(initInfo, implementations);
-	}
-
 	private Map<String, String> initInfo;
-	private Iterable<UserPickerProvider> implementations;
+	private Iterable<UserPickerProvider> userPickerProviders;
+	private Iterable<UserStorage> userStorages;
+
+	public static GatekeeperModuleStarter usingInitInfoAndUserPickerProvidersAndUserStorages(
+			Map<String, String> initInfo, Iterable<UserPickerProvider> userPickerProviders,
+			Iterable<UserStorage> userStorages) {
+		return new GatekeeperModuleStarter(initInfo, userPickerProviders, userStorages);
+	}
 
 	private GatekeeperModuleStarter(Map<String, String> initInfo,
-			Iterable<UserPickerProvider> implementations) {
+			Iterable<UserPickerProvider> userPickerProviders, Iterable<UserStorage> userStorages) {
 		this.initInfo = initInfo;
-		this.implementations = implementations;
+		this.userPickerProviders = userPickerProviders;
+		this.userStorages = userStorages;
 	}
 
-	public void startProvider() {
-		// Iterator<UserPickerProvider> implementationsIterator =
-		// implementations.iterator();
-		// boolean noImplementationsFound = !implementationsIterator.hasNext();
-		// if (noImplementationsFound) {
-		// throw new GatekeeperInitializationException(
-		// "No implementations found for UserPickerProvider");
-		// }
-		// UserPickerProvider userPickerProvider = implementationsIterator.next();
-		// userPickerProvider.startUsingInitInfo(initInfo);
-		// if (implementationsIterator.hasNext()) {
-		// throw new GatekeeperInitializationException(
-		// "More than one implementation found for UserPickerProvider");
-		// }
-
-		UserPickerProvider userPickerProvider = getImplementationThrowErrorIfNoneOrMoreThanOne();
+	public void start() {
+		UserPickerProvider userPickerProvider = getImplementationThrowErrorIfNoneOrMoreThanOne(
+				userPickerProviders, "UserPickerProvider");
 		String guestUserId = tryToGetInitParameter("guestUserId");
 
-		// userStorage.startUsingInitInfo(initInfo);
-		// userPickerProvider.startUsingUserStorageAndGuestUserId(userStorage,
-		// initInfo);
-		userPickerProvider.startUsingInitInfo(initInfo);
+		UserStorage userStorage = getImplementationThrowErrorIfNoneOrMoreThanOne(userStorages,
+				"UserStorage");
+		userPickerProvider.startUsingUserStorageAndGuestUserId(userStorage, guestUserId);
 
+		GatekeeperLocator locator = new GatekeeperLocatorImp();
+		GatekeeperInstanceProvider.setGatekeeperLocator(locator);
+		GatekeeperImp.INSTANCE.setUserPickerProvider(userPickerProvider);
 	}
 
 	private String tryToGetInitParameter(String parameterName) {
@@ -74,29 +70,31 @@ public class GatekeeperModuleStarter {
 		}
 	}
 
-	private UserPickerProvider getImplementationThrowErrorIfNoneOrMoreThanOne() {
-		UserPickerProvider userPickerProvider = null;
+	private <T extends Object> T getImplementationThrowErrorIfNoneOrMoreThanOne(
+			Iterable<T> implementations, String implementationClassName) {
+		T implementation = null;
 		int noOfImplementationsFound = 0;
-		for (UserPickerProvider userPickerProvider2 : implementations) {
+		for (T currentImplementation : implementations) {
 			noOfImplementationsFound++;
-			userPickerProvider = userPickerProvider2;
+			implementation = currentImplementation;
 		}
-		throwErrorIfNone(noOfImplementationsFound);
-		throwErrorIfMoreThanOne(noOfImplementationsFound);
-		return userPickerProvider;
+		throwErrorIfNone(noOfImplementationsFound, implementationClassName);
+		throwErrorIfMoreThanOne(noOfImplementationsFound, implementationClassName);
+		return implementation;
 	}
 
-	private void throwErrorIfNone(int noOfImplementationsFound) {
+	private void throwErrorIfNone(int noOfImplementationsFound, String implementationClassName) {
 		if (noOfImplementationsFound == 0) {
 			throw new GatekeeperInitializationException(
-					"No implementations found for UserPickerProvider");
+					"No implementations found for " + implementationClassName);
 		}
 	}
 
-	private void throwErrorIfMoreThanOne(int noOfImplementationsFound) {
+	private void throwErrorIfMoreThanOne(int noOfImplementationsFound,
+			String implementationClassName) {
 		if (noOfImplementationsFound > 1) {
 			throw new GatekeeperInitializationException(
-					"More than one implementation found for UserPickerProvider");
+					"More than one implementation found for " + implementationClassName);
 		}
 	}
 
@@ -105,9 +103,14 @@ public class GatekeeperModuleStarter {
 		return initInfo;
 	}
 
-	public Iterable<UserPickerProvider> getImplementations() {
+	public Iterable<UserPickerProvider> getUserPickerProviderImplementations() {
 		// needed for test
-		return implementations;
+		return userPickerProviders;
+	}
+
+	public Iterable<UserStorage> getUserStorageImplementations() {
+		// needed for test
+		return userStorages;
 	}
 
 }

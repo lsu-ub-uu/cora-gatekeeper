@@ -19,6 +19,9 @@
 package se.uu.ub.cora.gatekeeper.initialize;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertSame;
+import static org.testng.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,40 +31,48 @@ import java.util.Map;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import se.uu.ub.cora.gatekeeper.GatekeeperImp;
 import se.uu.ub.cora.gatekeeper.UserPickerProviderSpy;
+import se.uu.ub.cora.gatekeeper.dependency.GatekeeperInstanceProvider;
 import se.uu.ub.cora.gatekeeper.user.UserPickerProvider;
+import se.uu.ub.cora.gatekeeper.user.UserStorage;
 
 public class GatekeeperModuleStarterTest {
 
 	private Map<String, String> initInfo;
-	private List<UserPickerProvider> implementations;
+	private List<UserPickerProvider> userPickerProviders;
+	private List<UserStorage> userStorages;
 
 	@BeforeMethod
 	public void beforeMethod() {
 		initInfo = new HashMap<>();
 		initInfo.put("guestUserId", "someGuestUserId");
-		implementations = new ArrayList<>();
-		implementations.add(new UserPickerProviderSpy(null));
+		userPickerProviders = new ArrayList<>();
+		userPickerProviders.add(new UserPickerProviderSpy(null));
+		userStorages = new ArrayList<>();
+		userStorages.add(new UserStorageSpy());
 
 	}
 
 	@Test(expectedExceptions = GatekeeperInitializationException.class, expectedExceptionsMessageRegExp = ""
 			+ "No implementations found for UserPickerProvider")
-	public void testStartModuleThrowsErrorIfNoImplementations() throws Exception {
-		implementations.clear();
+	public void testStartModuleThrowsErrorIfNoUserPickerProviderImplementations() throws Exception {
+		userPickerProviders.clear();
 		startGatekeeperModuleStarter();
 	}
 
 	private void startGatekeeperModuleStarter() {
 		GatekeeperModuleStarter starter = GatekeeperModuleStarter
-				.usingInitInfoAndImplementations(initInfo, implementations);
-		starter.startProvider();
+				.usingInitInfoAndUserPickerProvidersAndUserStorages(initInfo, userPickerProviders,
+						userStorages);
+		starter.start();
 	}
 
 	@Test(expectedExceptions = GatekeeperInitializationException.class, expectedExceptionsMessageRegExp = ""
 			+ "More than one implementation found for UserPickerProvider")
-	public void testStartModuleThrowsErrorIfMoreThanOneImplementations() throws Exception {
-		implementations.add(new UserPickerProviderSpy(null));
+	public void testStartModuleThrowsErrorIfMoreThanOneUserPickerProviderImplementations()
+			throws Exception {
+		userPickerProviders.add(new UserPickerProviderSpy(null));
 		startGatekeeperModuleStarter();
 	}
 
@@ -73,10 +84,45 @@ public class GatekeeperModuleStarterTest {
 	}
 
 	@Test()
-	public void testStartModuleInitInfoSentToImplementation() throws Exception {
-		UserPickerProviderSpy userPickerProviderSpy = (UserPickerProviderSpy) implementations
+	public void testStartModuleGuestUserIdSentToImplementation() throws Exception {
+		UserPickerProviderSpy userPickerProviderSpy = (UserPickerProviderSpy) userPickerProviders
 				.get(0);
 		startGatekeeperModuleStarter();
-		assertEquals(userPickerProviderSpy.getInitInfo(), initInfo);
+		assertEquals(userPickerProviderSpy.guestUserId(), "someGuestUserId");
+	}
+
+	// **
+	@Test(expectedExceptions = GatekeeperInitializationException.class, expectedExceptionsMessageRegExp = ""
+			+ "No implementations found for UserStorage")
+	public void testStartModuleThrowsErrorIfNoUserStorageImplementations() throws Exception {
+		userStorages.clear();
+		startGatekeeperModuleStarter();
+	}
+
+	@Test(expectedExceptions = GatekeeperInitializationException.class, expectedExceptionsMessageRegExp = ""
+			+ "More than one implementation found for UserStorage")
+	public void testStartModuleThrowsErrorIfMoreThanOneUserStorageImplementations()
+			throws Exception {
+		userStorages.add(new UserStorageSpy());
+		startGatekeeperModuleStarter();
+	}
+
+	@Test()
+	public void testStartModuleUserStorageSentToImplementation() throws Exception {
+		UserPickerProviderSpy userPickerProviderSpy = (UserPickerProviderSpy) userPickerProviders
+				.get(0);
+		UserStorageSpy userStorageSpy = (UserStorageSpy) userStorages.get(0);
+		startGatekeeperModuleStarter();
+		assertEquals(userPickerProviderSpy.getUserStorage(), userStorageSpy);
+	}
+
+	@Test
+	public void testGatekeeperInstanceProviderSetUpWithLocator() throws Exception {
+		UserPickerProviderSpy userPickerProviderSpy = (UserPickerProviderSpy) userPickerProviders
+				.get(0);
+		startGatekeeperModuleStarter();
+		assertTrue(GatekeeperImp.INSTANCE.getUserPickerProvider() instanceof UserPickerProviderSpy);
+		assertSame(GatekeeperImp.INSTANCE.getUserPickerProvider(), userPickerProviderSpy);
+		assertNotNull(GatekeeperInstanceProvider.getGatekeeper());
 	}
 }

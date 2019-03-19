@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2016, 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -25,10 +25,13 @@ import java.util.Map;
 
 import se.uu.ub.cora.gatekeeper.user.UserPicker;
 import se.uu.ub.cora.gatekeeper.user.UserPickerProvider;
+import se.uu.ub.cora.gatekeeper.user.UserStorage;
 
 public class UserPickerProviderSpy implements UserPickerProvider {
 	public List<UserPickerSpy> factoredUserPickers = new ArrayList<>();
 	private Map<String, String> initInfo;
+	private UserStorage userStorage;
+	private String guestUserId;
 
 	public UserPickerProviderSpy(Map<String, String> initInfo) {
 		this.initInfo = initInfo;
@@ -46,9 +49,17 @@ public class UserPickerProviderSpy implements UserPickerProvider {
 	}
 
 	@Override
-	public void startUsingInitInfo(Map<String, String> initInfo) {
-		this.initInfo = initInfo;
+	public void startUsingUserStorageAndGuestUserId(UserStorage userStorage, String guestUserId) {
+		this.userStorage = userStorage;
+		this.guestUserId = guestUserId;
+	}
 
+	public String guestUserId() {
+		return guestUserId;
+	}
+
+	public UserStorage getUserStorage() {
+		return userStorage;
 	}
 
 }
