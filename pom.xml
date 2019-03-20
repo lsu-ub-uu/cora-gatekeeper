@@ -19,16 +19,16 @@
 
 	<artifactId>gatekeeper</artifactId>
 	<version>0.6-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
+	
 
 	<name>gatekeeper</name>
 
 	<properties>
 		<bookkeeper.version>0.14.0</bookkeeper.version>
-		<json.version>0.5.7</json.version>
-<!-- 		<userpicker.version>0.6.0</userpicker.version> -->
-		<javax.ws.rs.version>2.1.1</javax.ws.rs.version>
-		<jersey.version>2.27</jersey.version>
+<!-- 		<json.version>0.5.7</json.version> -->
+<!-- 		<javax.ws.rs.version>2.1.1</javax.ws.rs.version> -->
+<!-- 		<jersey.version>2.27</jersey.version> -->
 	</properties>
 
 	<scm>
@@ -40,22 +40,16 @@
 
 
 	<dependencies>
-		<dependency>
+		<dependency> 
 			<groupId>se.uu.ub.cora</groupId>
 			<artifactId>bookkeeper</artifactId>
 			<version>${bookkeeper.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>se.uu.ub.cora</groupId>
-			<artifactId>json</artifactId>
-			<version>${json.version}</version>
-			<scope>compile</scope>
-		</dependency>
 <!-- 		<dependency> -->
 <!-- 			<groupId>se.uu.ub.cora</groupId> -->
-<!-- 			<artifactId>userpicker</artifactId> -->
-<!-- 			<version>${userpicker.version}</version> -->
-<!-- 			<scope>provided</scope> -->
+<!-- 			<artifactId>json</artifactId> -->
+<!-- 			<version>${json.version}</version> -->
+<!-- 			<scope>compile</scope> -->
 <!-- 		</dependency> -->
 		<dependency>
 			<groupId>org.testng</groupId>
@@ -63,52 +57,49 @@
 			<version>${testng.version}</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>javax.ws.rs</groupId>
-			<artifactId>javax.ws.rs-api</artifactId>
-			<version>${javax.ws.rs.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.glassfish.jersey.containers</groupId>
-			<artifactId>jersey-container-servlet</artifactId>
-			<version>${jersey.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.glassfish.jersey.core</groupId>
-			<artifactId>jersey-common</artifactId>
-			<version>${jersey.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.glassfish.jersey.inject</groupId>
-			<artifactId>jersey-hk2</artifactId>
-			<version>${jersey.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>4.0.1</version>
-			<scope>provided</scope>
-		</dependency>
-		<!-- The JAXB APIs are considered to be Java EE APIs, and therefore are 
-			no longer contained on the default class path in Java SE 9. In Java 11 they 
-			are completely removed from the JDK. -->
-		<dependency>
-			<groupId>javax.xml.bind</groupId>
-			<artifactId>jaxb-api</artifactId>
-			<version>2.3.0</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.activation</groupId>
-			<artifactId>activation</artifactId>
-			<version>1.1.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.activation</groupId>
-			<artifactId>javax.activation</artifactId>
-			<version>1.2.0</version>
-		</dependency> 
+<!-- 		<dependency> -->
+<!-- 			<groupId>javax.ws.rs</groupId> -->
+<!-- 			<artifactId>javax.ws.rs-api</artifactId> -->
+<!-- 			<version>${javax.ws.rs.version}</version> -->
+<!-- 			<scope>compile</scope> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.glassfish.jersey.containers</groupId> -->
+<!-- 			<artifactId>jersey-container-servlet</artifactId> -->
+<!-- 			<version>${jersey.version}</version> -->
+<!-- 			<scope>compile</scope> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.glassfish.jersey.core</groupId> -->
+<!-- 			<artifactId>jersey-common</artifactId> -->
+<!-- 			<version>${jersey.version}</version> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.glassfish.jersey.inject</groupId> -->
+<!-- 			<artifactId>jersey-hk2</artifactId> -->
+<!-- 			<version>${jersey.version}</version> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>javax.servlet</groupId> -->
+<!-- 			<artifactId>javax.servlet-api</artifactId> -->
+<!-- 			<version>4.0.1</version> -->
+<!-- 			<scope>provided</scope> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>javax.xml.bind</groupId> -->
+<!-- 			<artifactId>jaxb-api</artifactId> -->
+<!-- 			<version>2.3.0</version> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>javax.activation</groupId> -->
+<!-- 			<artifactId>activation</artifactId> -->
+<!-- 			<version>1.1.1</version> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.sun.activation</groupId> -->
+<!-- 			<artifactId>javax.activation</artifactId> -->
+<!-- 			<version>1.2.0</version> -->
+<!-- 		</dependency>  -->
 	</dependencies>
 	<build>
 		<finalName>gatekeeper</finalName>
