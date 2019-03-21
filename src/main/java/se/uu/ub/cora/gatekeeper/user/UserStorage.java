@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Olov McKie
+ * Copyright 2017, 2018 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -17,12 +17,13 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper.dependency;
+package se.uu.ub.cora.gatekeeper.user;
 
-import se.uu.ub.cora.gatekeeper.Gatekeeper;
+import se.uu.ub.cora.bookkeeper.data.DataGroup;
 
-public interface GatekeeperLocator {
+public interface UserStorage {
 
-	Gatekeeper locateGatekeeper();
+	DataGroup getUserById(String id);
 
+	DataGroup getUserByIdFromLogin(String idFromLogin);
 }

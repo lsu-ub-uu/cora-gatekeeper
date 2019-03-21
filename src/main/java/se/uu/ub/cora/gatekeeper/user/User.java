@@ -17,21 +17,21 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper.authentication;
+package se.uu.ub.cora.gatekeeper.user;
 
-import se.uu.ub.cora.gatekeeper.Gatekeeper;
-import se.uu.ub.cora.gatekeeper.dependency.GatekeeperLocator;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
-public class GateKeeperLocatorSpy implements GatekeeperLocator {
+public class User {
 
-	public GatekeeperSpy gatekeeperSpy;
-	public boolean gatekeeperLocated = false;
+	public final String id;
+	public String loginId;
+	public String loginDomain;
+	public final Set<String> roles = new LinkedHashSet<>();
+	public String firstName;
+	public String lastName;
 
-	@Override
-	public Gatekeeper locateGatekeeper() {
-		gatekeeperLocated = true;
-		gatekeeperSpy = new GatekeeperSpy();
-		return gatekeeperSpy;
+	public User(String id) {
+		this.id = id;
 	}
-
 }

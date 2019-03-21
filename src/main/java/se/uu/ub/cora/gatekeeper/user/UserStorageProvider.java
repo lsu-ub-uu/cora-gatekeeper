@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -16,18 +16,13 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
+package se.uu.ub.cora.gatekeeper.user;
 
-package se.uu.ub.cora.gatekeeper;
+import java.util.Map;
 
-import se.uu.ub.cora.gatekeeper.tokenprovider.AuthToken;
-import se.uu.ub.cora.userpicker.User;
-import se.uu.ub.cora.userpicker.UserInfo;
+public interface UserStorageProvider {
 
-public interface Gatekeeper {
+	UserStorage getUserStorage();
 
-	User getUserForToken(String authToken);
-
-	AuthToken getAuthTokenForUserInfo(UserInfo userInfo);
-
-	void removeAuthTokenForUser(String authTokenId, String idInUserStorage);
+	void startUsingInitInfo(Map<String, String> initInfo);
 }

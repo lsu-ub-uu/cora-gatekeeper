@@ -1,6 +1,6 @@
 /*
- * Copyright 2015, 2016 Uppsala University Library
- * Copyright 2016 Olov McKie
+ * Copyright 2016, 2017 Uppsala University Library
+ * Copyright 2019 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -18,14 +18,11 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper.dependency;
+package se.uu.ub.cora.gatekeeper.user;
 
-import se.uu.ub.cora.gatekeeper.GatekeeperImp;
+public interface UserPickerProvider {
+	UserPicker getUserPicker();
 
-public final class GatekeeperLocatorImp implements GatekeeperLocator {
+	void startUsingUserStorageAndGuestUserId(UserStorage userStorage, String guestUserId);
 
-	@Override
-	public GatekeeperImp locateGatekeeper() {
-		return GatekeeperImp.INSTANCE;
-	}
 }

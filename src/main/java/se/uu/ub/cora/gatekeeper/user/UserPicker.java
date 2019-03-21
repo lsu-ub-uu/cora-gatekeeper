@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Uppsala University Library
+ * Copyright 2016 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -17,25 +17,12 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper.dependency;
+package se.uu.ub.cora.gatekeeper.user;
 
-import se.uu.ub.cora.gatekeeper.Gatekeeper;
+public interface UserPicker {
 
-public final class GatekeeperInstanceProvider {
-	private static GatekeeperLocator locator;
+	User pickGuest();
 
-	private GatekeeperInstanceProvider() {
-		// not called
-		throw new UnsupportedOperationException();
-	}
-
-	public static void setGatekeeperLocator(GatekeeperLocator locator) {
-		GatekeeperInstanceProvider.locator = locator;
-
-	}
-
-	public static Gatekeeper getGatekeeper() {
-		return locator.locateGatekeeper();
-	}
+	User pickUser(UserInfo userInfo);
 
 }
