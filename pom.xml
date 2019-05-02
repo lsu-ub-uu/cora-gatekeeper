@@ -25,7 +25,7 @@
 	<name>gatekeeper</name>
 
 	<properties>
-		<bookkeeper.version>1.0.0</bookkeeper.version>
+		<bookkeeper.version>1.1.0</bookkeeper.version>
 	</properties>
 
 	<scm>
