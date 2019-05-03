@@ -1,6 +1,5 @@
 /*
- * Copyright 2016, 2017 Uppsala University Library
- * Copyright 2019 Olov McKie
+ * Copyright 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -17,12 +16,15 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package se.uu.ub.cora.gatekeeper.user;
 
-public interface UserPickerProvider extends PreferenceLevel {
-	UserPicker getUserPicker();
-
-	void startUsingUserStorageAndGuestUserId(UserStorage userStorage, String guestUserId);
-
+public interface PreferenceLevel {
+	/**
+	 * getPreferenceLevel should return an int with the preference level for use of the implementing
+	 * class. A standard implementation should have preference level 0, and more specialized
+	 * implementations should have higher values, such as 10, 20, etc.
+	 * 
+	 * @return an int with the implementations preference level
+	 */
+	int getPreferenceLevel();
 }

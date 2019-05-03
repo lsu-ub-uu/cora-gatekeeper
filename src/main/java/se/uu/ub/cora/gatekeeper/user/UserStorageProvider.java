@@ -20,9 +20,10 @@ package se.uu.ub.cora.gatekeeper.user;
 
 import java.util.Map;
 
-public interface UserStorageProvider {
+public interface UserStorageProvider extends PreferenceLevel {
 
 	UserStorage getUserStorage();
 
 	void startUsingInitInfo(Map<String, String> initInfo);
+
 }
