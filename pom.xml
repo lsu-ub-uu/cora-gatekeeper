@@ -18,7 +18,7 @@
 	</parent>
 
 	<artifactId>gatekeeper</artifactId>
-	<version>1.1-SNAPSHOT</version>
+	<version>1.1.0</version>
 	<packaging>jar</packaging>
 	
 
@@ -32,7 +32,7 @@
 		<connection>scm:git:https://github.com/lsu-ub-uu/cora-gatekeeper.git</connection>
 		<developerConnection>scm:git:https://github.com/lsu-ub-uu/cora-gatekeeper.git</developerConnection>
 		<url>https://github.com/lsu-ub-uu/cora-gatekeeper.git</url>
-	  <tag>release/1.1</tag>
+	  <tag>gatekeeper-1.1.0</tag>
   </scm>
 
 
