@@ -20,7 +20,7 @@ package se.uu.ub.cora.gatekeeper.user;
 
 import java.util.Map;
 
-public interface UserStorageProvider extends PreferenceLevel {
+public interface UserStorageProvider extends SelectOrder {
 
 	UserStorage getUserStorage();
 
