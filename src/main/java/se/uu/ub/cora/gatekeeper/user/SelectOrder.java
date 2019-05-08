@@ -18,12 +18,13 @@
  */
 package se.uu.ub.cora.gatekeeper.user;
 
-import java.util.Map;
-
-public interface UserStorageProvider extends SelectOrder {
-
-	UserStorage getUserStorage();
-
-	void startUsingInitInfo(Map<String, String> initInfo);
-
+public interface SelectOrder {
+	/**
+	 * getOrderToSelectImplementionsBy should return an int with the select order of the
+	 * implementing class. A standard implementation should have select order 0, and more
+	 * specialized implementations should have higher values, such as 10, 20, etc.
+	 * 
+	 * @return an int with the implementations select order
+	 */
+	int getOrderToSelectImplementionsBy();
 }
