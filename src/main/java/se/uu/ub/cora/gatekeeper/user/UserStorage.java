@@ -19,7 +19,7 @@
 
 package se.uu.ub.cora.gatekeeper.user;
 
-import se.uu.ub.cora.bookkeeper.data.DataGroup;
+import se.uu.ub.cora.data.DataGroup;
 
 public interface UserStorage {
 
