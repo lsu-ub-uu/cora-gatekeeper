@@ -21,9 +21,28 @@ package se.uu.ub.cora.gatekeeper.user;
 
 import se.uu.ub.cora.data.DataGroup;
 
+/**
+ * UserStorage is an interface that is used to get users from storage. It is mainly intended to be
+ * used from loginsystems to check if a user is allowed to log into the system.
+ */
 public interface UserStorage {
-
+	/**
+	 * getUserById is used to retreive a user from storage if the userid is known.
+	 * 
+	 * @param id
+	 *            A String with the users id
+	 * @return A user represented as a DataGroup
+	 */
 	DataGroup getUserById(String id);
 
+	/**
+	 * getUserById is used to retreive a user from storage using idFromLogin, this is normally a
+	 * username from a common login system such as Swamid or LDAP.
+	 * 
+	 * @param idFromLogin
+	 *            A String with the users uniquiely identifying username from an external login
+	 *            system.
+	 * @return A user represented as a DataGroup
+	 */
 	DataGroup getUserByIdFromLogin(String idFromLogin);
 }

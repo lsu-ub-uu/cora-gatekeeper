@@ -18,6 +18,9 @@
  */
 package se.uu.ub.cora.gatekeeper.user;
 
+/**
+ * SelectOrder is an interface to help in selecting the desired implementation of a service.
+ */
 public interface SelectOrder {
 	/**
 	 * getOrderToSelectImplementionsBy should return an int with the select order of the
