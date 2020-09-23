@@ -41,6 +41,7 @@
 			<groupId>se.uu.ub.cora</groupId>
 			<artifactId>coradata</artifactId>
 			<version>${coradata.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.testng</groupId>
