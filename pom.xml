@@ -25,7 +25,7 @@
 	<name>gatekeeper</name>
 
 	<properties>
-		<coradata.version>6.2.0</coradata.version>
+		<coradata.version>7.0-SNAPSHOT</coradata.version>
 		<json.version>3.3.0</json.version>
 	</properties>
 
