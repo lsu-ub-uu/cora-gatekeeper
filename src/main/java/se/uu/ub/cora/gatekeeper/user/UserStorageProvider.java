@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2022 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -18,12 +18,69 @@
  */
 package se.uu.ub.cora.gatekeeper.user;
 
-import java.util.Map;
+import se.uu.ub.cora.initialize.ModuleInitializer;
+import se.uu.ub.cora.initialize.ModuleInitializerImp;
 
-public interface UserStorageProvider extends SelectOrder {
+/**
+ * AppTokenStorageViewInstanceProvider provides view access to apptoken data stored in storage.
+ */
+public class UserStorageProvider {
 
-	UserStorage getUserStorage();
+	private static UserStorageViewInstanceProvider instanceProvider;
+	private static ModuleInitializer moduleInitializer = new ModuleInitializerImp();
 
-	void startUsingInitInfo(Map<String, String> initInfo);
+	private UserStorageProvider() {
+		// prevent call to constructor
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * getStorageView returns a new AppTokenStorageView that can be used by anything that needs
+	 * access apptoken data.
+	 * <p>
+	 * <i>Code using the returned AppTokenStorageView instance MUST consider the returned instance
+	 * as NOT thread safe.</i>
+	 * 
+	 * @return A AppTokenStorageView that gives access to apptoken data.
+	 */
+	public static UserStorageView getStorageView() {
+		locateAndChooseRecordStorageInstanceProvider();
+		return instanceProvider.getStorageView();
+	}
+
+	private static void locateAndChooseRecordStorageInstanceProvider() {
+		if (instanceProvider == null) {
+			instanceProvider = moduleInitializer
+					.loadOneImplementationBySelectOrder(UserStorageViewInstanceProvider.class);
+		}
+	}
+
+	public static void onlyForTestSetModuleInitializer(ModuleInitializer moduleInitializer) {
+		UserStorageProvider.moduleInitializer = moduleInitializer;
+
+	}
+
+	public static ModuleInitializer onlyForTestGetModuleInitializer() {
+		return moduleInitializer;
+	}
+
+	/**
+	 * onlyForTestSetAppTokenViewInstanceProvider sets a AppTokenStorageViewInstanceProvider that
+	 * will be used to return instances for the {@link #getStorageView()} method. This possibility
+	 * to set a AppTokenStorageViewInstanceProvider is provided to enable testing of getting a
+	 * record storage in other classes and is not intented to be used in production.
+	 * <p>
+	 * The AppTokenStorageViewInstanceProvider to use in production should be provided through an
+	 * implementation of {@link UserStorageViewInstanceProvider} in a seperate java module.
+	 * 
+	 * @param instanceProvider
+	 *            A AppTokenStorageViewInstanceProvider to use to return AppTokenStorageView
+	 *            instances for testing
+	 */
+	public static void onlyForTestSetAppTokenViewInstanceProvider(
+			UserStorageViewInstanceProvider instanceProvider) {
+		UserStorageProvider.instanceProvider = instanceProvider;
+
+	}
 
 }

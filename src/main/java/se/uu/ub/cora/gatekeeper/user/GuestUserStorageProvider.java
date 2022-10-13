@@ -20,9 +20,11 @@ package se.uu.ub.cora.gatekeeper.user;
 
 import java.util.Map;
 
+import se.uu.ub.cora.initialize.SelectOrder;
+
 public interface GuestUserStorageProvider extends SelectOrder {
 
-	UserStorage getGuestUserStorage();
+	UserStorageView getGuestUserStorage();
 
 	void startUsingInitInfo(Map<String, String> initInfo);
 

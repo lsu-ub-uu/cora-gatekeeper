@@ -20,9 +20,11 @@
 
 package se.uu.ub.cora.gatekeeper.user;
 
+import se.uu.ub.cora.initialize.SelectOrder;
+
 public interface UserPickerProvider extends SelectOrder {
 	UserPicker getUserPicker();
 
-	void startUsingUserStorageAndGuestUserId(UserStorage userStorage, String guestUserId);
+	void startUsingUserStorageAndGuestUserId(UserStorageView userStorage, String guestUserId);
 
 }

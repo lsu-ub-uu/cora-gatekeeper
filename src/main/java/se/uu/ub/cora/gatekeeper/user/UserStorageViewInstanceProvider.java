@@ -18,16 +18,19 @@
  */
 package se.uu.ub.cora.gatekeeper.user;
 
+import se.uu.ub.cora.initialize.SelectOrder;
+
 /**
- * SelectOrder is an interface to help in selecting the desired implementation of a service.
+ * AppTokenStorageViewInstanceProvider is used to provide storage for AppToken
  */
-public interface SelectOrder {
+public interface UserStorageViewInstanceProvider extends SelectOrder {
+
 	/**
-	 * getOrderToSelectImplementionsBy should return an int with the select order of the
-	 * implementing class. A standard implementation should have select order 0, and more
-	 * specialized implementations should have higher values, such as 10, 20, etc.
+	 * getStorageView should be implemented in such a way that it returns an AppTokenStorage that
+	 * can be used by AppTokenVerifier
 	 * 
-	 * @return an int with the implementations select order
+	 * @return An AppTokenStorageView that gives access to storage for the implementing
+	 *         AppTokenStorage
 	 */
-	int getOrderToSelectImplementionsBy();
+	UserStorageView getStorageView();
 }

@@ -28,8 +28,10 @@ public class User {
 	public String loginId;
 	public String loginDomain;
 	public final Set<String> roles = new LinkedHashSet<>();
+	public Set<String> appTokenIds = new LinkedHashSet<>();
 	public String firstName;
 	public String lastName;
+	public boolean active;
 
 	public User(String id) {
 		this.id = id;
