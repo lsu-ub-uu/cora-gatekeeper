@@ -22,26 +22,51 @@ package se.uu.ub.cora.gatekeeper.user;
 /**
  * UserStorage is an interface that is used to get users from storage. It is mainly intended to be
  * used from loginsystems to check if a user is allowed to log into the system.
+ * </p>
+ * Instances of UserStorageView SHOULD be obtained through
+ * {@link UserStorageProvider#getStorageView()} for each thread that needs access to
+ * UserStorageView.
  */
 public interface UserStorageView {
 
 	/**
-	 * getUserById is used to retreive a user from storage if the userid is known.
+	 * getUserById is used to retreive a {@link User} from storage if the userid is known.
+	 * <p>
+	 * If no user for the specified id is found MUST a {@link UserStorageViewException} be thrown,
+	 * indicating that the requested user can not be found.
+	 * </p>
 	 * 
 	 * @param userId
 	 *            A String with the users id
-	 * @return A user represented as a DataGroup
+	 * @return A User populated with info from storage
 	 */
 	User getUserById(String userId);
 
 	/**
-	 * getUserById is used to retreive a user from storage using idFromLogin, this is normally a
-	 * username from a common login system such as Swamid or LDAP.
+	 * getUserById is used to retreive a {@link User} from storage using idFromLogin, this is
+	 * normally a username from a common login system such as Swamid or LDAP.
+	 * <p>
+	 * If no user for the specified id is found MUST a {@link UserStorageViewException} be thrown,
+	 * indicating that the requested user can not be found.
+	 * </p>
 	 * 
 	 * @param idFromLogin
 	 *            A String with the users uniquiely identifying username from an external login
 	 *            system.
-	 * @return A user represented as a DataGroup
+	 * @return A User populated with info from storage
 	 */
 	User getUserByIdFromLogin(String idFromLogin);
+
+	/**
+	 * getTokenById is used to retreive a {@link AppToken} from storage if the tokenId is known.
+	 * <p>
+	 * If no AppToken for the specified id is found MUST a {@link UserStorageViewException} be
+	 * thrown, indicating that the requested AppToken can not be found.
+	 * </p>
+	 * 
+	 * @param userId
+	 *            A String with the appToken id
+	 * @return A AppToken populated with info from storage
+	 */
+	AppToken getAppTokenById(String tokenId);
 }

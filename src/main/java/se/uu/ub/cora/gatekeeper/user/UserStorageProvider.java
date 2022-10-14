@@ -55,12 +55,12 @@ public class UserStorageProvider {
 		}
 	}
 
-	public static void onlyForTestSetModuleInitializer(ModuleInitializer moduleInitializer) {
+	static void onlyForTestSetModuleInitializer(ModuleInitializer moduleInitializer) {
 		UserStorageProvider.moduleInitializer = moduleInitializer;
 
 	}
 
-	public static ModuleInitializer onlyForTestGetModuleInitializer() {
+	static ModuleInitializer onlyForTestGetModuleInitializer() {
 		return moduleInitializer;
 	}
 

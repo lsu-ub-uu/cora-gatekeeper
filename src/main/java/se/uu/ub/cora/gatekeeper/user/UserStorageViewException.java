@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Uppsala University Library
+ * Copyright 2015, 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -16,16 +16,28 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package se.uu.ub.cora.gatekeeper.user;
 
-import java.util.Map;
+public class UserStorageViewException extends RuntimeException {
 
-import se.uu.ub.cora.initialize.SelectOrder;
+	private static final long serialVersionUID = -4842357477828677591L;
 
-public interface GuestUserStorageProvider extends SelectOrder {
+	public static UserStorageViewException usingMessageAndException(String message,
+			Exception exception) {
+		return new UserStorageViewException(message, exception);
+	}
 
-	UserStorageView getGuestUserStorage();
+	public static UserStorageViewException usingMessage(String message) {
+		return new UserStorageViewException(message);
+	}
 
-	void startUsingInitInfo(Map<String, String> initInfo);
+	private UserStorageViewException(String message) {
+		super(message);
+	}
+
+	private UserStorageViewException(String message, Exception exception) {
+		super(message, exception);
+	}
 
 }

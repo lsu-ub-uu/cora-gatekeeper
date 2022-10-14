@@ -26,7 +26,6 @@
 
 	<properties>
 		<initialize.version>1.0-SNAPSHOT</initialize.version>
-		<coradata.version>7.1.0</coradata.version>
 		<logger.version>2.5.0</logger.version>
 		<json.version>3.3.0</json.version>
 		<logger-spies.version>1.0-SNAPSHOT</logger-spies.version>
@@ -41,12 +40,6 @@
 	</scm>
 
 	<dependencies>
-		<dependency>
-			<groupId>se.uu.ub.cora</groupId>
-			<artifactId>coradata</artifactId>
-			<version>${coradata.version}</version>
-			<scope>provided</scope>
-		</dependency>
 		<dependency>
 			<groupId>se.uu.ub.cora</groupId>
 			<artifactId>initialize</artifactId>

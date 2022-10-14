@@ -18,6 +18,7 @@
  */
 package se.uu.ub.cora.gatekeeper.spies;
 
+import se.uu.ub.cora.gatekeeper.user.AppToken;
 import se.uu.ub.cora.gatekeeper.user.User;
 import se.uu.ub.cora.gatekeeper.user.UserStorageView;
 import se.uu.ub.cora.testutils.mcr.MethodCallRecorder;
@@ -39,6 +40,12 @@ public class UserStorageViewSpy implements UserStorageView {
 
 	@Override
 	public User getUserByIdFromLogin(String idFromLogin) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public AppToken getAppTokenById(String tokenId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
