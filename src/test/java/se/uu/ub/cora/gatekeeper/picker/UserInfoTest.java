@@ -17,11 +17,13 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper.user;
+package se.uu.ub.cora.gatekeeper.picker;
 
 import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;
+
+import se.uu.ub.cora.gatekeeper.picker.UserInfo;
 
 public class UserInfoTest {
 	@Test

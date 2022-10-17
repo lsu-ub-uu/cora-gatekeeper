@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2015, 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -17,23 +17,27 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper.user;
+package se.uu.ub.cora.gatekeeper.storage;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+public class UserStorageViewException extends RuntimeException {
 
-public class User {
+	private static final long serialVersionUID = -4842357477828677591L;
 
-	public final String id;
-	public String loginId;
-	public String loginDomain;
-	public final Set<String> roles = new LinkedHashSet<>();
-	public Set<String> appTokenIds = new LinkedHashSet<>();
-	public String firstName;
-	public String lastName;
-	public boolean active;
-
-	public User(String id) {
-		this.id = id;
+	public static UserStorageViewException usingMessageAndException(String message,
+			Exception exception) {
+		return new UserStorageViewException(message, exception);
 	}
+
+	public static UserStorageViewException usingMessage(String message) {
+		return new UserStorageViewException(message);
+	}
+
+	private UserStorageViewException(String message) {
+		super(message);
+	}
+
+	private UserStorageViewException(String message, Exception exception) {
+		super(message, exception);
+	}
+
 }

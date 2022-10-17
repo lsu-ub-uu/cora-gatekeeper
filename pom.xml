@@ -18,31 +18,39 @@
 	</parent>
 
 	<artifactId>gatekeeper</artifactId>
-	<version>3.15-SNAPSHOT</version>
+	<version>4.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
-	
+
 
 	<name>gatekeeper</name>
 
 	<properties>
-		<coradata.version>7.1.0</coradata.version>
+		<initialize.version>1.0-SNAPSHOT</initialize.version>
+		<logger.version>2.5.0</logger.version>
 		<json.version>3.3.0</json.version>
+		<logger-spies.version>1.0-SNAPSHOT</logger-spies.version>
+		<initialize-spies.version>1.0-SNAPSHOT</initialize-spies.version>
 	</properties>
 
 	<scm>
 		<connection>scm:git:https://github.com/lsu-ub-uu/cora-gatekeeper.git</connection>
 		<developerConnection>scm:git:https://github.com/lsu-ub-uu/cora-gatekeeper.git</developerConnection>
 		<url>https://github.com/lsu-ub-uu/cora-gatekeeper.git</url>
-	  <tag>release/1.1</tag>
-  </scm>
-
+		<tag>release/1.1</tag>
+	</scm>
 
 	<dependencies>
 		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<version>${testng.version}</version>
-			<scope>test</scope>
+			<groupId>se.uu.ub.cora</groupId>
+			<artifactId>initialize</artifactId>
+			<version>${initialize.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>se.uu.ub.cora</groupId>
+			<artifactId>logger</artifactId>
+			<version>${logger.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>se.uu.ub.cora</groupId>
@@ -50,11 +58,23 @@
 			<version>${json.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency> 
+		<dependency>
 			<groupId>se.uu.ub.cora</groupId>
-			<artifactId>coradata</artifactId>
-			<version>${coradata.version}</version>
-			<scope>provided</scope>
+			<artifactId>logger-spies</artifactId>
+			<version>${logger-spies.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>se.uu.ub.cora</groupId>
+			<artifactId>initialize-spies</artifactId>
+			<version>${initialize-spies.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>${testng.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

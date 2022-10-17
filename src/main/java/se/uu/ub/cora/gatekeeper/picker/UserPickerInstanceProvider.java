@@ -18,11 +18,10 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper.user;
+package se.uu.ub.cora.gatekeeper.picker;
 
-public interface UserPickerProvider extends SelectOrder {
+import se.uu.ub.cora.initialize.SelectOrder;
+
+public interface UserPickerInstanceProvider extends SelectOrder {
 	UserPicker getUserPicker();
-
-	void startUsingUserStorageAndGuestUserId(UserStorage userStorage, String guestUserId);
-
 }

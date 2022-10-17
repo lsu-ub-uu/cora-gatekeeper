@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Uppsala University Library
+ * Copyright 2022 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -18,12 +18,12 @@
  */
 package se.uu.ub.cora.gatekeeper.user;
 
-import java.util.Map;
+public class AppToken {
+	public final String id;
+	public final String tokenString;
 
-public interface GuestUserStorageProvider extends SelectOrder {
-
-	UserStorage getGuestUserStorage();
-
-	void startUsingInitInfo(Map<String, String> initInfo);
-
+	public AppToken(String id, String tokenString) {
+		this.id = id;
+		this.tokenString = tokenString;
+	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2022 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -16,24 +16,28 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
+package se.uu.ub.cora.gatekeeper.picker;
 
-package se.uu.ub.cora.gatekeeper.user;
+import se.uu.ub.cora.testutils.mcr.MethodCallRecorder;
+import se.uu.ub.cora.testutils.mrv.MethodReturnValues;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+public class UserPickerInstanceProviderSpy implements UserPickerInstanceProvider {
+	public MethodCallRecorder MCR = new MethodCallRecorder();
+	public MethodReturnValues MRV = new MethodReturnValues();
 
-public class User {
-
-	public final String id;
-	public String loginId;
-	public String loginDomain;
-	public final Set<String> roles = new LinkedHashSet<>();
-	public Set<String> appTokenIds = new LinkedHashSet<>();
-	public String firstName;
-	public String lastName;
-	public boolean active;
-
-	public User(String id) {
-		this.id = id;
+	public UserPickerInstanceProviderSpy() {
+		MCR.useMRV(MRV);
+		MRV.setDefaultReturnValuesSupplier("getUserPicker", UserPickerSpy::new);
 	}
+
+	@Override
+	public int getOrderToSelectImplementionsBy() {
+		return 0;
+	}
+
+	@Override
+	public UserPicker getUserPicker() {
+		return (UserPicker) MCR.addCallAndReturnFromMRV();
+	}
+
 }

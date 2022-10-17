@@ -17,7 +17,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper.user;
+package se.uu.ub.cora.gatekeeper.picker;
 
 public final class UserInfo {
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2022 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -16,13 +16,22 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
+package se.uu.ub.cora.gatekeeper.picker;
 
-package se.uu.ub.cora.gatekeeper.user;
+import se.uu.ub.cora.gatekeeper.user.User;
 
-public interface UserPicker {
+public class UserPickerSpy implements UserPicker {
 
-	User pickGuest();
+	@Override
+	public User pickGuest() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-	User pickUser(UserInfo userInfo);
+	@Override
+	public User pickUser(UserInfo userInfo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
