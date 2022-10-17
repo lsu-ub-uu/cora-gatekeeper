@@ -16,38 +16,28 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.uu.ub.cora.gatekeeper.spies;
+package se.uu.ub.cora.gatekeeper.storage;
 
-import se.uu.ub.cora.gatekeeper.user.AppToken;
-import se.uu.ub.cora.gatekeeper.user.User;
-import se.uu.ub.cora.gatekeeper.user.UserStorageView;
 import se.uu.ub.cora.testutils.mcr.MethodCallRecorder;
 import se.uu.ub.cora.testutils.mrv.MethodReturnValues;
 
-public class UserStorageViewSpy implements UserStorageView {
+public class UserStorageViewInstanceProviderSpy implements UserStorageViewInstanceProvider {
 	public MethodCallRecorder MCR = new MethodCallRecorder();
 	public MethodReturnValues MRV = new MethodReturnValues();
 
-	public UserStorageViewSpy() {
+	public UserStorageViewInstanceProviderSpy() {
 		MCR.useMRV(MRV);
+		MRV.setDefaultReturnValuesSupplier("getStorageView", UserStorageViewSpy::new);
 	}
 
 	@Override
-	public User getUserById(String id) {
-		// TODO Auto-generated method stub
-		return null;
+	public UserStorageView getStorageView() {
+		return (UserStorageView) MCR.addCallAndReturnFromMRV();
 	}
 
 	@Override
-	public User getUserByIdFromLogin(String idFromLogin) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public AppToken getAppTokenById(String tokenId) {
-		// TODO Auto-generated method stub
-		return null;
+	public int getOrderToSelectImplementionsBy() {
+		return 0;
 	}
 
 }

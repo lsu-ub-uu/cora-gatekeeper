@@ -17,27 +17,27 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper.user;
+package se.uu.ub.cora.gatekeeper.storage;
 
-public class UserStorageViewException extends RuntimeException {
+import static org.testng.Assert.assertEquals;
 
-	private static final long serialVersionUID = -4842357477828677591L;
+import org.testng.annotations.Test;
 
-	public static UserStorageViewException usingMessageAndException(String message,
-			Exception exception) {
-		return new UserStorageViewException(message, exception);
+public class UserStorageViewExceptionTest {
+	@Test
+	public void testInit() {
+		UserStorageViewException notFound = UserStorageViewException.usingMessage("message");
+
+		assertEquals(notFound.getMessage(), "message");
 	}
 
-	public static UserStorageViewException usingMessage(String message) {
-		return new UserStorageViewException(message);
-	}
+	@Test
+	public void testInitWithException() {
+		Exception exception = new Exception();
+		UserStorageViewException notFound = UserStorageViewException
+				.usingMessageAndException("message", exception);
 
-	private UserStorageViewException(String message) {
-		super(message);
+		assertEquals(notFound.getMessage(), "message");
+		assertEquals(notFound.getCause(), exception);
 	}
-
-	private UserStorageViewException(String message, Exception exception) {
-		super(message, exception);
-	}
-
 }

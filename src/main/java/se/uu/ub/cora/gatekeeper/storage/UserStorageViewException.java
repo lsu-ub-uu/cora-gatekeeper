@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2015, 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -16,21 +16,28 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.uu.ub.cora.gatekeeper.user;
 
-import se.uu.ub.cora.initialize.SelectOrder;
+package se.uu.ub.cora.gatekeeper.storage;
 
-/**
- * AppTokenStorageViewInstanceProvider is used to provide storage for AppToken
- */
-public interface UserStorageViewInstanceProvider extends SelectOrder {
+public class UserStorageViewException extends RuntimeException {
 
-	/**
-	 * getStorageView should be implemented in such a way that it returns an AppTokenStorage that
-	 * can be used by AppTokenVerifier
-	 * 
-	 * @return An AppTokenStorageView that gives access to storage for the implementing
-	 *         AppTokenStorage
-	 */
-	UserStorageView getStorageView();
+	private static final long serialVersionUID = -4842357477828677591L;
+
+	public static UserStorageViewException usingMessageAndException(String message,
+			Exception exception) {
+		return new UserStorageViewException(message, exception);
+	}
+
+	public static UserStorageViewException usingMessage(String message) {
+		return new UserStorageViewException(message);
+	}
+
+	private UserStorageViewException(String message) {
+		super(message);
+	}
+
+	private UserStorageViewException(String message, Exception exception) {
+		super(message, exception);
+	}
+
 }

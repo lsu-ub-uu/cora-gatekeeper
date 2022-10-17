@@ -1,5 +1,5 @@
 /*
- * Copyright 2015, 2019 Uppsala University Library
+ * Copyright 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -16,28 +16,21 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
+package se.uu.ub.cora.gatekeeper.storage;
 
-package se.uu.ub.cora.gatekeeper.user;
+import se.uu.ub.cora.initialize.SelectOrder;
 
-import static org.testng.Assert.assertEquals;
+/**
+ * AppTokenStorageViewInstanceProvider is used to provide storage for AppToken
+ */
+public interface UserStorageViewInstanceProvider extends SelectOrder {
 
-import org.testng.annotations.Test;
-
-public class UserStorageViewExceptionTest {
-	@Test
-	public void testInit() {
-		UserStorageViewException notFound = UserStorageViewException.usingMessage("message");
-
-		assertEquals(notFound.getMessage(), "message");
-	}
-
-	@Test
-	public void testInitWithException() {
-		Exception exception = new Exception();
-		UserStorageViewException notFound = UserStorageViewException
-				.usingMessageAndException("message", exception);
-
-		assertEquals(notFound.getMessage(), "message");
-		assertEquals(notFound.getCause(), exception);
-	}
+	/**
+	 * getStorageView should be implemented in such a way that it returns an AppTokenStorage that
+	 * can be used by AppTokenVerifier
+	 * 
+	 * @return An AppTokenStorageView that gives access to storage for the implementing
+	 *         AppTokenStorage
+	 */
+	UserStorageView getStorageView();
 }

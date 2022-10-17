@@ -17,7 +17,10 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper.user;
+package se.uu.ub.cora.gatekeeper.storage;
+
+import se.uu.ub.cora.gatekeeper.user.AppToken;
+import se.uu.ub.cora.gatekeeper.user.User;
 
 /**
  * UserStorage is an interface that is used to get users from storage. It is mainly intended to be

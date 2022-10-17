@@ -1,5 +1,6 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2016, 2017 Uppsala University Library
+ * Copyright 2019 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -17,12 +18,10 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.gatekeeper.user;
+package se.uu.ub.cora.gatekeeper.picker;
 
-public interface UserPicker {
+import se.uu.ub.cora.initialize.SelectOrder;
 
-	User pickGuest();
-
-	User pickUser(UserInfo userInfo);
-
+public interface UserPickerInstanceProvider extends SelectOrder {
+	UserPicker getUserPicker();
 }

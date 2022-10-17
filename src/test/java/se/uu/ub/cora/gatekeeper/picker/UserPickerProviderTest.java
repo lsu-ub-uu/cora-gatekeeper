@@ -16,20 +16,20 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.uu.ub.cora.gatekeeper.user;
+package se.uu.ub.cora.gatekeeper.picker;
 
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.function.Supplier;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.gatekeeper.spies.UserStorageViewInstanceProviderSpy;
 import se.uu.ub.cora.initialize.ModuleInitializer;
 import se.uu.ub.cora.initialize.ModuleInitializerImp;
 import se.uu.ub.cora.initialize.spies.ModuleInitializerSpy;
@@ -37,37 +37,37 @@ import se.uu.ub.cora.logger.LoggerFactory;
 import se.uu.ub.cora.logger.LoggerProvider;
 import se.uu.ub.cora.logger.spies.LoggerFactorySpy;
 
-public class UserStorageProviderTest {
+public class UserPickerProviderTest {
 	LoggerFactory loggerFactory = new LoggerFactorySpy();
 	private ModuleInitializerSpy moduleInitializerSpy;
-	private UserStorageViewInstanceProviderSpy instanceProviderSpy;
+	private UserPickerInstanceProviderSpy instanceProviderSpy;
 
 	@BeforeMethod
 	public void beforeMethod() {
 		LoggerProvider.setLoggerFactory(loggerFactory);
-		UserStorageProvider.onlyForTestSetAppTokenViewInstanceProvider(null);
+		UserPickerProvider.onlyForTestSetUserPickerInstanceProvider(null);
 	}
 
 	private void setupModuleInstanceProviderToReturnAppTokenStorageViewFactorySpy() {
 		moduleInitializerSpy = new ModuleInitializerSpy();
-		instanceProviderSpy = new UserStorageViewInstanceProviderSpy();
+		instanceProviderSpy = new UserPickerInstanceProviderSpy();
 		moduleInitializerSpy.MRV.setDefaultReturnValuesSupplier(
 				"loadOneImplementationBySelectOrder",
-				((Supplier<UserStorageViewInstanceProvider>) () -> instanceProviderSpy));
+				((Supplier<UserPickerInstanceProvider>) () -> instanceProviderSpy));
 
-		UserStorageProvider.onlyForTestSetModuleInitializer(moduleInitializerSpy);
+		UserPickerProvider.onlyForTestSetModuleInitializer(moduleInitializerSpy);
 	}
 
 	@Test
 	public void testPrivateConstructor() throws Exception {
-		Constructor<UserStorageProvider> constructor = UserStorageProvider.class
+		Constructor<UserPickerProvider> constructor = UserPickerProvider.class
 				.getDeclaredConstructor();
 		assertTrue(Modifier.isPrivate(constructor.getModifiers()));
 	}
 
 	@Test(expectedExceptions = InvocationTargetException.class)
 	public void testPrivateConstructorInvoke() throws Exception {
-		Constructor<UserStorageProvider> constructor = UserStorageProvider.class
+		Constructor<UserPickerProvider> constructor = UserPickerProvider.class
 				.getDeclaredConstructor();
 		constructor.setAccessible(true);
 		constructor.newInstance();
@@ -75,41 +75,48 @@ public class UserStorageProviderTest {
 
 	@Test
 	public void testDefaultInitializerIsModuleInitalizer() throws Exception {
-		ModuleInitializer initializer = UserStorageProvider.onlyForTestGetModuleInitializer();
+		ModuleInitializer initializer = UserPickerProvider.onlyForTestGetModuleInitializer();
 		assertNotNull(initializer);
 		assertTrue(initializer instanceof ModuleInitializerImp);
+	}
+
+	@Test
+	public void testGetUserPickerIsSynchronized_toPreventProblemsWithFindingImplementations()
+			throws Exception {
+		Method getUserPicker = UserPickerProvider.class.getMethod("getUserPicker");
+		assertTrue(Modifier.isSynchronized(getUserPicker.getModifiers()));
 	}
 
 	@Test
 	public void testGetRecordStorageUsesModuleInitializerToGetFactory() throws Exception {
 		setupModuleInstanceProviderToReturnAppTokenStorageViewFactorySpy();
 
-		UserStorageView appTokenStorageView = UserStorageProvider.getStorageView();
+		UserPicker appTokenStorageView = UserPickerProvider.getUserPicker();
 
 		assertNotNull(appTokenStorageView);
 		moduleInitializerSpy.MCR.assertParameters("loadOneImplementationBySelectOrder", 0,
-				UserStorageViewInstanceProvider.class);
-		instanceProviderSpy.MCR.assertReturn("getStorageView", 0, appTokenStorageView);
+				UserPickerInstanceProvider.class);
+		instanceProviderSpy.MCR.assertReturn("getUserPicker", 0, appTokenStorageView);
 	}
 
 	@Test
 	public void testOnlyForTestSetAppTokenStorageViewInstanceProvider() throws Exception {
-		UserStorageViewInstanceProviderSpy instanceProviderSpy2 = new UserStorageViewInstanceProviderSpy();
-		UserStorageProvider.onlyForTestSetAppTokenViewInstanceProvider(instanceProviderSpy2);
+		UserPickerInstanceProviderSpy instanceProviderSpy2 = new UserPickerInstanceProviderSpy();
+		UserPickerProvider.onlyForTestSetUserPickerInstanceProvider(instanceProviderSpy2);
 
-		UserStorageView appTokenStorageView = UserStorageProvider.getStorageView();
+		UserPicker appTokenStorageView = UserPickerProvider.getUserPicker();
 
-		instanceProviderSpy2.MCR.assertReturn("getStorageView", 0, appTokenStorageView);
+		instanceProviderSpy2.MCR.assertReturn("getUserPicker", 0, appTokenStorageView);
 	}
 
 	@Test
 	public void testMultipleCallsToGetStorageViewOnlyLoadsImplementationsOnce() throws Exception {
 		setupModuleInstanceProviderToReturnAppTokenStorageViewFactorySpy();
 
-		UserStorageProvider.getStorageView();
-		UserStorageProvider.getStorageView();
-		UserStorageProvider.getStorageView();
-		UserStorageProvider.getStorageView();
+		UserPickerProvider.getUserPicker();
+		UserPickerProvider.getUserPicker();
+		UserPickerProvider.getUserPicker();
+		UserPickerProvider.getUserPicker();
 
 		moduleInitializerSpy.MCR.assertNumberOfCallsToMethod("loadOneImplementationBySelectOrder",
 				1);
