@@ -25,11 +25,11 @@
 	<name>gatekeeper</name>
 
 	<properties>
-		<initialize.version>1.0-SNAPSHOT</initialize.version>
+		<initialize.version>1.0.0</initialize.version>
 		<logger.version>2.5.0</logger.version>
-		<json.version>3.3.0</json.version>
-		<logger-spies.version>1.0-SNAPSHOT</logger-spies.version>
-		<initialize-spies.version>1.0-SNAPSHOT</initialize-spies.version>
+		<json.version>3.4.0</json.version>
+		<logger-spies.version>1.0.0</logger-spies.version>
+		<initialize-spies.version>1.0.0</initialize-spies.version>
 	</properties>
 
 	<scm>
