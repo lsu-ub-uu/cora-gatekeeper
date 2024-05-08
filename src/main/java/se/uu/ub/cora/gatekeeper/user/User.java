@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2016, 2024 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -20,18 +20,20 @@
 package se.uu.ub.cora.gatekeeper.user;
 
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 
 public class User {
 
 	public final String id;
 	public String loginId;
-	public String loginDomain;
-	public final Set<String> roles = new LinkedHashSet<>();
-	public Set<String> appTokenIds = new LinkedHashSet<>();
 	public String firstName;
 	public String lastName;
 	public boolean active;
+	public String loginDomain;
+	public Set<String> appTokenIds = new LinkedHashSet<>();
+	public final Set<String> roles = new LinkedHashSet<>();
+	public Optional<String> password = Optional.empty();
 
 	public User(String id) {
 		this.id = id;
