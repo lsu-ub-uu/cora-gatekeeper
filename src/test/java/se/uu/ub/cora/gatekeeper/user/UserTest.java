@@ -62,17 +62,17 @@ public class UserTest {
 
 	@Test
 	public void testUserWithoutPassword() throws Exception {
-		assertTrue(user.password instanceof Optional);
-		assertTrue(user.password.isEmpty());
+		assertTrue(user.passwordId instanceof Optional);
+		assertTrue(user.passwordId.isEmpty());
 	}
 
 	@Test
 	public void testWithPassword() throws Exception {
-		user.password = Optional.of("someTextHashed");
+		user.passwordId = Optional.of("someTextHashed");
 
-		assertTrue(user.password.isPresent());
-		assertTrue(user.password.get() instanceof String);
-		assertEquals(user.password.get(), "someTextHashed");
+		assertTrue(user.passwordId.isPresent());
+		assertTrue(user.passwordId.get() instanceof String);
+		assertEquals(user.passwordId.get(), "someTextHashed");
 
 	}
 }

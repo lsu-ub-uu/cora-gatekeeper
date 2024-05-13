@@ -72,4 +72,19 @@ public interface UserStorageView {
 	 * @return A AppToken populated with info from storage
 	 */
 	AppToken getAppTokenById(String tokenId);
+
+	/**
+	 * doesPasswordMatchForUser method is intended to find out if the password of a User matches the
+	 * one provided.
+	 * 
+	 * 
+	 * @param user
+	 *            A User. The user must have been read previouly using getUserById or
+	 *            getUserByIdFromLogin
+	 * @param password
+	 *            A string containing the password to match
+	 * @return A boolean that indicates wether the passwords match or not. If User has no password
+	 *         then false is returned.
+	 */
+	boolean doesPasswordMatchForUser(User user, String password);
 }

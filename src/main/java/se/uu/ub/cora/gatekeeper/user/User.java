@@ -33,7 +33,7 @@ public class User {
 	public String loginDomain;
 	public Set<String> appTokenIds = new LinkedHashSet<>();
 	public final Set<String> roles = new LinkedHashSet<>();
-	public Optional<String> password = Optional.empty();
+	public Optional<String> passwordId = Optional.empty();
 
 	public User(String id) {
 		this.id = id;
