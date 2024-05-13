@@ -33,21 +33,24 @@ import se.uu.ub.cora.gatekeeper.user.User;
 public interface UserStorageView {
 
 	/**
-	 * getUserById is used to retreive a {@link User} from storage if the userid is known.
+	 * TODO: rename to: getUserByRecordId
+	 * <p>
+	 * getUserByRecordId is used to retreive a {@link User} from storage if the users recordId is
+	 * known.
 	 * <p>
 	 * If no user for the specified id is found MUST a {@link UserStorageViewException} be thrown,
 	 * indicating that the requested user can not be found.
 	 * </p>
 	 * 
-	 * @param userId
-	 *            A String with the users id
+	 * @param recordId
+	 *            A String with the users recordId
 	 * @return A User populated with info from storage
 	 */
-	User getUserById(String userId);
+	User getUserById(String recordId);
 
 	/**
-	 * getUserById is used to retreive a {@link User} from storage using idFromLogin, this is
-	 * normally a username from a common login system such as Swamid or LDAP.
+	 * getUserByIdFromLogin is used to retreive a {@link User} from storage using idFromLogin, this
+	 * is normally a username from a common login system such as Swamid or LDAP.
 	 * <p>
 	 * If no user for the specified id is found MUST a {@link UserStorageViewException} be thrown,
 	 * indicating that the requested user can not be found.
@@ -86,5 +89,5 @@ public interface UserStorageView {
 	 * @return A boolean that indicates wether the passwords match or not. If User has no password
 	 *         then false is returned.
 	 */
-	boolean doesPasswordMatchForUser(User user, String password);
+	// boolean doesPasswordMatchForUser(User user, String password);
 }
