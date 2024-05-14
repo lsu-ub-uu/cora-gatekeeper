@@ -77,17 +77,10 @@ public interface UserStorageView {
 	AppToken getAppTokenById(String tokenId);
 
 	/**
-	 * doesPasswordMatchForUser method is intended to find out if the password of a User matches the
-	 * one provided.
+	 * getSystemSecretById is used to retreive a systemSecret from storage
 	 * 
-	 * 
-	 * @param user
-	 *            A User. The user must have been read previouly using getUserById or
-	 *            getUserByIdFromLogin
-	 * @param password
-	 *            A string containing the password to match
-	 * @return A boolean that indicates wether the passwords match or not. If User has no password
-	 *         then false is returned.
+	 * @param systemSecretId
+	 * @return A string with the hashed text from system secret
 	 */
-	// boolean doesPasswordMatchForUser(User user, String password);
+	public String getSystemSecretById(String systemSecretId);
 }

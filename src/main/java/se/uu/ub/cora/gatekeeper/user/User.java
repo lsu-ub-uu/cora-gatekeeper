@@ -23,6 +23,11 @@ import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 
+/**
+ * User is an object that holds information of a user. It is the object representation of the User
+ * recordtype.
+ *
+ */
 public class User {
 
 	public final String id;
