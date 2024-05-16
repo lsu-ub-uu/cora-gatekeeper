@@ -49,4 +49,10 @@ public class UserStorageViewSpy implements UserStorageView {
 		return null;
 	}
 
+	@Override
+	public String getSystemSecretById(String systemSecretId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

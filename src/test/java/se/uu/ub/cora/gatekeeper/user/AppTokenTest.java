@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2024 Uppsala University Library
+ * Copyright 2024 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -19,28 +19,18 @@
 
 package se.uu.ub.cora.gatekeeper.user;
 
-import java.util.LinkedHashSet;
-import java.util.Optional;
-import java.util.Set;
+import static org.testng.Assert.assertEquals;
 
-/**
- * User is an object that holds information of a user. It is the object representation of the User
- * recordtype.
- *
- */
-public class User {
+import org.testng.annotations.Test;
 
-	public final String id;
-	public String loginId;
-	public String firstName;
-	public String lastName;
-	public boolean active;
-	public String loginDomain;
-	public Set<String> appTokenIds = new LinkedHashSet<>();
-	public final Set<String> roles = new LinkedHashSet<>();
-	public Optional<String> passwordId = Optional.empty();
+public class AppTokenTest {
 
-	public User(String id) {
-		this.id = id;
+	@Test
+	public void testAppToken() throws Exception {
+		AppToken appToken = new AppToken("someId", "someTokenString");
+
+		assertEquals(appToken.id, "someId");
+		assertEquals(appToken.tokenString, "someTokenString");
 	}
+
 }

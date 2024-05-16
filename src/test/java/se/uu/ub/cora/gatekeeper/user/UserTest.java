@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2016, 2024 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -22,38 +22,57 @@ package se.uu.ub.cora.gatekeeper.user;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
+import java.util.Optional;
 import java.util.Set;
 
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 public class UserTest {
-	@Test
-	public void init() {
-		String id = "someUserId";
-		User user = new User(id);
-		assertEquals(user.id, "someUserId");
+	private static final String SOME_USER_ID = "someUserId";
+	private static final String SOME_USER_NAME = "someUserName";
+	private User user;
+
+	@BeforeMethod
+	private void beforeMethod() {
+		user = new User(SOME_USER_ID);
+
 	}
 
 	@Test
 	public void testLoginInfo() {
-		String id = "122345";
-		User user = new User(id);
-		user.loginId = "someUserId";
+		user.loginId = SOME_USER_NAME;
 		user.loginDomain = "someDomain";
-		assertEquals(user.id, "122345");
-		assertEquals(user.loginId, "someUserId");
+
+		assertEquals(user.id, SOME_USER_ID);
+		assertEquals(user.loginId, SOME_USER_NAME);
 		assertEquals(user.loginDomain, "someDomain");
 	}
 
 	@Test
 	public void testRoleSet() {
-		String id = "122345";
-		User user = new User(id);
 		user.roles.add("admin");
 		user.roles.add("guest");
 		Set<String> roles = user.roles;
+
 		assertEquals(roles.size(), 2);
 		assertTrue(roles.contains("guest"));
 		assertTrue(roles.contains("admin"));
+	}
+
+	@Test
+	public void testUserWithoutPassword() throws Exception {
+		assertTrue(user.passwordId instanceof Optional);
+		assertTrue(user.passwordId.isEmpty());
+	}
+
+	@Test
+	public void testWithPassword() throws Exception {
+		user.passwordId = Optional.of("someTextHashed");
+
+		assertTrue(user.passwordId.isPresent());
+		assertTrue(user.passwordId.get() instanceof String);
+		assertEquals(user.passwordId.get(), "someTextHashed");
+
 	}
 }
