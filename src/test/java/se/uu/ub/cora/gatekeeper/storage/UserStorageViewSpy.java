@@ -38,7 +38,7 @@ public class UserStorageViewSpy implements UserStorageView {
 	}
 
 	@Override
-	public User getUserByIdFromLogin(String idFromLogin) {
+	public User getUserByLoginId(String loginId) {
 		// TODO Auto-generated method stub
 		return null;
 	}

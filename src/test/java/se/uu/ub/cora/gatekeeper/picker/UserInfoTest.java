@@ -23,8 +23,6 @@ import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.gatekeeper.picker.UserInfo;
-
 public class UserInfoTest {
 	@Test
 	public void testUserInfoUserInStorage() {
@@ -36,18 +34,18 @@ public class UserInfoTest {
 
 	@Test
 	public void testUserInfo() {
-		String idFromLogin = "idFromLogin";
+		String loginId = "loginId";
 		String domainFromLogin = "domainFromLogin";
 
-		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain(idFromLogin, domainFromLogin);
-		assertEquals(userInfo.idFromLogin, "idFromLogin");
+		UserInfo userInfo = UserInfo.withLoginIdAndLoginDomain(loginId, domainFromLogin);
+		assertEquals(userInfo.loginId, "loginId");
 	}
 
 	@Test
 	public void testUserInfoWithLoginId() {
-		String idFromLogin = "idFromLogin";
+		String loginId = "loginId";
 
-		UserInfo userInfo = UserInfo.withLoginId(idFromLogin);
-		assertEquals(userInfo.idFromLogin, "idFromLogin");
+		UserInfo userInfo = UserInfo.withLoginId(loginId);
+		assertEquals(userInfo.loginId, "loginId");
 	}
 }
