@@ -21,12 +21,12 @@ package se.uu.ub.cora.gatekeeper.picker;
 
 public final class UserInfo {
 
-	public String idFromLogin;
+	public String loginId;
 	public String domainFromLogin;
 	public String idInUserStorage;
 
-	private UserInfo(String idFromLogin, String domainFromLogin) {
-		this.idFromLogin = idFromLogin;
+	private UserInfo(String loginId, String domainFromLogin) {
+		this.loginId = loginId;
 		this.domainFromLogin = domainFromLogin;
 	}
 
@@ -37,17 +37,17 @@ public final class UserInfo {
 	private UserInfo() {
 	}
 
-	public static UserInfo withLoginIdAndLoginDomain(String idFromLogin, String domainFromLogin) {
-		return new UserInfo(idFromLogin, domainFromLogin);
+	public static UserInfo withLoginIdAndLoginDomain(String loginId, String domainFromLogin) {
+		return new UserInfo(loginId, domainFromLogin);
 	}
 
 	public static UserInfo withIdInUserStorage(String idInUserStorage) {
 		return new UserInfo(idInUserStorage);
 	}
 
-	public static UserInfo withLoginId(String idFromLogin) {
+	public static UserInfo withLoginId(String loginId) {
 		UserInfo userInfo = new UserInfo();
-		userInfo.idFromLogin = idFromLogin;
+		userInfo.loginId = loginId;
 		return userInfo;
 	}
 }

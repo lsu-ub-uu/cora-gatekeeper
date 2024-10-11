@@ -49,19 +49,19 @@ public interface UserStorageView {
 	User getUserById(String recordId);
 
 	/**
-	 * getUserByIdFromLogin is used to retreive a {@link User} from storage using idFromLogin, this
-	 * is normally a username from a common login system such as Swamid or LDAP.
+	 * getUserByloginId is used to retreive a {@link User} from storage using loginId, this is
+	 * normally a username from a common login system such as Swamid or LDAP.
 	 * <p>
 	 * If no user for the specified id is found MUST a {@link UserStorageViewException} be thrown,
 	 * indicating that the requested user can not be found.
 	 * </p>
 	 * 
-	 * @param idFromLogin
+	 * @param loginId
 	 *            A String with the users uniquiely identifying username from an external login
 	 *            system.
 	 * @return A User populated with info from storage
 	 */
-	User getUserByIdFromLogin(String idFromLogin);
+	User getUserByLoginId(String loginId);
 
 	/**
 	 * getTokenById is used to retreive a {@link AppToken} from storage if the tokenId is known.
