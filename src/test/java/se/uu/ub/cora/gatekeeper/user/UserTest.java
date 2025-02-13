@@ -20,6 +20,7 @@
 package se.uu.ub.cora.gatekeeper.user;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
 import java.util.Optional;
@@ -74,5 +75,44 @@ public class UserTest {
 		assertTrue(user.passwordId.get() instanceof String);
 		assertEquals(user.passwordId.get(), "someTextHashed");
 
+	}
+
+	@Test
+	public void testAddAndRemoveAppTokens() {
+		user.appTokenIds.add("token1");
+		user.appTokenIds.add("token2");
+
+		assertTrue(user.appTokenIds.contains("token1"));
+		assertTrue(user.appTokenIds.contains("token2"));
+
+		user.appTokenIds.remove("token1");
+
+		assertEquals(user.appTokenIds.size(), 1);
+		assertFalse(user.appTokenIds.contains("token1"));
+		assertTrue(user.appTokenIds.contains("token2"));
+	}
+
+	@Test
+	public void testUserActivation() {
+		user.active = true;
+		assertTrue(user.active);
+
+		user.active = false;
+		assertFalse(user.active);
+	}
+
+	@Test
+	public void testSetUserNames() {
+		user.firstName = "John";
+		user.lastName = "Doe";
+
+		assertEquals(user.firstName, "John");
+		assertEquals(user.lastName, "Doe");
+	}
+
+	@Test
+	public void testSetLoginDomain() {
+		user.loginDomain = "example.com";
+		assertEquals(user.loginDomain, "example.com");
 	}
 }
