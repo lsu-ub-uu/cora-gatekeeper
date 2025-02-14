@@ -36,6 +36,7 @@ public class User {
 	public String lastName;
 	public boolean active;
 	public String loginDomain;
+	public final Set<String> permissionUnitIds = new LinkedHashSet<>();
 	public Set<String> appTokenIds = new LinkedHashSet<>();
 	public final Set<String> roles = new LinkedHashSet<>();
 	public Optional<String> passwordId = Optional.empty();
