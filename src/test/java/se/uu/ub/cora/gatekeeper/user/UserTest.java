@@ -115,4 +115,20 @@ public class UserTest {
 		user.loginDomain = "example.com";
 		assertEquals(user.loginDomain, "example.com");
 	}
+
+	@Test
+	public void testPermissionUnitIds() {
+		user.permissionUnitIds.add("permissionUnit1");
+		user.permissionUnitIds.add("permissionUnit2");
+
+		assertTrue(user.permissionUnitIds.contains("permissionUnit1"));
+		assertTrue(user.permissionUnitIds.contains("permissionUnit2"));
+
+		user.permissionUnitIds.remove("permissionUnit1");
+
+		assertEquals(user.permissionUnitIds.size(), 1);
+		assertFalse(user.permissionUnitIds.contains("permissionUnit1"));
+		assertTrue(user.permissionUnitIds.contains("permissionUnit2"));
+	}
+
 }
